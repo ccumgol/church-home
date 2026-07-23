@@ -292,7 +292,7 @@ html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*
 /* ────────────────────────────────────────────────────────────────────────────
    5. Bottom CTA Card (Content Width Constraint max-w-5xl & High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
-/* Outer Section: transparent background */
+/* Outer Section: Bounded strictly inside max-w-5xl (1024px) */
 section[id*="cta"],
 section.blox-cta-card,
 #cta-invitation,
@@ -300,43 +300,63 @@ section.blox-cta-card,
 #section-cta-card {
   background-color: transparent !important;
   background: none !important;
-  max-width: 100% !important;
+  max-width: 64rem !important; /* max-w-5xl = 1024px */
+  margin-left: auto !important;
+  margin-right: auto !important;
   padding-top: 0.75rem !important;
   padding-bottom: 1rem !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+@media (min-width: 768px) {
+  section[id*="cta"],
+  section.blox-cta-card,
+  #cta-invitation {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 section[id*="cta"] .home-section-bg,
 #cta-invitation .home-section-bg,
 #section-cta-card .home-section-bg {
   display: none !important;
-  background-color: transparent !important;
 }
 
-/* Inner Card Container: Bounded strictly inside max-w-5xl (1024px) */
-[data-block-type="cta-card"],
+/* Outer Preact Block Container: Transparent Wrapper */
 .cta-card-block-container,
 #cta-invitation .cta-card-block-container,
-section[id*="cta"] div[class*="-container"],
-section[id*="cta"] div[class*="preact"],
-section[id*="cta"] div[class*="rounded"] {
-  max-width: 64rem !important; /* max-w-5xl = 1024px */
-  margin-left: auto !important;
-  margin-right: auto !important;
+[data-block-type="cta-card"] {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Single Inner Card Container Frame */
+.cta-card-block-container > div,
+#cta-invitation .cta-card-block-container > div,
+[data-block-type="cta-card"] > div {
+  width: 100% !important;
+  max-width: 100% !important;
   border-radius: 1.5rem !important;
   background: linear-gradient(135deg, #1c1917 0%, #292524 100%) !important;
   border: 1px solid #44403c !important;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
   padding: 2rem 1.5rem !important;
+  text-align: center !important;
 }
 
 @media (min-width: 768px) {
-  [data-block-type="cta-card"],
-  .cta-card-block-container,
-  #cta-invitation .cta-card-block-container,
-  section[id*="cta"] div[class*="-container"] {
-    padding: 2.5rem 2.5rem !important;
+  .cta-card-block-container > div,
+  #cta-invitation .cta-card-block-container > div,
+  [data-block-type="cta-card"] > div {
+    padding: 2.75rem 2.5rem !important;
   }
 }
 

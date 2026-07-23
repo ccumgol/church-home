@@ -12,6 +12,7 @@
 5. [이슈 5: 섹션 상하 여백 과다 및 섹션 타이틀 서식 파편화](#이슈-5-섹션-상하-여백-과다-및-섹션-타이틀-서식-파편화)
 6. [이슈 6: 정적 미디어 자산 WebP 일괄 변환 및 웹 표준 도입](#이슈-6-정적-미디어-자산-webp-일괄-변환-및-웹-표준-도입)
 7. [이슈 7: GitHub Pages 서비스 연동 및 CI/CD 워크플로우 세팅](#이슈-7-github-pages-서비스-연동-및-cicd-워크플로우-세팅)
+8. [이슈 8: config/_default/hugo.yaml 내 3가지 스키마 및 디프리케이션 문제 수정](#이슈-8-configdefaulthugoyaml-내-3가지-스키마-및-디프리케이션-문제-수정)
 
 ---
 
@@ -104,6 +105,23 @@
 1. GitHub API (`gh api -X POST repos/ccumgol/church-home/pages`)를 통해 GitHub Pages build_type을 `workflow`로 성공적으로 활성화했습니다.
 2. `hugo.toml` 및 `config/_default/hugo.yaml` 내 baseURL을 **`https://ccumgol.github.io/church-home/`**로 설정했습니다.
 3. [`.github/workflows/deploy.yaml`](file:///Users/gihyunpark/Desktop/Workspace/church-home/.github/workflows/deploy.yaml) CI/CD 파일 작성을 통해 `main` 브랜치 push 시 자동 릴리스 빌드 & 배포되도록 완수하였습니다.
+
+---
+
+## 이슈 8: config/_default/hugo.yaml 내 3가지 스키마 및 디프리케이션 문제 수정
+
+### 🔴 증상
+- VSCode / YAML Linter에서 `hugo.yaml` 파일에 3가지 경고/에러가 표시됨.
+
+### 🔍 원인 3가지
+1. **`cascade` 내 커스텀 파라미터 계층 누락:** `cascade` 항목의 `show_date`, `reading_time`, `pager`, `view` 등의 파라미터가 `params:` 서브 블록 아래에 작성되지 않아 스키마 에러 발생.
+2. **`timeout` 숫자형 타임아웃 경고:** 숫자형 밀리초 값(`600000`) 사용 시 Hugo 및 YAML 스키마에서 문자열 시간 단위(`'600s'`) 지정을 권장하는 디프리케이션 경고 발생.
+3. **상위 디프리케이션 키 선언:** `footnotereturnlinkcontents: <sup>^</sup>` 구식 옵션이 최상위 키로 잔재함.
+
+### 💡 해결 조치
+1. `cascade` 하위 항목들에 **`params:` 계층 구조**를 명확히 부여하여 YAML 스키마 준수.
+2. `timeout: 600000` ➔ **`timeout: '600s'`**로 표준 지속 시간 형식으로 변경.
+3. 최상단 잔재 레거시 키 정돈 및 스키마 검증 완수 (Hugo 빌드 `39 pages built in 630 ms` 확인 완료).
 
 ---
 

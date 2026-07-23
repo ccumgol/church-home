@@ -45,12 +45,12 @@ main:
     weight: 21
 
   - name: "새벽기도"
-    url: "https://www.youtube.com/playlist?list=PLnxFG_0wR9oKji-fEssNNfNDvUPYjTC1j"
+    url: "https://youtube.com/playlist?list=PLPRMrPgg66ocNGxPsLnRkQuSdZBkJRTM-&si=LljLPuvTAAFbo-Z-"
     parent: "sermons"
     weight: 22
 
   - name: "수요기도회"
-    url: "https://www.youtube.com/playlist?list=PLnxFG_0wR9oJb9mG3Wy0D5ynf7lsVuckF"
+    url: "https://youtube.com/playlist?list=PLPRMrPgg66oejzScM6qhysDHtTVKYu-dv&si=7m9QZFpPENEkXk2W"
     parent: "sermons"
     weight: 23
 

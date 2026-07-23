@@ -475,63 +475,46 @@ div[class*="orb"], div[class*="gradient_mesh"] {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   7. Sticky Navigation Header Background & Contrast Protection
+   7. Sticky Navigation Header & Dropdown Backgrounds
    ──────────────────────────────────────────────────────────────────────────── */
 .page-header,
 header,
 #site-header,
-.header,
-nav.navbar,
-header nav,
-header .container,
-header > div,
-nav.navbar > div,
-nav.navbar ul,
-.navbar-menu {
+.header {
   background-color: var(--color-paper) !important;
   background: var(--color-paper) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   border-bottom: 1px solid var(--color-rule) !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
 }
 
 .dark .page-header,
 .dark header,
 .dark #site-header,
-.dark .header,
-.dark nav.navbar,
-.dark header nav,
-.dark header .container,
-.dark header > div,
-.dark nav.navbar > div,
-.dark nav.navbar ul,
-.dark .navbar-menu {
+.dark .header {
   background-color: #0f172a !important;
   background: #0f172a !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-  opacity: 1 !important;
 }
 
-/* Mobile Navigation Dropdown Solid Background */
-@media (max-width: 1023px) {
-  #nav-toggle:checked ~ div,
-  #nav-toggle:checked ~ ul,
-  .navbar-menu,
-  nav.navbar ul {
-    background-color: var(--color-paper) !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-  }
-  .dark #nav-toggle:checked ~ div,
-  .dark #nav-toggle:checked ~ ul,
-  .dark .navbar-menu,
-  .dark nav.navbar ul {
-    background-color: #0f172a !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-  }
+/* Dropdown Submenu Background & Styling (Preserving Default Hover Visibility) */
+nav.navbar ul.nav-dropdown,
+.navbar-dropdown,
+header nav .nav-dropdown {
+  background-color: var(--color-paper) !important;
+  border: 1px solid var(--color-rule) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0.75rem !important;
+}
+
+.dark nav.navbar ul.nav-dropdown,
+.dark .navbar-dropdown,
+.dark header nav .nav-dropdown {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Navbar Brand - Solid Warm Accent */

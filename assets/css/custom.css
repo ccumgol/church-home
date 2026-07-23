@@ -701,6 +701,24 @@ p.powered-by,
   padding: 0 !important;
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+   12. YouTube Playlist Video Player Container
+   ──────────────────────────────────────────────────────────────────────────── */
+#latest-sermon {
+  padding-top: 1.5rem !important;
+  padding-bottom: 2rem !important;
+}
+
+#latest-sermon .max-w-prose,
+#latest-sermon .prose {
+  max-width: 56rem !important; /* 896px max-w-4xl for optimal video aspect ratio */
+  width: 100% !important;
+}
+
+#latest-sermon iframe {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2) !important;
+}
+
 footer a, .page-footer a {
   color: #a8a29e !important;
   transition: color 0.2s ease !important;

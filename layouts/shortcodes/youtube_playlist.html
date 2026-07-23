@@ -1,0 +1,16 @@
+{{ $listID := .Get "list" | default (.Get 0) | default "PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP" }}
+{{ $title := .Get "title" | default "최신 설교 및 예배 영상" }}
+
+<div class="my-4 max-w-4xl mx-auto px-2 sm:px-0">
+  <div class="relative w-full overflow-hidden rounded-2xl shadow-2xl border border-stone-200 dark:border-stone-800 bg-stone-950 aspect-video">
+    <iframe
+      class="absolute top-0 left-0 w-full h-full rounded-2xl"
+      src="https://www.youtube-nocookie.com/embed/videoseries?list={{ $listID }}"
+      title="{{ $title }}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>

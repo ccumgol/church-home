@@ -40,6 +40,19 @@ sections:
       background:
         color: "#1a1614"
 
+  - block: markdown
+    id: latest-sermon
+    content:
+      subtitle: Recent Sermon & Praise
+      title: 최근 설교 및 예배 영상
+      text: |
+        유튜브 공식 채널 플레이리스트의 가장 최근 설교 및 말씀 영상이 자동으로 연결되어 표시됩니다.
+
+        {{< youtube_playlist list="PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP" title="샘플교회 최신 설교 및 예배 영상" >}}
+    design:
+      columns: '1'
+      css_class: "bg-stone-100/50 dark:bg-stone-900/40 border-b border-stone-200 dark:border-stone-800"
+
   - block: features
     id: worship-schedule
     content:

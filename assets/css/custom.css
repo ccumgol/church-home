@@ -84,23 +84,70 @@ section[id="worship-schedule"] {
   padding-bottom: 0.25rem !important;
 }
 
-/* Keep Hero Section Padding Top/Bottom Compact */
+/* Keep Hero Section Padding Top/Bottom Compact (Cut by Half) */
 section[class*="hero"],
-.block-hero {
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important;
+.block-hero,
+#section-hero {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
 
 @media (min-width: 768px) {
   section[class*="hero"],
-  .block-hero {
-    padding-top: 3.5rem !important;
-    padding-bottom: 3.5rem !important;
+  .block-hero,
+  #section-hero {
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+}
+
+.hero-block-container,
+#section-hero .hero-block-container {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2. STANDARDIZED SECTION HEADINGS (English Subtitle + Korean Title + Description)
+   ──────────────────────────────────────────────────────────────────────────── */
+.hbb-section [class*="subtitle"],
+.hbb-section .section-subtitle,
+.preact-block [class*="subtitle"] {
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: var(--color-accent) !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.dark .hbb-section [class*="subtitle"],
+.dark .preact-block [class*="subtitle"] {
+  color: #f97316 !important;
+}
+
+.hbb-section [class*="title"]:not(.hero-title),
+.hbb-section .section-title,
+.preact-block h2 {
+  font-family: var(--font-display) !important;
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 0.2rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+@media (min-width: 768px) {
+  .hbb-section [class*="title"]:not(.hero-title),
+  .hbb-section .section-title,
+  .preact-block h2 {
+    font-size: 2rem !important;
   }
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   2. Typography & Legibility (Light Mode Defaults)
+   3. Typography & Legibility (Light Mode Defaults)
    ──────────────────────────────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .font-display,
@@ -126,7 +173,7 @@ html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   3. GLOBAL DARK MODE TEXT & COLOR INVERSION (.dark)
+   4. GLOBAL DARK MODE TEXT & COLOR INVERSION (.dark)
    ──────────────────────────────────────────────────────────────────────────── */
 .dark {
   --color-paper: #0f172a;
@@ -243,7 +290,7 @@ html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   4. Bottom CTA Card (Content Width Constraint max-w-5xl & High Contrast)
+   5. Bottom CTA Card (Content Width Constraint max-w-5xl & High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
 /* Outer Section: transparent background */
 section[id*="cta"],
@@ -359,14 +406,34 @@ section[id*="cta"] button:hover,
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   5. Hero Section Refinement
+   6. Hero Section Refinement
    ──────────────────────────────────────────────────────────────────────────── */
 .block-hero,
-section[class*="hero"] {
+section[class*="hero"],
+#section-hero {
   position: relative;
-  background-color: #1a1614 !important; /* Warm Dark Charcoal */
   color: #ffffff !important;
   overflow: hidden;
+}
+
+.block-hero .home-section-bg,
+section[class*="hero"] .home-section-bg,
+#section-hero .home-section-bg {
+  background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.30) 0%, rgba(15, 23, 42, 0.48) 100%), url('/media/bright_sky_bg.webp') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+.dark .block-hero .home-section-bg,
+.dark section[class*="hero"] .home-section-bg,
+.dark #section-hero .home-section-bg {
+  background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.50) 0%, rgba(15, 23, 42, 0.70) 100%), url('/media/bright_sky_bg.webp') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-color: transparent !important;
 }
 
 .hero-title,
@@ -384,6 +451,15 @@ section[class*="hero"] strong {
   color: #f1f5f9 !important;
 }
 
+/* Hide Star Rating Icons in Hero Section */
+.hero-block-container svg[class*="yellow"],
+.hero-block-container svg[class*="star"],
+.hero-block-container div.flex.items-center.gap-x-1,
+section[class*="hero"] svg[class*="yellow"],
+section[class*="hero"] svg[class*="star"] {
+  display: none !important;
+}
+
 /* Ambient Glow for Hero */
 .block-hero::before {
   content: "";
@@ -399,7 +475,7 @@ div[class*="orb"], div[class*="gradient_mesh"] {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   6. Navigation Header Seamless Background Matching
+   7. Navigation Header Seamless Background Matching
    ──────────────────────────────────────────────────────────────────────────── */
 header,
 #site-header,
@@ -448,7 +524,7 @@ nav.navbar > div {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   7. Buttons & Micro-interactions
+   8. Buttons & Micro-interactions
    ──────────────────────────────────────────────────────────────────────────── */
 a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
   font-family: var(--font-body);
@@ -485,7 +561,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   8. Cards & Bento Grid
+   9. Cards & Bento Grid
    ──────────────────────────────────────────────────────────────────────────── */
 .bento-card, .card, [class*="block-"] article {
   border: 1px solid var(--color-rule);
@@ -506,7 +582,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   9. Editorial FAQ Details & Accordion
+   10. Editorial FAQ Details & Accordion
    ──────────────────────────────────────────────────────────────────────────── */
 details {
   border: 1px solid var(--color-rule);
@@ -529,7 +605,7 @@ summary {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   10. Footer Spacing Reduction
+   11. Footer Spacing Reduction
    ──────────────────────────────────────────────────────────────────────────── */
 footer,
 .page-footer,
@@ -570,7 +646,7 @@ footer p, footer div, footer li {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   11. Section Container Alignment & Max Width (1024px)
+   12. Section Container Alignment & Max Width (1024px)
    ──────────────────────────────────────────────────────────────────────────── */
 .hbb-section > div[class*="-block-container"],
 .hbb-section .preact-block,

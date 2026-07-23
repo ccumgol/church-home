@@ -30,9 +30,6 @@ sections:
         link:
           text: 자세히 보기
           url: "/about/#services"
-      trust:
-        stars: 5
-        text: "**123 Main St, Palisades Park, NJ 07650**"
     design:
       spacing:
         padding: [0, 0, 0, 0]
@@ -46,32 +43,27 @@ sections:
   - block: features
     id: worship-schedule
     content:
-      title: 예배 및 모임 시간
       subtitle: Worship & Prayer Schedule
+      title: 예배 및 모임 시간
       text: 참된 예배와 기도로 하나님께 영광을 올려드리는 거룩한 구별의 시간입니다.
       items:
         - name: 주일 대예배
           icon: sparkles
-          description: |
-            **매주 주일 오전 11:00 AM**  
-            본당 2층 & YouTube Live 생중계
+          description: "**매주 주일 오전 11:00 AM**<br />본당 2층 & YouTube Live 생중계"
         - name: 새벽기도회
           icon: bolt
-          description: |
-            **월 ~ 금요일 오전 06:00 AM**  
-            본당 1층 & 온라인 라이브
+          description: "**월 ~ 금요일 오전 06:00 AM**<br />본당 1층 & 온라인 라이브"
         - name: 수요기도회
           icon: shield-check
-          description: |
-            **매주 수요일 저녁 08:00 PM**  
-            본당 2층 (말씀 중심 기도회)
+          description: "**매주 수요일 저녁 08:00 PM**<br />본당 2층 (말씀 중심 기도회)"
     design:
       css_class: "bg-amber-50/70 dark:bg-stone-900/80 border-b border-stone-200 dark:border-stone-800"
 
   - block: steps
     id: worship-guide
     content:
-      title: 샘플교회 공동체 사역 안내
+      subtitle: Community & Ministry
+      title: 공동체 사역 안내
       text: 참된 말씀의 훈련과 사랑의 교제가 준비되어 있습니다.
       items:
         - title: 1. 하나님을 높이는 참된 예배
@@ -92,7 +84,7 @@ sections:
     id: core-values
     content:
       subtitle: Core Values
-      title: 개혁주의 신앙과 사랑의 섬김
+      title: 핵심 가치 및 사역 철학
       text: 오직 성경, 오직 은혜, 오직 믿음으로 하나님과 이웃을 온전히 섬깁니다.
       items:
         - name: 오직 성경 (Sola Scriptura)
@@ -120,8 +112,9 @@ sections:
   - block: faq
     id: faq
     content:
-      title: 자주 묻는 질문 (FAQ)
-      subtitle: 신앙생활 및 방문에 관해 자주 물으시는 질문입니다.
+      subtitle: Frequently Asked Questions
+      title: 자주 묻는 질문
+      text: 신앙생활 및 교회 방문에 관해 자주 물으시는 질문입니다.
       items:
         - question: 새가족 등록은 어떻게 하나요?
           answer: |
@@ -139,6 +132,7 @@ sections:
   - block: cta-card
     id: cta-invitation
     content:
+      subtitle: Worship Invitation
       title: 참된 은혜와 평안이 있는 예배에 초청합니다
       text: "123 Main St, Palisades Park, NJ 07650 | Tel: (201) 555-0100"
       button:

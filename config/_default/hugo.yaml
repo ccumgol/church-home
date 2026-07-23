@@ -14,31 +14,32 @@ baseURL: 'https://ccumgol.github.io/church-home/' # Website URL
 cascade:
   - target:
       path: /**
-    show_date: false
-    reading_time: false
+    params:
+      show_date: false
+      reading_time: false
   # Blog post options
   - target:
       path: /blog/**
       kind: page
-    pager: true
-    editable: true
-    show_date: true
-    show_date_updated: true
-    reading_time: true
-    commentable: true
-    show_related: true
-    share: true
-    # Just use Breadcrumb for navigation on blog post pages?
-    show_breadcrumb: false
-    header:
-      navbar:
-        enable: true
+    params:
+      pager: true
+      editable: true
+      show_date: true
+      show_date_updated: true
+      reading_time: true
+      commentable: true
+      show_related: true
+      share: true
+      show_breadcrumb: false
+      header:
+        navbar:
+          enable: true
   # Blog section options
   - target:
       path: /blog/*
       kind: section
-    # Set the listing view
-    view: date-title-summary
+    params:
+      view: date-title-summary
 
 ############################
 ## LANGUAGE
@@ -61,7 +62,6 @@ pagination:
   pagerSize: 10
 enableEmoji: true
 enableRobotsTXT: true
-footnotereturnlinkcontents: <sup>^</sup>
 ignoreFiles: [".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 disableAliases: true
 outputs:
@@ -72,7 +72,7 @@ imaging:
   quality: 90
   anchor: smart
   hint: picture
-timeout: 600000
+timeout: '600s'
 taxonomies:
   tag: tags
   category: categories

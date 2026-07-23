@@ -517,6 +517,37 @@ header nav .nav-dropdown {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Remove borders, outlines, and backgrounds from top navigation menu items */
+nav.navbar .nav-link,
+nav.navbar .nav-item,
+nav.navbar .nav-item > a,
+.navbar-nav .nav-link,
+.navbar-nav .nav-item > a,
+header nav a,
+header nav button {
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none !important;
+}
+
+.dark nav.navbar .nav-link,
+.dark nav.navbar .nav-item,
+.dark nav.navbar .nav-item > a,
+.dark .navbar-nav .nav-link,
+.dark .navbar-nav .nav-item > a,
+.dark header nav a,
+.dark header nav button {
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: none !important;
+}
+
 /* Navbar Brand - Solid Warm Accent */
 .navbar-brand, nav a.font-bold {
   font-family: var(--font-display) !important;

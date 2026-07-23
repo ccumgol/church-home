@@ -137,6 +137,7 @@ sections:
             [교회소개 - 온라인헌금](/about/#offering) 안내 페이지에서 계좌 송금 및 온라인 송금 상세 정보를 확인하실 수 있습니다.
 
   - block: cta-card
+    id: cta-invitation
     content:
       title: 참된 은혜와 평안이 있는 예배에 초청합니다
       text: "123 Main St, Palisades Park, NJ 07650 | Tel: (201) 555-0100"

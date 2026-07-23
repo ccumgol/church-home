@@ -37,7 +37,7 @@ body {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   1. Typography & Contrast Refinement (WCAG AAA High Contrast)
+   1. Typography & Legibility (WCAG AAA High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .font-display,
@@ -49,23 +49,138 @@ section h1, section h2 {
 }
 
 /* Light Background Content Typography */
-section:not(.dark):not([class*="hero"]) h1,
-section:not(.dark):not([class*="hero"]) h2,
-section:not(.dark):not([class*="hero"]) h3,
-section:not(.dark):not([class*="hero"]) h4 {
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) h1,
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) h2,
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) h3,
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) h4 {
   color: #1c1917 !important;
 }
 
-section:not(.dark):not([class*="hero"]) p,
-section:not(.dark):not([class*="hero"]) li,
-section:not(.dark):not([class*="hero"]) span:not([class*="badge"]) {
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) p,
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) li,
+section:not(.dark):not([class*="hero"]):not([id*="cta"]) span:not([class*="badge"]) {
   color: #292524;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   2. Dark Boxes & Dark Sections High Contrast Overrides (Hero, CTA Card, etc.)
+   2. Bottom CTA Card (Content Width Constraint max-w-5xl & 100% Text Legibility)
    ──────────────────────────────────────────────────────────────────────────── */
-/* Hero Section */
+/* Outer Section: transparent background so no full-bleed black viewport overflow occurs */
+section[id*="cta"],
+section.blox-cta-card,
+#cta-invitation,
+#section-cta-invitation,
+#section-cta-card {
+  background-color: transparent !important;
+  background: none !important;
+  max-width: 100% !important;
+  padding-top: 1rem !important;
+  padding-bottom: 1.5rem !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+section[id*="cta"] .home-section-bg,
+#cta-invitation .home-section-bg,
+#section-cta-card .home-section-bg {
+  display: none !important;
+  background-color: transparent !important;
+}
+
+/* Inner Card Container: Bounded strictly inside max-w-5xl (1024px), matching FAQ section 1:1 */
+[data-block-type="cta-card"],
+.cta-card-block-container,
+#cta-invitation .cta-card-block-container,
+section[id*="cta"] div[class*="-container"],
+section[id*="cta"] div[class*="preact"],
+section[id*="cta"] div[class*="rounded"] {
+  max-width: 64rem !important; /* max-w-5xl = 1024px */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border-radius: 1.5rem !important;
+  background: linear-gradient(135deg, #1c1917 0%, #292524 100%) !important;
+  border: 1px solid #44403c !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  padding: 2.5rem 1.5rem !important;
+}
+
+@media (min-width: 768px) {
+  [data-block-type="cta-card"],
+  .cta-card-block-container,
+  #cta-invitation .cta-card-block-container,
+  section[id*="cta"] div[class*="-container"] {
+    padding: 3.5rem 3rem !important;
+  }
+}
+
+/* Title Text: Absolute Crisp Pure White, High Visibility */
+section[id*="cta"] h1,
+section[id*="cta"] h2,
+section[id*="cta"] h3,
+section[id*="cta"] h4,
+[data-block-type="cta-card"] h1,
+[data-block-type="cta-card"] h2,
+[data-block-type="cta-card"] h3,
+.cta-card-block-container h2,
+.cta-card-block-container h3,
+.cta-card-block-container h4 {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Description Text: Crisp Bright Slate/Off-white, 100% High Visibility */
+section[id*="cta"] p,
+section[id*="cta"] span,
+section[id*="cta"] div,
+[data-block-type="cta-card"] p,
+[data-block-type="cta-card"] span,
+.cta-card-block-container p,
+.cta-card-block-container span {
+  color: #f1f5f9 !important;
+  -webkit-text-fill-color: #f1f5f9 !important;
+  opacity: 0.95 !important;
+  visibility: visible !important;
+  font-size: 1.05rem !important;
+}
+
+/* Action Button: Crisp Terracotta Action Button with White Text */
+section[id*="cta"] a,
+section[id*="cta"] button,
+[data-block-type="cta-card"] a,
+[data-block-type="cta-card"] button,
+.cta-card-block-container a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: var(--color-accent) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.85rem 2rem !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 4px 12px rgba(217, 93, 18, 0.4) !important;
+  margin-top: 1rem !important;
+  transition: all 0.2s ease !important;
+}
+
+section[id*="cta"] a:hover,
+section[id*="cta"] button:hover,
+[data-block-type="cta-card"] a:hover,
+.cta-card-block-container a:hover {
+  background-color: var(--color-accent-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. Hero Section Refinement (Clean Ambient Surface & High Contrast Text)
+   ──────────────────────────────────────────────────────────────────────────── */
 .block-hero,
 section[class*="hero"],
 section.dark {
@@ -96,53 +211,6 @@ section.dark strong {
   color: #f1f5f9 !important;
 }
 
-/* Bottom CTA Card Section (Explicit High Contrast) */
-section[id*="cta"],
-.cta-card,
-[class*="cta-card"],
-.block-cta-card,
-div[class*="cta-card"],
-[data-block-type="cta-card"] {
-  background-color: #1c1917 !important;
-  border: 1px solid #334155 !important;
-  border-radius: 16px !important;
-  color: #ffffff !important;
-}
-
-section[id*="cta"] *,
-.cta-card *,
-[class*="cta-card"] *,
-.block-cta-card *,
-div[class*="cta-card"] *,
-[data-block-type="cta-card"] * {
-  color: #ffffff !important;
-}
-
-section[id*="cta"] p,
-.cta-card p,
-[class*="cta-card"] p,
-[data-block-type="cta-card"] p,
-section[id*="cta"] text {
-  color: #f1f5f9 !important;
-}
-
-/* CTA Card Primary Action Button */
-section[id*="cta"] a,
-section[id*="cta"] button,
-.cta-card a,
-.cta-card button,
-[class*="cta-card"] a {
-  background-color: var(--color-accent) !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-section[id*="cta"] a:hover,
-.cta-card a:hover {
-  background-color: var(--color-accent-hover) !important;
-  color: #ffffff !important;
-}
-
 /* Ambient Glow for Hero */
 .block-hero::before {
   content: "";
@@ -158,7 +226,7 @@ div[class*="orb"], div[class*="gradient_mesh"] {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   3. Glassmorphism Navigation Header & Clean Warm Aesthetic
+   4. Glassmorphism Navigation Header & Clean Warm Aesthetic
    ──────────────────────────────────────────────────────────────────────────── */
 header, nav.navbar, header nav {
   backdrop-filter: blur(12px) saturate(160%) !important;
@@ -190,7 +258,7 @@ header, nav.navbar, header nav {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   4. Buttons & Micro-interactions
+   5. Buttons & Micro-interactions
    ──────────────────────────────────────────────────────────────────────────── */
 a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
   font-family: var(--font-body);
@@ -227,7 +295,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   5. Cards & Bento Grid (Crisp Hairline Borders & High Contrast)
+   6. Cards & Bento Grid (Crisp Hairline Borders & High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
 .bento-card, .card, [class*="block-"] article {
   border: 1px solid var(--color-rule);
@@ -253,7 +321,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   6. Editorial FAQ Details & Accordion
+   7. Editorial FAQ Details & Accordion
    ──────────────────────────────────────────────────────────────────────────── */
 details {
   border: 1px solid var(--color-rule);
@@ -285,7 +353,7 @@ summary {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   7. Footer Spacing Reduction (Reduced Top Margin by > 50%)
+   8. Footer Spacing Reduction (Zero Top Margin, Compact Padding)
    ──────────────────────────────────────────────────────────────────────────── */
 footer,
 .page-footer,
@@ -326,7 +394,7 @@ footer p, footer div, footer li {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   8. Section Container Alignment & Max Width (1024px)
+   9. Section Container Alignment & Max Width (1024px)
    ──────────────────────────────────────────────────────────────────────────── */
 .hbb-section > div[class*="-block-container"],
 .hbb-section .preact-block,

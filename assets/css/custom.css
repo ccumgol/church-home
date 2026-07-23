@@ -61,6 +61,29 @@ section[class*="hbb-section"],
   }
 }
 
+/* Specific Override for '예배 및 모임 시간' Section (Cut Padding in Half) */
+#worship-schedule,
+section#worship-schedule,
+section[id="worship-schedule"] {
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
+}
+
+@media (min-width: 768px) {
+  #worship-schedule,
+  section#worship-schedule,
+  section[id="worship-schedule"] {
+    padding-top: 0.85rem !important;
+    padding-bottom: 0.85rem !important;
+  }
+}
+
+#worship-schedule > div[class*="-block-container"],
+#worship-schedule .features-block-container {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
 /* Keep Hero Section Padding Top/Bottom Compact */
 section[class*="hero"],
 .block-hero {

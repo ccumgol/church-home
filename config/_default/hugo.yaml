@@ -68,9 +68,9 @@ outputs:
   home: [HTML, RSS, headers, redirects]
   section: [HTML, RSS]
 imaging:
-  resampleFilter: lanczos
+  resampleFilter: Lanczos
   quality: 90
-  anchor: smart
+  anchor: Smart
   hint: picture
 timeout: '600s'
 taxonomies:

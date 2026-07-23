@@ -46,7 +46,28 @@
 
     {{/* Left 3 Columns: Sermon Cards List (col-span-3) */}}
     <div class="lg:col-span-3">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      {{/* Active Filter Status Bar */}}
+      <div id="filter-status-bar" class="mb-5 hidden items-center justify-between p-3.5 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-900/60 text-xs">
+        <span class="font-semibold text-orange-900 dark:text-orange-200 flex items-center gap-1.5" id="filter-status-text">
+          <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+          필터 적용 중
+        </span>
+        <button type="button" onclick="resetSermonFilter()" class="font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1">
+          ✕ 전체 설교 보기
+        </button>
+      </div>
+
+      {{/* Empty State Result */}}
+      <div id="sermon-no-results" class="hidden p-8 rounded-2xl text-center bg-stone-50 dark:bg-stone-900 border border-dashed border-stone-300 dark:border-stone-700 my-4">
+        <p class="text-sm font-medium text-stone-600 dark:text-stone-400 mb-3">선택하신 태그에 해당하는 설교가 없습니다.</p>
+        <button type="button" onclick="resetSermonFilter()" class="px-4 py-2 text-xs font-bold text-white bg-orange-600 rounded-lg shadow-sm hover:bg-orange-700 transition-colors">
+          전체 설교 목록 보기
+        </button>
+      </div>
+
+      {{/* Sermon Cards Grid */}}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="sermons-grid">
         {{ range .Pages }}
           {{- $youtubeURL := .Params.youtube_url | default "" -}}
           {{- $videoID := "" -}}
@@ -56,8 +77,13 @@
             {{- $videoID = replaceRE ".*(?:v=|/embed/|youtu\\.be/)" "" $rawMatch -}}
           {{- end -}}
           {{- $thumbURL := cond (ne $videoID "") (printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $videoID) "/media/bright_sky_bg.webp" -}}
+          {{- $tagString := delimit (.Params.tags | default slice) "," -}}
 
-          <article class="group flex flex-col rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+          <article 
+            class="sermon-card group flex flex-col rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+            data-book="{{ .Params.book | default "" }}"
+            data-speaker="{{ .Params.speaker | default "" }}"
+            data-tags="{{ $tagString }}">
             
             {{/* 1. Thumbnail Container */}}
             <a href="{{ .RelPermalink }}" class="relative w-full aspect-video overflow-hidden bg-black block">
@@ -119,6 +145,9 @@
             <svg class="w-4 h-4 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
             말씀 분류 및 태그
           </h2>
+          <button type="button" onclick="resetSermonFilter()" class="text-xs text-orange-600 dark:text-orange-400 font-bold hover:underline">
+            전체보기
+          </button>
         </div>
 
         {{/* Category 1: 성경권별 (By Book of the Bible) */}}
@@ -130,9 +159,12 @@
           </h3>
           <div class="flex flex-wrap gap-1.5">
             {{ range $book := $uniqueBooks }}
-            <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 shadow-xs inline-flex items-center">
+            <button 
+              type="button" 
+              onclick="filterSermons('book', '{{ $book }}', this)" 
+              class="sermon-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center cursor-pointer">
               #{{ $book }}
-            </span>
+            </button>
             {{ end }}
           </div>
         </div>
@@ -147,9 +179,12 @@
           </h3>
           <div class="flex flex-wrap gap-1.5">
             {{ range $sp := $uniqueSpeakers }}
-            <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 shadow-xs inline-flex items-center">
+            <button 
+              type="button" 
+              onclick="filterSermons('speaker', '{{ $sp }}', this)" 
+              class="sermon-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center cursor-pointer">
               #{{ $sp }}
-            </span>
+            </button>
             {{ end }}
           </div>
         </div>
@@ -164,9 +199,12 @@
           </h3>
           <div class="flex flex-wrap gap-1.5">
             {{ range $season := $uniqueTags }}
-            <span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 shadow-xs inline-flex items-center">
+            <button 
+              type="button" 
+              onclick="filterSermons('tag', '{{ $season }}', this)" 
+              class="sermon-filter-btn px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center cursor-pointer">
               #{{ $season }}
-            </span>
+            </button>
             {{ end }}
           </div>
         </div>
@@ -179,4 +217,99 @@
   </div>
 
 </div>
+
+{{/* Interactive Filtering JavaScript */}}
+<script>
+  let activeFilterType = null;
+  let activeFilterVal = null;
+
+  function filterSermons(type, value, btnEl) {
+    const cards = document.querySelectorAll('.sermon-card');
+    const allBtns = document.querySelectorAll('.sermon-filter-btn');
+
+    // Toggle off if clicking active tag again
+    if (activeFilterType === type && activeFilterVal === value) {
+      resetSermonFilter();
+      return;
+    }
+
+    activeFilterType = type;
+    activeFilterVal = value;
+
+    // Reset button styles
+    allBtns.forEach(btn => {
+      btn.classList.remove('bg-orange-600', 'text-white', 'border-orange-600', 'ring-2', 'ring-orange-300');
+      btn.classList.add('bg-white', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-200', 'border-stone-200', 'dark:border-stone-700');
+    });
+
+    // Active button style
+    if (btnEl) {
+      btnEl.classList.remove('bg-white', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-200', 'border-stone-200', 'dark:border-stone-700');
+      btnEl.classList.add('bg-orange-600', 'text-white', 'border-orange-600', 'ring-2', 'ring-orange-300');
+    }
+
+    let visibleCount = 0;
+    cards.forEach(card => {
+      let match = false;
+      if (type === 'book') {
+        match = (card.dataset.book === value);
+      } else if (type === 'speaker') {
+        match = (card.dataset.speaker === value);
+      } else if (type === 'tag') {
+        const tags = (card.dataset.tags || '').split(',');
+        match = tags.includes(value);
+      }
+
+      if (match) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Update status bar & empty results
+    const statusBar = document.getElementById('filter-status-bar');
+    const statusText = document.getElementById('filter-status-text');
+    const noResults = document.getElementById('sermon-no-results');
+
+    if (statusBar && statusText) {
+      statusBar.classList.remove('hidden');
+      statusBar.classList.add('flex');
+      statusText.innerHTML = `<span class="font-bold text-orange-600 dark:text-orange-400">#${value}</span> 태그 검색 결과 (${visibleCount}건)`;
+    }
+
+    if (noResults) {
+      noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+    }
+  }
+
+  function resetSermonFilter() {
+    activeFilterType = null;
+    activeFilterVal = null;
+    const cards = document.querySelectorAll('.sermon-card');
+    const allBtns = document.querySelectorAll('.sermon-filter-btn');
+
+    allBtns.forEach(btn => {
+      btn.classList.remove('bg-orange-600', 'text-white', 'border-orange-600', 'ring-2', 'ring-orange-300');
+      btn.classList.add('bg-white', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-200', 'border-stone-200', 'dark:border-stone-700');
+    });
+
+    cards.forEach(card => {
+      card.style.display = 'flex';
+    });
+
+    const statusBar = document.getElementById('filter-status-bar');
+    const noResults = document.getElementById('sermon-no-results');
+
+    if (statusBar) {
+      statusBar.classList.add('hidden');
+      statusBar.classList.remove('flex');
+    }
+
+    if (noResults) {
+      noResults.style.display = 'none';
+    }
+  }
+</script>
 {{ end }}

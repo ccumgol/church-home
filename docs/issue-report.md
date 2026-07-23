@@ -21,20 +21,19 @@
 14. [이슈 14: 푸터 하단 Hugo Blox 관련 외부 링크 문구 완전 제거](#이슈-14-푸터-하단-hugo-blox-관련-외부-링크-문구-완전-제거)
 15. [이슈 15: 히어로 직하단 유튜브 특정 플레이리스트 최신 영상 자동 연동 연출](#이슈-15-히어로-직하단-유튜브-특정-플레이리스트-최신-영상-자동-연동-연출)
 16. [이슈 16: 주일설교 영상 축적 시스템 구축 (유튜브 썸네일 자동 추출 & 목록/상세 레이아웃)](#이슈-16-주일설교-영상-축적-시스템-구축-유튜브-썸네일-자동-추출--목록상세-레이아웃)
+17. [이슈 17: 상단 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 유튜브 플레이리스트 URL 갱신](#이슈-17-상단-드롭다운-메뉴-새벽기도-및-수요기도회-유튜브-플레이리스트-url-갱신)
 
 ---
 
-## 이슈 16: 주일설교 영상 축적 시스템 구축 (유튜브 썸네일 자동 추출 & 목록/상세 레이아웃)
+## 이슈 17: 상단 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 유튜브 플레이리스트 URL 갱신
 
 ### 🔴 요구사항
-- `content/sermons/` 폴더에 주일설교 `.md` 포스트를 계속 작성하여 축적할 수 있도록 시스템 구축.
-- 유튜브 링크를 입력하면 **썸네일을 자동 생성**하고, 목록에서는 `썸네일 + 제목 + 성경본문 + 설교자 + 예배일` 표시.
-- 상세 페이지에서는 `제목 + 성경본문 + 유튜브 영상 플레이어 + 설교자 + 예배일 + 설교 원고` 순으로 정렬 배치.
+- 상단 네비게이션 메뉴의 '말씀' 하위 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 연결 유튜브 플레이리스트 URL 최신화 요청.
 
 ### 💡 해결 조치
-1. **아키타입 제공 (`archetypes/sermons.md`):** `hugo new sermons/yyyy-mm-dd-title.md` 명령어로 간편 생성.
-2. **썸네일 자동 추출 (`layouts/sermons/list.html`):** 정규식을 사용해 `youtube_url`에서 비디오 ID를 분리하고 `https://img.youtube.com/vi/{VIDEO_ID}/hqdefault.jpg` 썸네일을 자동 생성하여 3열 카드 그리드 디자인 적용.
-3. **상세 페이지 설계 (`layouts/sermons/single.html`):** 상단부터 `제목 + 성경본문 뱃지 + 유튜브 16:9 반응형 플레이어 + 설교자/예배일 메타바 + 설교 원고 카드` 순으로 완벽 구현.
+- [`config/_default/menus.yaml`](file:///Users/gihyunpark/Desktop/Workspace/church-home/config/_default/menus.yaml) 파일 내 `새벽기도` 및 `수요기도회` 항목의 `url` 매개변수를 최신 유튜브 플레이리스트 링크로 수정 반영:
+  - **새벽기도:** `https://youtube.com/playlist?list=PLPRMrPgg66ocNGxPsLnRkQuSdZBkJRTM-&si=LljLPuvTAAFbo-Z-`
+  - **수요기도회:** `https://youtube.com/playlist?list=PLPRMrPgg66oejzScM6qhysDHtTVKYu-dv&si=7m9QZFpPENEkXk2W`
 
 ---
 

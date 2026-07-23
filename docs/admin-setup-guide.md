@@ -34,9 +34,7 @@
 3. 기존 코드를 모두 지우고 아래 코드를 붙여넣기:
 
 ```javascript
-// sveltia-cms-auth — GitHub OAuth proxy for Decap CMS
-// Source: https://github.com/sveltia/sveltia-cms-auth
-
+// GitHub OAuth proxy for Decap CMS (Cloudflare Worker)
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -56,15 +54,31 @@ export default {
       const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, code }),
+        body: JSON.stringify({ 
+          client_id: env.GITHUB_CLIENT_ID, 
+          client_secret: env.GITHUB_CLIENT_SECRET, 
+          code 
+        }),
       });
-      const { access_token } = await tokenRes.json();
-      const html = `<!DOCTYPE html><html><body><script>
-        window.opener.postMessage(
-          'authorization:github:success:{"token":"${access_token}","provider":"github"}',
-          '*'
-        );
-      </script></body></html>`;
+      const data = await tokenRes.json();
+      
+      // Decap CMS requires a 2-way handshake
+      const html = `<!DOCTYPE html>
+      <html>
+      <head><meta charset="utf-8"><title>Callback</title></head>
+      <body>
+        <script>
+          function receiveMessage(e) {
+            window.opener.postMessage(
+              'authorization:github:success:{"token":"${data.access_token}","provider":"github"}',
+              e.origin
+            );
+          }
+          window.addEventListener("message", receiveMessage, false);
+          window.opener.postMessage("authorizing:github", "*");
+        </script>
+      </body>
+      </html>`;
       return new Response(html, { headers: { 'Content-Type': 'text/html' } });
     }
     

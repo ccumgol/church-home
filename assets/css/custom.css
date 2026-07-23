@@ -689,6 +689,18 @@ footer[aria-labelledby="footer-heading"],
   padding-top: 0.5rem !important;
 }
 
+/* Hide Hugo Blox attribution link line */
+.powered-by,
+p.powered-by,
+[data-hbx*="poweredby"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 footer a, .page-footer a {
   color: #a8a29e !important;
   transition: color 0.2s ease !important;

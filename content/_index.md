@@ -9,7 +9,7 @@ type: landing
 sections:
   - block: hero
     content:
-      eyebrow: 새로운개혁교회 · Saeroun Reformed Church
+      eyebrow: 샘플교회 · SAMPLE CHURCH
       title: 하나님의 말씀과 은혜로<br>새로워지는 성도의 삶
       text: 하나님의 사랑과 십자가 은혜가 넘치는 참된 예배 공동체에 여러분을 기쁨으로 초대합니다.
       primary_action:

@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════════════════════
    Hallmark Design System: Sacred Warmth & Editorial Clarity
-   /* Hallmark · macrostructure: Manifesto · genre: editorial · theme: Warm Terracotta */
+   Hallmark · macrostructure: Manifesto · genre: editorial · theme: Warm Terracotta
    ══════════════════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=MaruBuri:wght@400;600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
@@ -541,6 +541,7 @@ nav.navbar ul,
   letter-spacing: -0.02em;
   color: var(--color-accent) !important;
   background: none !important;
+  background-clip: unset !important;
   -webkit-background-clip: unset !important;
   -webkit-text-fill-color: initial !important;
   transition: opacity 0.2s ease;

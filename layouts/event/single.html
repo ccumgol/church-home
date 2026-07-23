@@ -1,0 +1,60 @@
+{{ define "main" }}
+<div class="container mx-auto px-4 md:px-8 py-10 max-w-4xl">
+  
+  {{/* Breadcrumb / Back button */}}
+  <div class="mb-6">
+    <a href="/event/" class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      행사 목록으로 돌아가기
+    </a>
+  </div>
+
+  <article class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+    
+    {{/* Header Image (Optional) */}}
+    {{ if .Params.image }}
+      <div class="w-full aspect-[21/9] md:aspect-[3/1] bg-slate-100 dark:bg-slate-800 relative">
+        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-full object-cover">
+      </div>
+    {{ end }}
+
+    <div class="p-6 md:p-10">
+      
+      {{/* Meta Info */}}
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span class="inline-flex items-center px-3 py-1 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-sm font-bold">
+          일시: {{ .Params.date | time.Format "2006년 1월 2일" }}
+          {{ if .Params.end_date }}
+            ~ {{ .Params.end_date | time.Format "2006년 1월 2일" }}
+          {{ end }}
+        </span>
+        {{ if .Params.location }}
+        <span class="inline-flex items-center px-3 py-1 rounded-md bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 text-sm font-medium">
+          <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          장소: {{ .Params.location }}
+        </span>
+        {{ end }}
+      </div>
+
+      {{/* Title */}}
+      <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
+        {{ .Title }}
+      </h1>
+
+      <hr class="border-slate-100 dark:border-slate-800 my-8">
+
+      {{/* Content */}}
+      <div class="prose prose-slate prose-lg dark:prose-invert max-w-none">
+        {{ if .Content }}
+          {{ .Content }}
+        {{ else if .Params.description }}
+          <p class="text-xl text-slate-500">{{ .Params.description }}</p>
+        {{ else }}
+          <p class="text-slate-500 italic">상세 내용이 없습니다.</p>
+        {{ end }}
+      </div>
+
+    </div>
+  </article>
+</div>
+{{ end }}

@@ -1,7 +1,6 @@
 ---
 title: "교회 주요 행사 안내"
 date: 2026-07-22
-type: page
 ---
 
 <p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">

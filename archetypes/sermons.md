@@ -3,6 +3,8 @@ title: "{{ replace .Name "-" " " | title }}"
 date: {{ .Date }}
 speaker: "담임목사"
 passage: "성경본문 입력 (예: 요한복음 1:14-18)"
+book: "성경권 (예: 요한복음)"
+tags: ["주일대예배"]
 youtube_url: "https://www.youtube.com/watch?v=비디오ID입력"
 draft: false
 ---

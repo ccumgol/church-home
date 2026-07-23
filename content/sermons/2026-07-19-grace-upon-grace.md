@@ -3,6 +3,8 @@ title: "은혜 위에 더하는 은혜"
 date: 2026-07-19
 speaker: "담임목사"
 passage: "요한복음 1:14-18"
+book: "요한복음"
+tags: ["주일대예배"]
 youtube_url: "https://www.youtube.com/watch?v=SCY3qabS1XQ"
 draft: false
 ---

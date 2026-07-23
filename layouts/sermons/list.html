@@ -1,5 +1,5 @@
 {{ define "main" }}
-<div class="container mx-auto px-4 md:px-8 py-6 max-w-5xl">
+<div class="container mx-auto px-4 md:px-8 py-6 max-w-6xl">
 
   {{/* Section Header Banner */}}
   <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 p-8 md:p-10 mb-8 shadow-xl text-white border border-white/10 text-center md:text-left">
@@ -20,68 +20,135 @@
     </div>
   </div>
 
-  {{/* Sermon Grid List */}}
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {{ range .Pages }}
-      {{- $youtubeURL := .Params.youtube_url | default "" -}}
-      {{- $videoID := "" -}}
-      {{- if findRE "(?:v=|/embed/|youtu\\.be/)([a-zA-Z0-9_-]{11})" $youtubeURL -}}
-        {{- $match := findRE "(?:v=|/embed/|youtu\\.be/)([a-zA-Z0-9_-]{11})" $youtubeURL -}}
-        {{- $rawMatch := index $match 0 -}}
-        {{- $videoID = replaceRE ".*(?:v=|/embed/|youtu\\.be/)" "" $rawMatch -}}
-      {{- end -}}
-      {{- $thumbURL := cond (ne $videoID "") (printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $videoID) "/media/bright_sky_bg.webp" -}}
+  {{/* 4-Column Layout Grid (3 Cols: Sermon Cards | 1 Col: Filter Sidebar) */}}
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
 
-      <article class="group flex flex-col rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
-        
-        {{/* 1. Thumbnail Container */}}
-        <a href="{{ .RelPermalink }}" class="relative w-full aspect-video overflow-hidden bg-black block">
-          <img 
-            src="{{ $thumbURL }}" 
-            alt="{{ .Title }}" 
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
-            loading="lazy" />
-          
-          {{/* Play Icon Overlay */}}
-          <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-            <div class="w-12 h-12 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    {{/* Left 3 Columns: Sermon Cards List (col-span-3) */}}
+    <div class="lg:col-span-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {{ range .Pages }}
+          {{- $youtubeURL := .Params.youtube_url | default "" -}}
+          {{- $videoID := "" -}}
+          {{- if findRE "(?:v=|/embed/|youtu\\.be/)([a-zA-Z0-9_-]{11})" $youtubeURL -}}
+            {{- $match := findRE "(?:v=|/embed/|youtu\\.be/)([a-zA-Z0-9_-]{11})" $youtubeURL -}}
+            {{- $rawMatch := index $match 0 -}}
+            {{- $videoID = replaceRE ".*(?:v=|/embed/|youtu\\.be/)" "" $rawMatch -}}
+          {{- end -}}
+          {{- $thumbURL := cond (ne $videoID "") (printf "https://img.youtube.com/vi/%s/hqdefault.jpg" $videoID) "/media/bright_sky_bg.webp" -}}
+
+          <article class="group flex flex-col rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+            
+            {{/* 1. Thumbnail Container */}}
+            <a href="{{ .RelPermalink }}" class="relative w-full aspect-video overflow-hidden bg-black block">
+              <img 
+                src="{{ $thumbURL }}" 
+                alt="{{ .Title }}" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                loading="lazy" />
+              
+              {{/* Play Icon Overlay */}}
+              <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
+                <div class="w-12 h-12 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+            </a>
+
+            {{/* Content Box */}}
+            <div class="p-5 flex flex-col flex-grow justify-between">
+              <div>
+                {{/* 3. Scripture Passage Badge (성경본문) */}}
+                {{ with .Params.passage }}
+                <div class="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/50 px-2.5 py-1 rounded-md mb-2 border border-orange-200/50 dark:border-orange-800/50">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                  {{ . }}
+                </div>
+                {{ end }}
+
+                {{/* 2. Title (제목) */}}
+                <h2 class="text-lg font-bold text-stone-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 mb-2">
+                  <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                </h2>
+              </div>
+
+              {{/* Meta Info: 4. Speaker + 5. Date of Service (설교자 + 예배일) */}}
+              <div class="pt-3 mt-2 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+                <span class="inline-flex items-center gap-1 font-medium">
+                  <svg class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                  {{ .Params.speaker | default "담임목사" }}
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  {{ .Date.Format "2006.01.02" }}
+                </span>
+              </div>
+
             </div>
-          </div>
-        </a>
+          </article>
+        {{ end }}
+      </div>
+    </div>
 
-        {{/* Content Box */}}
-        <div class="p-5 flex flex-col flex-grow justify-between">
-          <div>
-            {{/* 3. Scripture Passage Badge (성경본문) */}}
-            {{ with .Params.passage }}
-            <div class="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/50 px-2.5 py-1 rounded-md mb-2 border border-orange-200/50 dark:border-orange-800/50">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-              {{ . }}
-            </div>
-            {{ end }}
-
-            {{/* 2. Title (제목) */}}
-            <h2 class="text-lg font-bold text-stone-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 mb-2">
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-            </h2>
-          </div>
-
-          {{/* Meta Info: 4. Speaker + 5. Date of Service (설교자 + 예배일) */}}
-          <div class="pt-3 mt-2 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
-            <span class="inline-flex items-center gap-1 font-medium">
-              <svg class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-              {{ .Params.speaker | default "담임목사" }}
-            </span>
-            <span class="inline-flex items-center gap-1">
-              <svg class="w-3.5 h-3.5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-              {{ .Date.Format "2006.01.02" }}
-            </span>
-          </div>
-
+    {{/* Right 4th Column: Filter Tags Sidebar (col-span-1) */}}
+    <aside class="lg:col-span-1 space-y-6 sticky top-24">
+      
+      <div class="p-5 rounded-2xl bg-stone-100/90 dark:bg-stone-900/90 border border-stone-200/80 dark:border-stone-800 shadow-sm space-y-6">
+        <div class="pb-3 border-b border-stone-200/60 dark:border-stone-800 flex items-center justify-between">
+          <h2 class="text-sm font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+            말씀 분류 및 태그
+          </h2>
         </div>
-      </article>
-    {{ end }}
+
+        {{/* Category 1: 성경권별 (By Book of the Bible) */}}
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            성경권별
+          </h3>
+          <div class="flex flex-wrap gap-1.5">
+            {{ range $book := slice "창세기" "마태복음" "요한복음" "로마서" "시편" }}
+            <a href="#" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center">
+              #{{ $book }}
+            </a>
+            {{ end }}
+          </div>
+        </div>
+
+        {{/* Category 2: 설교자별 (By Speaker) */}}
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            설교자별
+          </h3>
+          <div class="flex flex-wrap gap-1.5">
+            {{ range $sp := slice "담임목사" "원로목사" "초청강사" }}
+            <a href="#" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center">
+              #{{ $sp }}
+            </a>
+            {{ end }}
+          </div>
+        </div>
+
+        {{/* Category 3: 절기별 (By Season/Occasion) */}}
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-2.5 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            절기별
+          </h3>
+          <div class="flex flex-wrap gap-1.5">
+            {{ range $season := slice "부활절" "추수감사절" "성탄절" "신년예배" "창립기념" }}
+            <a href="#" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 shadow-xs transition-all duration-200 inline-flex items-center">
+              #{{ $season }}
+            </a>
+            {{ end }}
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
   </div>
 
 </div>

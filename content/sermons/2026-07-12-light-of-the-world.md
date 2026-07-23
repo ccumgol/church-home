@@ -3,6 +3,8 @@ title: "너희는 세상의 빛이라"
 date: 2026-07-12
 speaker: "담임목사"
 passage: "마태복음 5:14-16"
+book: "마태복음"
+tags: ["주일대예배"]
 youtube_url: "https://www.youtube.com/watch?v=sZ9j7YhsPwg"
 draft: false
 ---

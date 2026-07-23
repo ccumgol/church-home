@@ -1,0 +1,42 @@
+{{ define "main" }}
+<div class="container mx-auto px-4 md:px-8 py-6 max-w-5xl">
+
+  {{/* Premium Gradient Section Header Banner */}}
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 p-8 md:p-12 mb-10 shadow-xl text-white border border-white/10 text-center md:text-left">
+    <div class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+    <div class="relative z-10">
+      <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md mb-3 border border-white/20 shadow-sm">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        샘플교회
+      </span>
+      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-md">
+        {{ .Title }}
+      </h1>
+    </div>
+  </div>
+
+  {{/* Section Body Content - Aligned Container */}}
+  <div class="prose prose-slate lg:prose-xl dark:prose-invert max-w-none page-content">
+    {{ .Content | safeHTML }}
+  </div>
+
+  {{ if .Pages }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+      {{ range .Pages }}
+        <a href="{{ .RelPermalink }}" class="block group p-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/60 shadow-md hover:shadow-xl hover:border-orange-500/50 transition-all duration-300 transform hover:-translate-y-1">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors mb-2">
+            {{ .Title }}
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+            {{ .Summary | truncate 120 }}
+          </p>
+          <div class="mt-4 flex items-center text-xs font-semibold text-orange-600 dark:text-orange-400">
+            자세히 보기 <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </div>
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
+
+</div>
+{{ end }}

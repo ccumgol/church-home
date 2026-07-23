@@ -1,0 +1,16 @@
+# Hugo build output & temporary files
+public/
+resources/_gen/
+.hugo_build.lock
+hugo_stats.json
+
+# Node & dependencies
+node_modules/
+
+# OS / Editor temporary files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.tmp

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <circle cx="100" cy="100" r="100" fill="#e2e8f0"/>
+  <!-- Male Suit Silhouette -->
+  <g fill="#64748b">
+    <!-- Head -->
+    <circle cx="100" cy="65" r="32"/>
+    <!-- Hairline -->
+    <path d="M 68 62 C 68 36, 132 36, 132 62 C 122 46, 78 46, 68 62 Z" fill="#475569"/>
+    <!-- Neck -->
+    <path d="M 86 90 L 114 90 L 118 115 L 82 115 Z" fill="#cbd5e1"/>
+    <!-- Collar Shirt -->
+    <polygon points="86,95 100,120 74,105" fill="#ffffff"/>
+    <polygon points="114,95 100,120 126,105" fill="#ffffff"/>
+    <!-- Tie -->
+    <polygon points="95,115 105,115 108,185 92,185" fill="#334155"/>
+    <polygon points="94,115 106,115 100,126" fill="#1e293b"/>
+    <!-- Suit Jacket Shoulders & Torso -->
+    <path d="M 30 200 C 30 142, 60 122, 78 112 L 94 175 L 100 200 L 106 175 L 122 112 C 140 122, 170 142, 170 200 Z" fill="#475569"/>
+    <!-- Lapels -->
+    <polygon points="78,112 94,175 66,145" fill="#334155"/>
+    <polygon points="122,112 106,175 134,145" fill="#334155"/>
+  </g>
+</svg>

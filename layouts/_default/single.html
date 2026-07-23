@@ -1,0 +1,24 @@
+{{ define "main" }}
+<div class="container mx-auto px-4 md:px-8 py-6 max-w-5xl">
+  
+  {{/* Premium Gradient Page Header Banner */}}
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 p-8 md:p-12 mb-10 shadow-xl text-white border border-white/10 text-center md:text-left">
+    <div class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+    <div class="relative z-10">
+      <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md mb-3 border border-white/20 shadow-sm">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+        샘플교회
+      </span>
+      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-md">
+        {{ .Title }}
+      </h1>
+    </div>
+  </div>
+
+  {{/* Page Body Content - Unescaped Safe HTML Container */}}
+  <div class="prose prose-slate lg:prose-xl dark:prose-invert max-w-none page-content">
+    {{ .Content | safeHTML }}
+  </div>
+
+</div>
+{{ end }}

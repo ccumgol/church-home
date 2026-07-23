@@ -1,0 +1,248 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   새로운개혁교회 (Saeroun Reformed Church) Custom Design System
+   Modern Premium UI/UX Polish with Glassmorphism, Micro-interactions & Vibrant Accents
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-accent: #f97316;
+  --primary-hover: #ea580c;
+  --secondary-accent: #fbbf24;
+  --glass-bg-light: rgba(255, 255, 255, 0.85);
+  --glass-border-light: rgba(249, 115, 22, 0.12);
+  --glass-bg-dark: rgba(15, 23, 42, 0.8);
+  --glass-border-dark: rgba(249, 115, 22, 0.2);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  line-height: 1.7;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1. Glassmorphism Navigation Header & Branding
+   ──────────────────────────────────────────────────────────────────────────── */
+header, nav.navbar, header nav {
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark header, .dark nav {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Navbar Brand & Links */
+.navbar-brand, nav a.font-bold {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.02);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2. Enhanced Hero & Section Typography
+   ──────────────────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.hero-title, section h1 {
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+}
+
+/* Smooth button animations */
+a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 10px !important;
+}
+
+a.btn:hover, button:hover, a[class*="primary_action"]:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 24px -6px rgba(249, 115, 22, 0.35) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. Card & Bento Grid Enhancements
+   ──────────────────────────────────────────────────────────────────────────── */
+.card, [class*="block-"], section article, div[class*="rounded-"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects on interactive cards & items */
+div[class*="bg-white"]:hover, div[class*="bg-gray-50"]:hover, .dark div[class*="bg-gray-900"]:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+/* Feature & Bento Grid Cards */
+.bento-card {
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  border-radius: 16px;
+}
+
+.dark .bento-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Staff Cards (Explicit Border 0) */
+.staff-card, div.staff-card {
+  border: none !important;
+  border-width: 0 !important;
+}
+
+/* Subtle icon glowing containers */
+div[class*="icon"] svg, svg[class*="w-"] {
+  transition: transform 0.3s ease;
+}
+
+div:hover > div[class*="icon"] svg, div:hover > svg[class*="w-"] {
+  transform: scale(1.1) rotate(2deg);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   4. FAQ & Accordion Improvements
+   ──────────────────────────────────────────────────────────────────────────── */
+details {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
+details[open] {
+  background-color: rgba(249, 115, 22, 0.04);
+}
+
+.dark details[open] {
+  background-color: rgba(249, 115, 22, 0.08);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   5. Dark Footer Styling & Total Border Width Reset (Thickness = 0)
+   ──────────────────────────────────────────────────────────────────────────── */
+footer,
+.page-footer,
+footer[aria-labelledby="footer-heading"],
+.footer-container,
+footer *,
+footer div,
+footer section,
+footer .grid,
+footer .footer-logo,
+footer a,
+footer button,
+footer img,
+footer svg,
+footer ul,
+footer li,
+footer span,
+footer h1,
+footer h2,
+footer h3,
+footer h4 {
+  border: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+footer, .page-footer, footer[aria-labelledby="footer-heading"], .footer-container {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+footer a, .page-footer a {
+  color: #94a3b8 !important;
+  transition: color 0.2s ease !important;
+}
+
+footer a:hover, .page-footer a:hover {
+  color: #f97316 !important;
+}
+
+footer h2, footer h3, footer h4, footer h5, footer .footer-title, footer span[class*="text-"] {
+  color: #ffffff !important;
+}
+
+footer p, footer div, footer li {
+  color: #cbd5e1 !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 5px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   6. Landing Page Section Container Alignment (max-w-5xl px-4 md:px-8)
+   ──────────────────────────────────────────────────────────────────────────── */
+.hbb-section > div[class*="-block-container"],
+.hbb-section .preact-block,
+.home-section .container,
+section.hbb-section > div:not(.home-section-bg):not(.absolute) {
+  max-width: 64rem !important; /* max-w-5xl = 1024px */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1rem !important; /* px-4 */
+  padding-right: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .hbb-section > div[class*="-block-container"],
+  .hbb-section .preact-block,
+  .home-section .container,
+  section.hbb-section > div:not(.home-section-bg):not(.absolute) {
+    padding-left: 2rem !important; /* md:px-8 */
+    padding-right: 2rem !important;
+  }
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
+}

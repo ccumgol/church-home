@@ -1,0 +1,30 @@
+title: "샘플교회"
+baseURL: "https://example.com/"
+languageCode: ko-kr
+defaultContentLanguage: ko
+
+ignoreLogs:
+  - warning-goldmark-raw-html
+
+module:
+  imports:
+    - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-bootstrap/v5
+    - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-core
+
+params:
+  site:
+    name: "샘플교회"
+    tagline: "하나님의 말씀과 은혜로 새로워지는 교회"
+    address:
+      street: "샘플로 123"
+      city: "샘플구"
+      region: "서울특별시"
+      postcode: "12345"
+      country: "대한민국"
+    phone: "02-1234-5678"
+    email: "contact@samplechurch.org"
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true

@@ -1,0 +1,204 @@
+main:
+  - name: "교회소개"
+    url: "/about/#greeting"
+    weight: 10
+    identifier: "about"
+
+  - name: "담임목사 인사말"
+    url: "/about/#greeting"
+    parent: "about"
+    weight: 11
+
+  - name: "예배 및 모임안내"
+    url: "/about/#services"
+    parent: "about"
+    weight: 12
+
+  - name: "섬기는 이들"
+    url: "/about/#staff"
+    parent: "about"
+    weight: 13
+
+  - name: "교회 오시는 길"
+    url: "/about/#direction"
+    parent: "about"
+    weight: 14
+
+  - name: "교회 연혁"
+    url: "/about/history/"
+    parent: "about"
+    weight: 15
+
+  - name: "온라인헌금"
+    url: "/about/#offering"
+    parent: "about"
+    weight: 16
+
+  - name: "말씀"
+    url: "/sermons/"
+    weight: 20
+    identifier: "sermons"
+
+  - name: "주일설교"
+    url: "/sermons/"
+    parent: "sermons"
+    weight: 21
+
+  - name: "새벽기도"
+    url: "https://www.youtube.com/playlist?list=PLnxFG_0wR9oKji-fEssNNfNDvUPYjTC1j"
+    parent: "sermons"
+    weight: 22
+
+  - name: "수요기도회"
+    url: "https://www.youtube.com/playlist?list=PLnxFG_0wR9oJb9mG3Wy0D5ynf7lsVuckF"
+    parent: "sermons"
+    weight: 23
+
+  - name: "행사안내"
+    url: "/event/"
+    weight: 30
+
+  - name: "교회교육"
+    url: "/education/school/"
+    weight: 40
+    identifier: "education"
+
+  - name: "교회학교"
+    url: "/education/school/"
+    parent: "education"
+    weight: 41
+
+  - name: "샘플한국학교"
+    url: "/education/korean-school/"
+    parent: "education"
+    weight: 42
+
+  - name: "샘플여름학교"
+    url: "/education/summer-school/"
+    parent: "education"
+    weight: 43
+
+  - name: "양육"
+    url: "/biblestudy/#TEE"
+    weight: 50
+    identifier: "biblestudy"
+
+  - name: "열린성경공부"
+    url: "/biblestudy/#TEE"
+    parent: "biblestudy"
+    weight: 51
+
+  - name: "커피브레이크"
+    url: "/biblestudy/#CoffeeBreak"
+    parent: "biblestudy"
+    weight: 52
+
+  - name: "회복의 삶"
+    url: "/biblestudy/#Prasso"
+    parent: "biblestudy"
+    weight: 53
+
+  - name: "회복학교"
+    url: "/biblestudy/#RecoverySchool"
+    parent: "biblestudy"
+    weight: 54
+
+  - name: "제자의삶"
+    url: "/biblestudy/#Disciple"
+    parent: "biblestudy"
+    weight: 55
+
+  - name: "심리상담북클럽"
+    url: "/biblestudy/#BookClub"
+    parent: "biblestudy"
+    weight: 56
+
+  - name: "실버코스 웰리빙웰다잉"
+    url: "/biblestudy/#Silver"
+    parent: "biblestudy"
+    weight: 57
+
+  - name: "미션퍼스펙티브스"
+    url: "/biblestudy/#PSP"
+    parent: "biblestudy"
+    weight: 58
+
+  - name: "선교"
+    url: "/mission/co-missionary/"
+    weight: 60
+    identifier: "mission"
+
+  - name: "협력선교사"
+    url: "/mission/co-missionary/"
+    parent: "mission"
+    weight: 61
+
+  - name: "선교게시판"
+    url: "/mission/board/"
+    parent: "mission"
+    weight: 62
+
+  - name: "커뮤니티"
+    url: "/community/news/"
+    weight: 70
+    identifier: "community"
+
+  - name: "교회소식"
+    url: "/community/news/"
+    parent: "community"
+    weight: 71
+
+  - name: "주보"
+    url: "/community/bulletin/"
+    parent: "community"
+    weight: 72
+
+  - name: "포토앨범"
+    url: "/community/album/"
+    parent: "community"
+    weight: 73
+
+  - name: "양식자료실"
+    url: "/community/resources/"
+    parent: "community"
+    weight: 74
+
+  - name: "교회 정관"
+    url: "/community/bylaws/"
+    parent: "community"
+    weight: 75
+
+footer:
+  - name: "예배 및 사역"
+    weight: 10
+  - parent: "예배 및 사역"
+    name: "주일설교"
+    url: "/sermons/"
+    weight: 10
+  - parent: "예배 및 사역"
+    name: "행사안내"
+    url: "/event/"
+    weight: 20
+  - parent: "예배 및 사역"
+    name: "Youtube 채널"
+    url: "https://youtube.com"
+    weight: 30
+  - parent: "예배 및 사역"
+    name: "온라인헌금"
+    url: "/about/#offering"
+    weight: 40
+
+  - name: "주요 링크"
+    weight: 20
+  - parent: "주요 링크"
+    name: "예배/모임안내"
+    url: "/about/#services"
+    weight: 10
+  - parent: "주요 링크"
+    name: "교역자 소개"
+    url: "/about/#staff"
+    weight: 20
+  - parent: "주요 링크"
+    name: "오시는 길"
+    url: "/about/#direction"
+    weight: 30

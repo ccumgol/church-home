@@ -54,9 +54,7 @@ main:
     parent: "sermons"
     weight: 23
 
-  - name: "행사안내"
-    url: "/event/"
-    weight: 30
+
 
   - name: "교회교육"
     url: "/education/school/"
@@ -167,6 +165,11 @@ main:
     url: "/community/bylaws/"
     parent: "community"
     weight: 75
+
+  - name: "행사안내"
+    url: "/event/"
+    parent: "community"
+    weight: 76
 
 footer:
   - name: "예배 및 사역"

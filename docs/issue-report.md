@@ -20,17 +20,21 @@
 13. [이슈 13: 모바일 화면 푸터 메뉴 2단 세로 수평 배치 개편](#이슈-13-모바일-화면-푸터-메뉴-2단-세로-수평-배치-개편)
 14. [이슈 14: 푸터 하단 Hugo Blox 관련 외부 링크 문구 완전 제거](#이슈-14-푸터-하단-hugo-blox-관련-외부-링크-문구-완전-제거)
 15. [이슈 15: 히어로 직하단 유튜브 특정 플레이리스트 최신 영상 자동 연동 연출](#이슈-15-히어로-직하단-유튜브-특정-플레이리스트-최신-영상-자동-연동-연출)
+16. [이슈 16: 주일설교 영상 축적 시스템 구축 (유튜브 썸네일 자동 추출 & 목록/상세 레이아웃)](#이슈-16-주일설교-영상-축적-시스템-구축-유튜브-썸네일-자동-추출--목록상세-레이아웃)
 
 ---
 
-## 이슈 15: 히어로 직하단 유튜브 특정 플레이리스트 최신 영상 자동 연동 연출
+## 이슈 16: 주일설교 영상 축적 시스템 구축 (유튜브 썸네일 자동 추출 & 목록/상세 레이아웃)
 
 ### 🔴 요구사항
-- 첫 화면 히어로(Hero) 섹션 바로 아래에 유튜브 채널의 특정 플레이리스트(`PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP`)의 가장 최근에 올린 최신 영상이 늘 자동 갱신되어 상단에 뜨도록 구현 요청.
+- `content/sermons/` 폴더에 주일설교 `.md` 포스트를 계속 작성하여 축적할 수 있도록 시스템 구축.
+- 유튜브 링크를 입력하면 **썸네일을 자동 생성**하고, 목록에서는 `썸네일 + 제목 + 성경본문 + 설교자 + 예배일` 표시.
+- 상세 페이지에서는 `제목 + 성경본문 + 유튜브 영상 플레이어 + 설교자 + 예배일 + 설교 원고` 순으로 정렬 배치.
 
 ### 💡 해결 조치
-1. [`layouts/shortcodes/youtube_playlist.html`](file:///Users/gihyunpark/Desktop/Workspace/church-home/layouts/shortcodes/youtube_playlist.html) 반응형 16:9 임베드 숏코드를 신규 구현하여 `videoseries?list=PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP` 매개변수를 활용, 새로운 영상이 업로드될 때마다 유튜브 플레이리스트 최상단 최신 영상이 자동으로 메인 화면에 로딩되어 재생되도록 연동했습니다.
-2. [`content/_index.md`](file:///Users/gihyunpark/Desktop/Workspace/church-home/content/_index.md)의 `hero` 섹션 바로 직하단에 `latest-sermon` 섹션을 신설 배치하고, `custom.css`에 896px 최적 비율 프레임 및 라운딩 그림자 효과를 선언하여 완성도를 높였습니다.
+1. **아키타입 제공 (`archetypes/sermons.md`):** `hugo new sermons/yyyy-mm-dd-title.md` 명령어로 간편 생성.
+2. **썸네일 자동 추출 (`layouts/sermons/list.html`):** 정규식을 사용해 `youtube_url`에서 비디오 ID를 분리하고 `https://img.youtube.com/vi/{VIDEO_ID}/hqdefault.jpg` 썸네일을 자동 생성하여 3열 카드 그리드 디자인 적용.
+3. **상세 페이지 설계 (`layouts/sermons/single.html`):** 상단부터 `제목 + 성경본문 뱃지 + 유튜브 16:9 반응형 플레이어 + 설교자/예배일 메타바 + 설교 원고 카드` 순으로 완벽 구현.
 
 ---
 

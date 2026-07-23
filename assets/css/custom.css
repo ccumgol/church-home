@@ -37,7 +37,7 @@ body {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   1. Typography & Legibility (WCAG AAA High Contrast)
+   1. Typography & Legibility (Light Mode Defaults)
    ──────────────────────────────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .font-display,
@@ -49,23 +49,140 @@ section h1, section h2 {
 }
 
 /* Light Background Content Typography */
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) h1,
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) h2,
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) h3,
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) h4 {
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h1,
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h2,
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h3,
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h4 {
   color: #1c1917 !important;
 }
 
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) p,
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) li,
-section:not(.dark):not([class*="hero"]):not([id*="cta"]) span:not([class*="badge"]) {
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) p,
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) li,
+html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) span:not([class*="badge"]) {
   color: #292524;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   2. Bottom CTA Card (Content Width Constraint max-w-5xl & 100% Text Legibility)
+   2. GLOBAL DARK MODE TEXT & COLOR INVERSION (.dark)
    ──────────────────────────────────────────────────────────────────────────── */
-/* Outer Section: transparent background so no full-bleed black viewport overflow occurs */
+.dark {
+  --color-paper: #0f172a;
+  --color-paper-2: #1e293b;
+  --color-ink: #f8fafc;
+  --color-ink-2: #cbd5e1;
+  --color-rule: #334155;
+  color: #f8fafc !important;
+  background-color: #0f172a !important;
+}
+
+.dark body {
+  color: #f8fafc !important;
+  background-color: #0f172a !important;
+}
+
+/* All Headings in Dark Mode */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark .hero-title,
+.dark .font-display,
+.dark section h1,
+.dark section h2,
+.dark section h3,
+.dark section h4,
+.dark [class*="title"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* All Paragraphs, Spans, Lists, Labels in Dark Mode */
+.dark p,
+.dark span:not([class*="badge"]),
+.dark li,
+.dark label,
+.dark td,
+.dark th,
+.dark strong,
+.dark b,
+.dark article,
+.dark div:not([class*="badge"]):not([class*="card"]):not([class*="hero"]) {
+  color: #e2e8f0 !important;
+}
+
+.dark strong, .dark b {
+  color: #ffffff !important;
+}
+
+.dark summary {
+  color: #ffffff !important;
+}
+
+.dark a:not(.btn):not([class*="button"]):not(.navbar-brand) {
+  color: #fbbf24 !important;
+}
+
+.dark a:not(.btn):not([class*="button"]):not(.navbar-brand):hover {
+  color: #f97316 !important;
+}
+
+/* Cards & Accordions in Dark Mode */
+.dark .card,
+.dark .bento-card,
+.dark details,
+.dark [class*="block-"] article,
+.dark div[class*="rounded"] {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark details[open] {
+  background-color: #334155 !important;
+  border-color: var(--color-accent) !important;
+}
+
+/* Navigation & Footer in Dark Mode */
+.dark header,
+.dark #site-header,
+.dark .header,
+.dark nav.navbar,
+.dark header nav,
+.dark header .container,
+.dark header > div,
+.dark nav.navbar > div {
+  background-color: #0f172a !important;
+  background: #0f172a !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
+.dark .navbar-brand,
+.dark nav a.font-bold {
+  color: #f97316 !important;
+}
+
+.dark nav a.nav-link,
+.dark nav a:not(.navbar-brand) {
+  color: #e2e8f0 !important;
+}
+
+.dark nav a.nav-link:hover {
+  color: #f97316 !important;
+}
+
+.dark footer,
+.dark .page-footer {
+  background-color: #070a12 !important;
+  color: #cbd5e1 !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. Bottom CTA Card (Content Width Constraint max-w-5xl & High Contrast)
+   ──────────────────────────────────────────────────────────────────────────── */
+/* Outer Section: transparent background */
 section[id*="cta"],
 section.blox-cta-card,
 #cta-invitation,
@@ -87,7 +204,7 @@ section[id*="cta"] .home-section-bg,
   background-color: transparent !important;
 }
 
-/* Inner Card Container: Bounded strictly inside max-w-5xl (1024px), matching FAQ section 1:1 */
+/* Inner Card Container: Bounded strictly inside max-w-5xl (1024px) */
 [data-block-type="cta-card"],
 .cta-card-block-container,
 #cta-invitation .cta-card-block-container,
@@ -113,7 +230,7 @@ section[id*="cta"] div[class*="rounded"] {
   }
 }
 
-/* Title Text: Absolute Crisp Pure White, High Visibility */
+/* Title Text: Absolute Crisp Pure White */
 section[id*="cta"] h1,
 section[id*="cta"] h2,
 section[id*="cta"] h3,
@@ -133,7 +250,7 @@ section[id*="cta"] h4,
   margin-bottom: 0.75rem !important;
 }
 
-/* Description Text: Crisp Bright Slate/Off-white, 100% High Visibility */
+/* Description Text: Crisp Bright Slate/Off-white */
 section[id*="cta"] p,
 section[id*="cta"] span,
 section[id*="cta"] div,
@@ -179,11 +296,10 @@ section[id*="cta"] button:hover,
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   3. Hero Section Refinement (Clean Ambient Surface & High Contrast Text)
+   4. Hero Section Refinement
    ──────────────────────────────────────────────────────────────────────────── */
 .block-hero,
-section[class*="hero"],
-section.dark {
+section[class*="hero"] {
   position: relative;
   background-color: #1a1614 !important; /* Warm Dark Charcoal */
   color: #ffffff !important;
@@ -192,10 +308,7 @@ section.dark {
 
 .hero-title,
 section[class*="hero"] h1,
-section[class*="hero"] h2,
-section.dark h1,
-section.dark h2,
-section.dark h3 {
+section[class*="hero"] h2 {
   font-weight: 700 !important;
   line-height: 1.3 !important;
   color: #ffffff !important;
@@ -204,10 +317,7 @@ section.dark h3 {
 section[class*="hero"] p,
 section[class*="hero"] span,
 section[class*="hero"] div,
-section[class*="hero"] strong,
-section.dark p,
-section.dark span,
-section.dark strong {
+section[class*="hero"] strong {
   color: #f1f5f9 !important;
 }
 
@@ -226,7 +336,7 @@ div[class*="orb"], div[class*="gradient_mesh"] {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   4. Navigation Header Seamless Background Matching (Identical to Body Page Background)
+   5. Navigation Header Seamless Background Matching
    ──────────────────────────────────────────────────────────────────────────── */
 header,
 #site-header,
@@ -275,7 +385,7 @@ nav.navbar > div {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   5. Buttons & Micro-interactions
+   6. Buttons & Micro-interactions
    ──────────────────────────────────────────────────────────────────────────── */
 a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
   font-family: var(--font-body);
@@ -312,7 +422,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   6. Cards & Bento Grid (Crisp Hairline Borders & High Contrast)
+   7. Cards & Bento Grid
    ──────────────────────────────────────────────────────────────────────────── */
 .bento-card, .card, [class*="block-"] article {
   border: 1px solid var(--color-rule);
@@ -326,11 +436,6 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-.dark .bento-card, .dark .card {
-  background-color: #1e293b;
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
 /* Staff Cards (Explicit Border 0) */
 .staff-card, div.staff-card {
   border: none !important;
@@ -338,7 +443,7 @@ a[class*="secondary_action"]:hover, .btn-secondary:hover {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   7. Editorial FAQ Details & Accordion
+   8. Editorial FAQ Details & Accordion
    ──────────────────────────────────────────────────────────────────────────── */
 details {
   border: 1px solid var(--color-rule);
@@ -347,18 +452,9 @@ details {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.dark details {
-  background-color: #1e293b;
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
 details[open] {
   border-color: var(--color-accent);
   background-color: var(--color-paper-2);
-}
-
-.dark details[open] {
-  background-color: rgba(217, 93, 18, 0.1);
 }
 
 summary {
@@ -370,7 +466,7 @@ summary {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   8. Footer Spacing Reduction (Zero Top Margin, Compact Padding)
+   9. Footer Spacing Reduction
    ──────────────────────────────────────────────────────────────────────────── */
 footer,
 .page-footer,
@@ -411,7 +507,7 @@ footer p, footer div, footer li {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   9. Section Container Alignment & Max Width (1024px)
+   10. Section Container Alignment & Max Width (1024px)
    ──────────────────────────────────────────────────────────────────────────── */
 .hbb-section > div[class*="-block-container"],
 .hbb-section .preact-block,

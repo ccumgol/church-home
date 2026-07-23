@@ -22,18 +22,21 @@
 15. [이슈 15: 히어로 직하단 유튜브 특정 플레이리스트 최신 영상 자동 연동 연출](#이슈-15-히어로-직하단-유튜브-특정-플레이리스트-최신-영상-자동-연동-연출)
 16. [이슈 16: 주일설교 영상 축적 시스템 구축 (유튜브 썸네일 자동 추출 & 목록/상세 레이아웃)](#이슈-16-주일설교-영상-축적-시스템-구축-유튜브-썸네일-자동-추출--목록상세-레이아웃)
 17. [이슈 17: 상단 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 유튜브 플레이리스트 URL 갱신](#이슈-17-상단-드롭다운-메뉴-새벽기도-및-수요기도회-유튜브-플레이리스트-url-갱신)
+18. [이슈 18: 주일설교 글목록 4단 분할 및 우측 태그(성경권/설교자/절기) 사이드바 구현](#이슈-18-주일설교-글목록-4단-분할-및-우측-태그성경권설교자절기-사이드바-구현)
 
 ---
 
-## 이슈 17: 상단 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 유튜브 플레이리스트 URL 갱신
+## 이슈 18: 주일설교 글목록 4단 분할 및 우측 태그(성경권/설교자/절기) 사이드바 구현
 
 ### 🔴 요구사항
-- 상단 네비게이션 메뉴의 '말씀' 하위 드롭다운 메뉴 '새벽기도' 및 '수요기도회' 연결 유튜브 플레이리스트 URL 최신화 요청.
+- 주일설교 목록 페이지를 4단으로 나누어 **좌측 3단은 설교 포스트 카드 목록**, **우측 4번째 단은 `성경권별, 설교자별, 절기별` 태그 사이드바**로 구성.
+- 태그 섹션은 은은한 배경색을 넣고 태그 링크는 흰색 배경 버튼 형태(`text-xs`)로 도드라지게 구현 요청.
 
 ### 💡 해결 조치
-- [`config/_default/menus.yaml`](file:///Users/gihyunpark/Desktop/Workspace/church-home/config/_default/menus.yaml) 파일 내 `새벽기도` 및 `수요기도회` 항목의 `url` 매개변수를 최신 유튜브 플레이리스트 링크로 수정 반영:
-  - **새벽기도:** `https://youtube.com/playlist?list=PLPRMrPgg66ocNGxPsLnRkQuSdZBkJRTM-&si=LljLPuvTAAFbo-Z-`
-  - **수요기도회:** `https://youtube.com/playlist?list=PLPRMrPgg66oejzScM6qhysDHtTVKYu-dv&si=7m9QZFpPENEkXk2W`
+- [`layouts/sermons/list.html`](file:///Users/gihyunpark/Desktop/Workspace/church-home/layouts/sermons/list.html) 템플릿을 `grid-cols-4` 개편:
+  - `lg:col-span-3`: 설교 카드 목록 배치.
+  - `lg:col-span-1`: 은은한 배경색(`bg-stone-100/90 dark:bg-stone-900/90`)의 스티키 사이드바 배치.
+  - 태그 버튼: `bg-white dark:bg-stone-800 border text-xs shadow-xs` 적용하여 한 단계 작고 단정한 흰색 버튼 디자인 완성.
 
 ---
 

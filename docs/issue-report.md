@@ -16,6 +16,7 @@
 9. [이슈 9: 스크롤 시 스티키 메뉴바(Sticky Navbar) 배경 미적용으로 인한 텍스트 겹침 문제](#이슈-9-스크롤-시-스티키-메뉴바sticky-navbar-배경-미적용으로-인한-텍스트-겹침-문제)
 10. [이슈 10: 상단 드롭다운 서브메뉴(Submenu) 일괄 강제 노출 및 화면 겹침 오류](#이슈-10-상단-드롭다운-서브메뉴submenu-일괄-강제-노출-및-화면-겹침-오류)
 11. [이슈 11: 상단 메뉴 버튼 외곽 테두리(Border) 박스 노출 제거](#이슈-11-상단-메뉴-버튼-외곽-테두리border-박스-노출-제거)
+12. [이슈 12: 하단 CTA 초대 카드의 이중 테두리(Double Border) 및 1040px 오버플로우 문제](#이슈-12-하단-cta-초대-카드의-이중-테두리double-border-및-1040px-오버플로우-문제)
 
 ---
 
@@ -40,10 +41,6 @@
 ### 🔴 증상
 - 메인 페이지 하단 CTA 박스가 상단 FAQ 등 일반 컨텐츠 영역(1024px)보다 좌우로 크게 튀어나오고, 검은 배경 안의 제목("참된 은혜와 평안이 있는 예배에 초청합니다")이 보이지 않는 현상.
 
-### 🔍 근본 원인
-- HugoBlox `cta-card` 블록의 바깥쪽 섹션 배경(`home-section-bg`)이 뷰포트 전체 100% 너비로 검게 확장되었습니다.
-- 또한 Preact `cta-card` 내부 `<h2>` 태그가 Tailwind 디폴트 검은색 스타일로 렌더링되어 검은 카드 배경에 묻혔습니다.
-
 ### 💡 해결 조치
 1. 섹션 바깥 배경을 투명(`transparent`) 처리하고, 내부 카드 컨테이너에 직접 `max-width: 64rem !important;` (1024px) 및 `margin: 0 auto !important;`를 부여하여 상단 섹션과 **1:1 정렬**되도록 보정했습니다.
 2. `[data-block-type="cta-card"] h2` 및 `section[id*="cta"] h2`에 `color: #ffffff !important;`를 적용하여 100% 흰색 글자로 도드라지게 수정하였습니다.
@@ -55,9 +52,6 @@
 ### 🔴 증상
 - 상단 메뉴바 영역이 메인 페이지 배경색(`var(--color-paper)` / `#faf8f5`)과 미세하게 다른 이질적인 사각형 직사각형 띠 형태로 도드라져 보임.
 
-### 🔍 근본 원인
-- 메뉴바 CSS에 `rgba(250, 248, 245, 0.95)` 반투명 레이어와 `backdrop-filter: blur(...)`가 적용되어 있어, 부모 배경 투과로 인해 색상 차이가 생겼습니다.
-
 ### 💡 해결 조치
 - `header`, `#site-header`, `nav.navbar`, `header .container` 전체에 배경색을 바디 배경색 변수인 **`var(--color-paper) !important;` (`#faf8f5`)**로 100% 명시적 동일화하여 경계 없이 자연스럽게 이어지도록 조치하였습니다.
 
@@ -68,12 +62,8 @@
 ### 🔴 증상
 - CSS에 `url('/media/bright_sky_bg.jpg')` 배경 이미지를 지정했음에도 불구하고 히어로 섹션에 이미지가 노출되지 않고 어두운 단색 배경만 표시됨.
 
-### 🔍 근본 원인
-1. **자산 경로 서빙 오류:** 이미지가 `assets/media/` 폴더에만 놓여 있어 Hugo Web 루트(`/media/...`)로 직접 서빙되지 않고 **404 에러**가 났습니다.
-2. **템플릿 인라인 배경색 가림:** HugoBlox 히어로 템플릿 내부의 `<div class="home-section-bg" style="background-color:#1a1614">` 레이어가 인라인 스타일로 배경을 덮고 있었습니다.
-
 ### 💡 해결 조치
-1. 이미지 파일(`bright_sky_bg.webp`)을 정적 서빙 폴더인 **`static/media/`** 경로로 복사 배치하여 `/media/bright_sky_bg.webp`로 정상 서빙되도록 해결했습니다 (Hugo 빌드 결과 `Static files: 4` 확인).
+1. 이미지 파일(`bright_sky_bg.webp`)을 정적 서빙 폴더인 **`static/media/`** 경로로 복사 배치하여 `/media/bright_sky_bg.webp`로 정상 서빙되도록 해결했습니다.
 2. `custom.css`에서 `#section-hero .home-section-bg`를 직접 타깃으로 지정하여 `background-image` 규칙 및 `background-color: transparent !important;`를 부여해 배경 이미지가 정상 노출되도록 조치했습니다.
 
 ---
@@ -81,77 +71,67 @@
 ## 이슈 5: 섹션 상하 여백 과다 및 섹션 타이틀 서식 파편화
 
 ### 🔴 증상
-- 메인 페이지 섹션들의 상하 padding이 지나치게 커서 화면 스크롤 시 공간이 낭비되었고, 각 섹션의 제목 포맷(영문, 한글, 설명)이 제각각이었습니다.
+- 메인 페이지 섹션들의 상하 padding이 지나치게 커서 공간이 낭비되었고, 각 섹션의 제목 포맷이 제각각이었습니다.
 
 ### 💡 해결 조치
-1. **여백 축소:** 일반 섹션 상하 여백을 기존 ~6rem에서 **1.75rem (~28px)** 수준으로 약 1/3 축소하고, '예배 및 모임 시간' 섹션은 **0.85rem**로 타이트하게 정돈했습니다.
-2. **타이틀 포맷 통일:** 모든 섹션 헤더를 **`영문 서브타이틀 (Terracotta Uppercase) + 한국어 타이틀 (MaruBuri Serif) + 설명문`** 스타일로 통일하였습니다.
+1. **여백 축소:** 일반 섹션 상하 여백을 **1.75rem (~28px)** 수준으로 축소.
+2. **타이틀 포맷 통일:** 모든 섹션 헤더를 **`영문 서브타이틀 + 한국어 타이틀 + 설명문`** 스타일로 통일.
 
 ---
 
 ## 이슈 6: 정적 미디어 자산 WebP 일괄 변환 및 웹 표준 도입
 
-### 🔴 증상
-- 기존 JPG, PNG 확장자 사용으로 인한 용량 비효율 및 로딩 속도 개선 필요.
-
 ### 💡 해결 조치
-- Python Pillow 라이브러리를 활용하여 `static/media/`, `assets/media/` 내의 모든 JPG/PNG 파일을 **.webp** 포맷으로 일괄 변환하고, CSS 및 템플릿 코드 참조 경로를 `.webp`로 최종 업데이트하였습니다.
+- Python Pillow 라이브러리로 모든 JPG/PNG를 **.webp** 포맷으로 일괄 변환 및 적용.
 
 ---
 
 ## 이슈 7: GitHub Pages 서비스 연동 및 CI/CD 워크플로우 세팅
 
-### 🔴 증상
-- 개발된 웹사이트를 웹상에서 누구나 접속하여 볼 수 있는 호스팅 환경 필요.
-
 ### 💡 해결 조치
-1. GitHub API (`gh api -X POST repos/ccumgol/church-home/pages`)를 통해 GitHub Pages build_type을 `workflow`로 성공적으로 활성화했습니다.
-2. `hugo.toml` 및 `config/_default/hugo.yaml` 내 baseURL을 **`https://ccumgol.github.io/church-home/`**로 설정했습니다.
-3. [`.github/workflows/deploy.yaml`](file:///Users/gihyunpark/Desktop/Workspace/church-home/.github/workflows/deploy.yaml) CI/CD 파일 작성을 통해 `main` 브랜치 push 시 자동 릴리스 빌드 & 배포되도록 완수하였습니다.
+- GitHub Pages 활성화 및 [`.github/workflows/deploy.yaml`](file:///Users/gihyunpark/Desktop/Workspace/church-home/.github/workflows/deploy.yaml) 자동 배포 구축.
 
 ---
 
 ## 이슈 8: config/_default/hugo.yaml 내 3가지 스키마 및 디프리케이션 문제 수정
 
-### 🔴 증상
-- VSCode / YAML Linter에서 `hugo.yaml` 파일에 3가지 경고/에러가 표시됨.
-
 ### 💡 해결 조치
-1. `cascade` 하위 항목들에 **`params:` 계층 구조**를 명확히 부여하여 YAML 스키마 준수.
-2. `timeout: 600000` ➔ **`timeout: '600s'`**로 표준 지속 시간 형식으로 변경.
-3. `resampleFilter: Lanczos`, `anchor: Smart` 등 이미지 설정의 파스칼 케이스(PascalCase) 대소문자 규격 준수.
+- `cascade` 내 `params:` 계층화, `timeout: '600s'`, `Lanczos`, `Smart` 대소문자 규격화 완료.
 
 ---
 
 ## 이슈 9: 스크롤 시 스티키 메뉴바(Sticky Navbar) 배경 미적용으로 인한 텍스트 겹침 문제
 
-### 🔴 증상
-- 화면을 아래로 스크롤할 때 고정(Sticky) 메뉴바 레이어 뒤로 메인 페이지 본문 요소가 투과되어 메뉴글씨와 본문 글씨가 지저분하게 겹쳐 보이는 현상 발생.
-
 ### 💡 해결 조치
-1. `.page-header` 및 메뉴바 하위 전체 블록에 100% 불투명 배경색(`var(--color-paper)` / `#faf8f5`, 다크 모드 `#0f172a`)을 명시하여 스크롤되는 하단 본문 텍스트가 완벽하게 은폐되도록 수정했습니다.
-2. 은은한 입체감을 주어 본문 섹션과 깔끔히 구별되도록 소프트 그림자(`box-shadow: 0 4px 14px rgba(0,0,0,0.05)`)를 추가했습니다.
+- `.page-header` 불투명 배경색 및 그림자 적용.
 
 ---
 
 ## 이슈 10: 상단 드롭다운 서브메뉴(Submenu) 일괄 강제 노출 및 화면 겹침 오류
 
-### 🔴 증상
-- 상단 메뉴바의 모든 드롭다운 메뉴(`교회소개`, `말씀`, `교회교육`, `양육`, `선교`, `커뮤니티`) 하위 목록이 마우스 호버 여부와 상관없이 **동시에 펼쳐져 가로로 화면 전체를 가리는 현상** 발생.
-
 ### 💡 해결 조치
-1. `custom.css`에서 `nav.navbar ul`에 부과되었던 `visibility: visible !important;` 및 `opacity: 1 !important;` 과잉 타깃 규칙을 완전 제거하여 **기본 마우스 호버(Hover) 동작을 복원**했습니다.
-2. 드롭다운 서브메뉴(`ul.nav-dropdown`)는 호버 시에만 깔끔하게 펼쳐지며, 깔끔한 카드형 그림자(`box-shadow`)와 불투명 바탕색이 정돈되도록 단독 규칙으로 리팩토링했습니다.
+- `nav.navbar ul` 과잉 `visibility: visible` 제거 후 기본 마우스 호버 동작 복원.
 
 ---
 
 ## 이슈 11: 상단 메뉴 버튼 외곽 테두리(Border) 박스 노출 제거
 
+### 💡 해결 조치
+- 상단 메뉴 버튼 테두리 박스 및 배경 제거.
+
+---
+
+## 이슈 12: 하단 CTA 초대 카드의 이중 테두리(Double Border) 및 1040px 오버플로우 문제
+
 ### 🔴 증상
-- 상단 메뉴바의 각 메뉴 항목(`교회소개`, `말씀`, `교회교육`, `양육`, `선교`, `커뮤니티`)에 둥근 라운드 테두리(Border) 박스가 감싸고 있어 이질감이 드는 현상.
+- 하단 CTA 초대 카드("참된 은혜와 평안이 있는...")가 상단 FAQ 섹션(1024px)보다 좌우로 튀어나오며, 검은 상자 안에 또 다른 검은 테두리 상자가 겹쳐지는 **이중 테두리(Double Border)** 현상 발생.
+
+### 🔍 근본 원인
+- CSS 선택자 중 `section[id*="cta"] div[class*="-container"]` 및 `div[class*="rounded"]`가 외부 Preact Wrapper와 내부 Rendered Container에 동시에 적용되어, 두 계층 모두에 독립적인 테두리(`border: 1px solid #44403c`)와 패딩(`padding: 2rem`)이 겹쳐서 적용되었습니다.
 
 ### 💡 해결 조치
-- `custom.css` 내 메뉴 링크 항목(`nav.navbar .nav-link`, `.nav-item > a`)에 `border: none !important; box-shadow: none !important; background: transparent !important;` 규칙을 부과하여 둥근 테두리 박스를 완전히 제거하고 글자 위주의 깔끔한 에디토리얼 메뉴로 정돈했습니다.
+1. 최상위 섹션(`section#cta-invitation`)에 `max-width: 64rem !important; margin: 0 auto !important;`를 적용하여 상단 FAQ 및 핵심가치 섹션과 **1024px 1:1 라인**을 형성하도록 전역 너비를 정합했습니다.
+2. 외부 Preact 블록 컨테이너는 완전 투명(`background: transparent; border: none; padding: 0`) 처리하고, 내부 단일 카드 요소(`[data-block-type="cta-card"] > div`)에만 단일 카드 스타일(배경, 단일 테두리 `#44403c`, 그림자)을 적용하여 **이중 테두리 현상을 완벽히 제거**했습니다.
 
 ---
 

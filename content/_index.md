@@ -4,7 +4,7 @@ date: 2026-07-22
 type: landing
 
 # Hallmark · macrostructure: Manifesto · genre: editorial · theme: Warm Terracotta
-# Hallmark · pre-emit critique: P5 H5 E5 S4 R5 V5
+# Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5
 
 sections:
   - block: hero
@@ -43,26 +43,30 @@ sections:
       background:
         color: "#1a1614"
 
-  - block: stats
+  - block: features
+    id: worship-schedule
     content:
+      title: 예배 및 모임 시간
+      subtitle: Worship & Prayer Schedule
+      text: 참된 예배와 기도로 하나님께 영광을 올려드리는 거룩한 구별의 시간입니다.
       items:
-        - statistic: "주일 11:00 AM"
+        - name: 주일 대예배
+          icon: sparkles
           description: |
-            **주일 대예배**  
-            본당 & YouTube Live
-        - statistic: "월-금 06:00 AM"
+            **매주 주일 오전 11:00 AM**  
+            본당 2층 & YouTube Live 생중계
+        - name: 새벽기도회
+          icon: bolt
           description: |
-            **새벽기도회**  
-            본당 & 온라인
-        - statistic: "수요일 08:00 PM"
+            **월 ~ 금요일 오전 06:00 AM**  
+            본당 1층 & 온라인 라이브
+        - name: 수요기도회
+          icon: shield-check
           description: |
-            **수요기도회**  
-            말씀과 기도
+            **매주 수요일 저녁 08:00 PM**  
+            본당 2층 (말씀 중심 기도회)
     design:
-      layout: minimal
-      css_class: "bg-stone-50 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800"
-      spacing:
-        padding: ["2.5rem", 0, "2.5rem", 0]
+      css_class: "bg-amber-50/70 dark:bg-stone-900/80 border-b border-stone-200 dark:border-stone-800"
 
   - block: steps
     id: worship-guide
@@ -111,7 +115,7 @@ sections:
           description: 거룩한 주일에 하나님께 감사함으로 예배드리며 안식과 은혜를 누립니다.
     design:
       layout: bento
-      css_class: "bg-stone-100/50 dark:bg-stone-900/50"
+      css_class: "bg-stone-100/60 dark:bg-stone-900/50"
 
   - block: faq
     id: faq

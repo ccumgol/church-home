@@ -36,7 +36,7 @@ body {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   1. Typography & Editorial Display Headers (No Gradient Text Fill)
+   1. Typography & Contrast Refinement (WCAG AAA High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6,
 .font-display,
@@ -47,17 +47,41 @@ section h1, section h2 {
   letter-spacing: -0.025em;
 }
 
-.hero-title {
-  font-weight: 700 !important;
-  line-height: 1.3 !important;
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-ink);
+}
+
+p, span, li, div {
+  color: #292524; /* Dark warm charcoal for high legibility on light backgrounds */
+}
+
+/* Dark Section / Dark Mode Contrast Fixes */
+.dark,
+section.dark,
+section[class*="hero"],
+div[class*="bg-stone-900"],
+div[class*="bg-slate-900"],
+div[class*="bg-stone-800"] {
+  color: #f1f5f9 !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4,
+section.dark h1, section.dark h2, section.dark h3, section.dark h4,
+section[class*="hero"] h1, section[class*="hero"] h2, section[class*="hero"] h3 {
   color: #ffffff !important;
 }
 
-.dark h1, .dark h2, .dark h3, .dark h4 {
-  color: #f8fafc;
+.dark p, .dark span, .dark li, .dark div:not([class*="bg-white"]),
+section.dark p, section.dark span, section.dark div,
+section[class*="hero"] p, section[class*="hero"] span, section[class*="hero"] div {
+  color: #e2e8f0 !important;
 }
 
-/* Navbar Brand - Solid Warm Ink / Accent (No Gradient Clip) */
+.dark strong, section.dark strong, section[class*="hero"] strong {
+  color: #ffffff !important;
+}
+
+/* Navbar Brand - Solid Warm Ink / Accent */
 .navbar-brand, nav a.font-bold {
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
@@ -79,32 +103,38 @@ section h1, section h2 {
 header, nav.navbar, header nav {
   backdrop-filter: blur(12px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
-  background-color: rgba(250, 248, 245, 0.9) !important;
+  background-color: rgba(250, 248, 245, 0.95) !important;
   border-bottom: 1px solid var(--color-rule) !important;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .dark header, .dark nav {
-  background-color: rgba(15, 23, 42, 0.9) !important;
+  background-color: rgba(15, 23, 42, 0.95) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   3. Hero Section Refinement (No Aurora Orbs / Clean Warm Ambient Surface)
+   3. Hero Section Refinement (Clean Ambient Surface & High Contrast Text)
    ──────────────────────────────────────────────────────────────────────────── */
 .block-hero, section[class*="hero"] {
   position: relative;
-  background-color: #1a1614 !important; /* Warm Dark Slate Charcoal */
-  color: #f8fafc;
+  background-color: #1a1614 !important; /* Warm Dark Charcoal */
+  color: #ffffff !important;
   overflow: hidden;
 }
 
-/* Ambient Subtle Grain / Static Glow (Replacing Aurora Mesh Orbs) */
+.hero-title {
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #ffffff !important;
+}
+
+/* Ambient Subtle Grain / Static Glow */
 .block-hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(217, 93, 18, 0.22) 0%, rgba(217, 119, 6, 0.08) 45%, transparent 75%);
+  background: radial-gradient(circle at 50% 0%, rgba(217, 93, 18, 0.25) 0%, rgba(217, 119, 6, 0.1) 45%, transparent 75%);
   pointer-events: none;
 }
 
@@ -114,7 +144,7 @@ div[class*="orb"], div[class*="gradient_mesh"] {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   4. Buttons & Micro-interactions (Restrained Hover, No Noisy Scale)
+   4. Buttons & Micro-interactions
    ──────────────────────────────────────────────────────────────────────────── */
 a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
   font-family: var(--font-body);
@@ -139,19 +169,19 @@ a[class*="primary_action"]:hover, .btn-primary:hover {
 
 /* Secondary Action Button */
 a[class*="secondary_action"], .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 a[class*="secondary_action"]:hover, .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.16) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
   transform: translateY(-1px) !important;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   5. Cards & Bento Grid (Crisp Hairline Borders & Negative Space)
+   5. Cards & Bento Grid (Crisp Hairline Borders & High Contrast)
    ──────────────────────────────────────────────────────────────────────────── */
 .bento-card, .card, [class*="block-"] article {
   border: 1px solid var(--color-rule);
@@ -205,10 +235,11 @@ summary {
   font-family: var(--font-display);
   font-weight: 600;
   padding: 1.1rem 1.25rem;
+  color: var(--color-ink) !important;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   7. Dark Footer Styling & Clean Colophon
+   7. Footer Spacing Reduction (Reduced Top Margin by > 50%)
    ──────────────────────────────────────────────────────────────────────────── */
 footer,
 .page-footer,
@@ -219,9 +250,15 @@ footer[aria-labelledby="footer-heading"],
   border: 0 !important;
   border-width: 0 !important;
   box-shadow: none !important;
-  margin-top: 2rem !important;
-  padding-top: 1.5rem !important;
-  padding-bottom: 1.5rem !important;
+  margin-top: 0 !important; /* Zero top margin */
+  margin-bottom: 0 !important;
+  padding-top: 0.75rem !important; /* Reduced top padding */
+  padding-bottom: 0.75rem !important;
+}
+
+.page-footer footer {
+  margin-top: 0 !important;
+  padding-top: 0.5rem !important;
 }
 
 footer a, .page-footer a {

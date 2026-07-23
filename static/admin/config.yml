@@ -22,7 +22,7 @@ public_folder: /media/uploads
 locale: ko
 
 # 편집 미리보기 비활성화 (Hugo 템플릿과 호환 불가)
-site_url: https://ccumgol.github.io/church-home/
+site_url: https://church-home.pages.dev/
 
 # ──────────────────────────────────────────────
 # 컬렉션 정의

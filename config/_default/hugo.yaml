@@ -5,7 +5,7 @@
 
 # Website name (set in params.yaml under hugoblox.branding.name)
 title: '샘플교회'
-baseURL: 'https://ccumgol.github.io/church-home/' # Website URL
+baseURL: 'https://church-home.pages.dev/' # Website URL
 
 ############################
 ## PAGE OPTIONS

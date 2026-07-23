@@ -1,0 +1,220 @@
+# Decap CMS Configuration
+# Docs: https://decapcms.org/docs/configuration-options/
+#
+# ⚠️  설정 방법:
+#   1. GitHub OAuth App을 생성하세요 (Settings > Developer Settings > OAuth Apps)
+#   2. Cloudflare Workers에 sveltia-cms-auth를 배포하세요
+#   3. 아래 base_url을 배포된 Cloudflare Worker 주소로 교체하세요
+#      예: https://sveltia-cms-auth.YOUR-WORKER.workers.dev
+
+backend:
+  name: github
+  repo: ccumgol/church-home        # GitHub 리포지터리 (소유자/이름)
+  branch: main                      # 콘텐츠가 저장될 브랜치
+  base_url: https://sveltia-cms-auth.YOUR-WORKER.workers.dev  # ← Cloudflare Worker 주소로 교체
+  auth_endpoint: /auth
+
+# 미디어(이미지) 업로드 경로
+media_folder: static/media/uploads
+public_folder: /media/uploads
+
+# 로케일 설정
+locale: ko
+
+# 편집 미리보기 비활성화 (Hugo 템플릿과 호환 불가)
+site_url: https://ccumgol.github.io/church-home/
+
+# ──────────────────────────────────────────────
+# 컬렉션 정의
+# ──────────────────────────────────────────────
+collections:
+
+  # ① 주일설교
+  - name: sermons
+    label: "📖 주일설교"
+    label_singular: "설교"
+    folder: content/sermons
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [date, title, speaker]
+    preview_path: "sermons/{{slug}}"
+    fields:
+      - label: "설교 제목"
+        name: title
+        widget: string
+        hint: "예: 은혜 위에 은혜를"
+
+      - label: "예배일"
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+
+      - label: "설교자"
+        name: speaker
+        widget: select
+        options:
+          - { label: "담임목사", value: "담임목사" }
+          - { label: "원로목사", value: "원로목사" }
+          - { label: "초청강사", value: "초청강사" }
+          - { label: "부목사", value: "부목사" }
+        default: "담임목사"
+
+      - label: "성경본문"
+        name: passage
+        widget: string
+        hint: "예: 요한복음 1:14-18"
+
+      - label: "성경권 (필터 태그용)"
+        name: book
+        widget: select
+        options:
+          - 창세기
+          - 출애굽기
+          - 레위기
+          - 민수기
+          - 신명기
+          - 여호수아
+          - 사사기
+          - 룻기
+          - 사무엘상
+          - 사무엘하
+          - 열왕기상
+          - 열왕기하
+          - 역대상
+          - 역대하
+          - 에스라
+          - 느헤미야
+          - 에스더
+          - 욥기
+          - 시편
+          - 잠언
+          - 전도서
+          - 아가
+          - 이사야
+          - 예레미야
+          - 예레미야애가
+          - 에스겔
+          - 다니엘
+          - 호세아
+          - 요엘
+          - 아모스
+          - 오바댜
+          - 요나
+          - 미가
+          - 나훔
+          - 하박국
+          - 스바냐
+          - 학개
+          - 스가랴
+          - 말라기
+          - 마태복음
+          - 마가복음
+          - 누가복음
+          - 요한복음
+          - 사도행전
+          - 로마서
+          - 고린도전서
+          - 고린도후서
+          - 갈라디아서
+          - 에베소서
+          - 빌립보서
+          - 골로새서
+          - 데살로니가전서
+          - 데살로니가후서
+          - 디모데전서
+          - 디모데후서
+          - 디도서
+          - 빌레몬서
+          - 히브리서
+          - 야고보서
+          - 베드로전서
+          - 베드로후서
+          - 요한1서
+          - 요한2서
+          - 요한3서
+          - 유다서
+          - 요한계시록
+
+      - label: "유튜브 영상 링크"
+        name: youtube_url
+        widget: string
+        hint: "예: https://www.youtube.com/watch?v=xxxxxxxx"
+        required: false
+
+      - label: "절기 / 카테고리 태그"
+        name: tags
+        widget: list
+        hint: "예: 주일대예배, 부활절, 성탄절"
+        field:
+          label: 태그
+          name: tag
+          widget: string
+
+      - label: "초안"
+        name: draft
+        widget: boolean
+        default: false
+
+      - label: "설교 원고"
+        name: body
+        widget: markdown
+        required: false
+        hint: "설교 원고를 입력하세요. 비워도 됩니다."
+
+  # ② 행사안내
+  - name: events
+    label: "📅 행사안내"
+    label_singular: "행사"
+    folder: content/event
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [date, title]
+    fields:
+      - label: "행사 제목"
+        name: title
+        widget: string
+
+      - label: "행사 시작일"
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+
+      - label: "행사 종료일"
+        name: end_date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        required: false
+
+      - label: "장소"
+        name: location
+        widget: string
+        required: false
+        hint: "예: 본당, 친교실, 온라인"
+
+      - label: "간단 설명 (목록에 표시)"
+        name: description
+        widget: text
+        required: false
+
+      - label: "행사 이미지"
+        name: image
+        widget: image
+        required: false
+        media_folder: /static/media/uploads
+        public_folder: /media/uploads
+
+      - label: "초안"
+        name: draft
+        widget: boolean
+        default: false
+
+      - label: "상세 내용"
+        name: body
+        widget: markdown
+        required: false

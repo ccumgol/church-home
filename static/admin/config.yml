@@ -11,7 +11,7 @@ backend:
   name: github
   repo: ccumgol/church-home        # GitHub 리포지터리 (소유자/이름)
   branch: main                      # 콘텐츠가 저장될 브랜치
-  base_url: https://sveltia-cms-auth.YOUR-WORKER.workers.dev  # ← Cloudflare Worker 주소로 교체
+  base_url: https://church-admin-auth.office-a67.workers.dev  # ← Cloudflare Worker 주소로 교체
   auth_endpoint: /auth
 
 # 미디어(이미지) 업로드 경로

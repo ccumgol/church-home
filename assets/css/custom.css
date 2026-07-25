@@ -704,14 +704,10 @@ p.powered-by,
 /* ────────────────────────────────────────────────────────────────────────────
    12. YouTube Playlist Video Player Container
    ──────────────────────────────────────────────────────────────────────────── */
-#latest-sermon {
-  padding-top: 1.5rem !important;
-  padding-bottom: 2rem !important;
-}
 
 #latest-sermon .max-w-prose,
 #latest-sermon .prose {
-  max-width: 56rem !important; /* 896px max-w-4xl for optimal video aspect ratio */
+  max-width: 100% !important;
   width: 100% !important;
 }
 

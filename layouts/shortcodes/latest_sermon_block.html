@@ -1,0 +1,82 @@
+{{ $sermons := where site.RegularPages "Type" "sermons" }}
+{{ $latest := index ($sermons.ByDate.Reverse) 0 }}
+
+{{ if $latest }}
+  {{ $video_id := "" }}
+  {{ if $latest.Params.youtube_url }}
+    {{ if in $latest.Params.youtube_url "youtu.be/" }}
+      {{ $parts := split (index (split $latest.Params.youtube_url "?") 0) "/" }}
+      {{ $video_id = index $parts (sub (len $parts) 1) }}
+    {{ else if in $latest.Params.youtube_url "youtube.com/watch" }}
+      {{ $video_id = index (split (index (split $latest.Params.youtube_url "v=") 1) "&") 0 }}
+    {{ end }}
+  {{ end }}
+
+  <div class="max-w-5xl mx-auto w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center w-full">
+      <div class="w-full lg:col-span-2">
+      <div class="relative w-full overflow-hidden rounded-2xl shadow-2xl border border-stone-200 dark:border-stone-800 bg-stone-950 aspect-video">
+        {{ if $video_id }}
+        <iframe
+          class="absolute top-0 left-0 w-full h-full rounded-2xl"
+          src="https://www.youtube-nocookie.com/embed/{{ $video_id }}"
+          title="{{ $latest.Title }}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+        {{ else }}
+        <iframe
+          class="absolute top-0 left-0 w-full h-full rounded-2xl"
+          src="https://www.youtube-nocookie.com/embed/videoseries?list=PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP"
+          title="최신 설교 재생목록"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+        {{ end }}
+      </div>
+    </div>
+    <div class="flex flex-col justify-center space-y-4 lg:pl-6 lg:col-span-1 text-left">
+      {{ $summary := "" }}
+      {{ range $part := split $latest.RawContent "###" }}
+        {{ $trimmed := trim $part " \n\r" }}
+        {{ if hasPrefix $trimmed "설교 개요" }}
+          {{ $summary = trim (strings.TrimPrefix "설교 개요" $trimmed) " \n\r" }}
+        {{ else if hasPrefix $trimmed "설교개요" }}
+          {{ $summary = trim (strings.TrimPrefix "설교개요" $trimmed) " \n\r" }}
+        {{ end }}
+      {{ end }}
+      {{ if eq $summary "" }}
+        {{ $summary = $latest.Summary | plainify | htmlUnescape }}
+      {{ end }}
+
+      <div class="space-y-1">
+        <h3 class="text-3xl font-extrabold text-stone-800 dark:text-stone-100 leading-tight">
+          {{ $latest.Title }}
+        </h3>
+        {{ if $latest.Params.passage }}
+        <p class="text-stone-500 dark:text-stone-400 font-medium text-sm mt-1">
+          본문: {{ $latest.Params.passage }}
+        </p>
+        {{ end }}
+        <p class="text-stone-500 dark:text-stone-400 text-sm">
+          {{ $latest.Date.Format "2006. 01. 02" }} 
+          {{ if $latest.Params.speaker }} | {{ $latest.Params.speaker }}{{ end }}
+        </p>
+      </div>
+
+      <p class="text-stone-600 dark:text-stone-300 text-[1.05rem] leading-relaxed line-clamp-3">
+        {{ $summary | plainify | htmlUnescape }}
+      </p>
+
+      <div class="pt-2">
+        <a href="/sermons/" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium text-[1.05rem] py-2 px-4 rounded-lg transition-all shadow-md hover:shadow-lg hover:-translate-y-1">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          지난 설교 다시보기
+        </a>
+      </div>
+    </div>
+    </div>
+  </div>
+{{ end }}

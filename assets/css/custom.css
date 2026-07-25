@@ -775,10 +775,11 @@ footer p, footer div, footer li {
 /* ────────────────────────────────────────────────────────────────────────────
    12. Section Container Alignment & Max Width (1024px)
    ──────────────────────────────────────────────────────────────────────────── */
-.hbb-section > div[class*="-block-container"],
-.hbb-section .preact-block,
+/* 캐러셀 섹션(.church-carousel)은 화면 전체 너비를 써야 하므로 이 폭 제한에서 제외합니다. */
+.hbb-section:not(.church-carousel) > div[class*="-block-container"],
+.hbb-section:not(.church-carousel) .preact-block,
 .home-section .container,
-section.hbb-section > div:not(.home-section-bg):not(.absolute) {
+section.hbb-section:not(.church-carousel) > div:not(.home-section-bg):not(.absolute) {
   max-width: 64rem !important; /* max-w-5xl = 1024px */
   margin-left: auto !important;
   margin-right: auto !important;
@@ -787,10 +788,10 @@ section.hbb-section > div:not(.home-section-bg):not(.absolute) {
 }
 
 @media (min-width: 768px) {
-  .hbb-section > div[class*="-block-container"],
-  .hbb-section .preact-block,
+  .hbb-section:not(.church-carousel) > div[class*="-block-container"],
+  .hbb-section:not(.church-carousel) .preact-block,
   .home-section .container,
-  section.hbb-section > div:not(.home-section-bg):not(.absolute) {
+  section.hbb-section:not(.church-carousel) > div:not(.home-section-bg):not(.absolute) {
     padding-left: 2rem !important;
     padding-right: 2rem !important;
   }
@@ -876,4 +877,334 @@ section.hbb-section > div:not(.home-section-bg):not(.absolute) {
 
 .bento-item:hover::after {
   left: 150%;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   14. Hero Carousel (params.church.hero_style: carousel)
+   ────────────────────────────────────────────────────────────────────────────
+   마크업: layouts/_partials/hbx/blocks/slider/block.html
+   동작:   static/js/church-carousel.js
+
+   설계 메모
+   - 배경을 섹션 전체 폭에 깔기 위해 섹션의 좌우 패딩과 1024px 폭 제한을 모두 해제합니다.
+     (폭 제한 해제는 위 12번 섹션의 :not(.church-carousel) 로 처리)
+   - 글자색은 티커형 배너와 맞추기 위해 흰색 계열로 고정합니다. 섹션에 `dark` 클래스가
+     함께 붙으므로 3번 섹션의 밝은 배경용 글자색 규칙은 이 섹션을 건드리지 않습니다.
+   - 높이는 --carousel-height 변수 하나로 통일합니다. 값은 블록의
+     design.slide_height / slide_height_mobile 에서 인라인으로 주입됩니다.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* 섹션 껍데기: 여백 제거 + 넘침 차단 */
+section.hbb-section.church-carousel {
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 콘텐츠 폭 제한 해제 — 배경이 좌우 끝까지 닿게 합니다. */
+section.hbb-section.church-carousel > div.church-carousel-viewport {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.church-carousel-viewport {
+  position: relative;
+  isolation: isolate;
+}
+
+/* 모든 슬라이드를 같은 격자 칸에 겹쳐 두고 투명도로 교차 전환합니다. */
+.church-carousel-track {
+  display: grid;
+  width: 100%;
+}
+
+.church-carousel-slide {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--carousel-height-mobile, 60vh);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 0;
+  transition: opacity 0.9s ease-in-out, visibility 0s linear 0.9s;
+}
+
+.church-carousel-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+  transition: opacity 0.9s ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .church-carousel-slide {
+    min-height: var(--carousel-height, 72vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .church-carousel-slide {
+    transition: none;
+  }
+}
+
+/* 배경 이미지 / 기본 배경 */
+.church-carousel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* 슬라이드에 배경 이미지를 지정하지 않았을 때 쓰는 기본 배경.
+   design.md 의 안티패턴(보라/파랑 그라디언트 금지)에 맞춘 따뜻한 테라코타 계열입니다. */
+.church-carousel-bg.is-default {
+  background-image: linear-gradient(135deg, #3b2415 0%, #7c3a12 55%, #b45309 100%);
+}
+
+/* 어떤 배경 이미지가 오더라도 흰 글씨가 읽히도록 덮는 어두운 막 */
+.church-carousel-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.55) 0%,
+    rgba(15, 23, 42, 0.42) 45%,
+    rgba(15, 23, 42, 0.62) 100%
+  );
+}
+
+/* 본문 영역 — 배경은 전체 폭, 글은 읽기 좋은 폭으로 가운데 정렬 */
+/* 모바일에서는 이동 버튼을 숨기므로 좌우 여백을 좁게 쓰고,
+   아래 여백만 인디케이터를 피하도록 넉넉히 둡니다. */
+.church-carousel-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .church-carousel-inner {
+    padding: 4rem 2rem 4.5rem;
+    gap: 2rem;
+  }
+}
+
+/* 포스터가 있는 행사 슬라이드: 좌 글 / 우 포스터 2단 */
+@media (min-width: 768px) {
+  .church-carousel-inner.is-split {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    gap: 3rem;
+  }
+
+  .church-carousel-inner.is-split .church-carousel-copy {
+    flex: 1 1 55%;
+    align-items: flex-start;
+  }
+
+  .church-carousel-inner.is-split .church-carousel-poster {
+    flex: 0 1 40%;
+  }
+}
+
+.church-carousel-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 42rem;
+}
+
+.church-carousel-inner.is-split .church-carousel-copy {
+  align-items: center;
+}
+
+/* 제목 — 티커형 배너의 hero-title 과 같은 크기/서체 계열을 씁니다.
+   클래스 이름에 "title" 을 쓰지 않는 이유: 2번 섹션의 [class*="title"] 규칙이
+   글자 크기를 1.75rem 으로 덮어써 버리기 때문입니다. */
+.church-carousel-heading {
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.75rem, 5vw, 3.25rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.025em;
+  margin: 0 !important;
+  color: #ffffff !important;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  text-wrap: balance;
+  /* 한글은 어절 단위로 끊어야 읽힙니다. (없으면 "창립 10주 / 년 감사예배" 처럼 잘림) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.church-carousel-lede {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+  line-height: 1.75;
+  margin: 0 !important;
+  color: #f1f5f9 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  max-width: 40rem;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.church-carousel-actions {
+  margin-top: 0.5rem;
+}
+
+/* 클래스 이름에 "button" 을 포함시켜, 다크 섹션의 링크를 호박색으로 바꾸는
+   3번 섹션의 `.dark a:not([class*="button"])` 규칙에서 스스로 빠지도록 했습니다. */
+.church-carousel-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #1c1917 !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.church-carousel-button-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+}
+
+.church-carousel-button:hover {
+  background: var(--color-accent-gold, #d97706);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.55);
+}
+
+/* 행사 포스터 */
+.church-carousel-poster {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  justify-content: center;
+}
+
+.church-carousel-poster img {
+  width: auto;
+  max-width: 100%;
+  /* 모바일에서는 제목·설명·버튼이 먼저 보이도록 포스터를 넉넉히 줄입니다. */
+  max-height: min(32vh, 15rem);
+  object-fit: contain;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 768px) {
+  .church-carousel-poster img {
+    max-height: calc(var(--carousel-height, 72vh) - 10rem);
+  }
+}
+
+/* 좌우 이동 버튼 — 모바일에서는 화면이 좁아 글을 가리므로 숨기고,
+   대신 스와이프와 인디케이터로 이동합니다. (church-carousel.js) */
+.church-carousel-nav {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background-color 0.25s ease;
+}
+
+.church-carousel-nav:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.church-carousel-nav:focus-visible {
+  outline: 3px solid var(--color-focus, #d95d12);
+  outline-offset: 3px;
+}
+
+.church-carousel-nav svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .church-carousel-nav {
+    display: flex;
+  }
+
+  .church-carousel-nav.is-prev { left: 2rem; }
+  .church-carousel-nav.is-next { right: 2rem; }
+}
+
+/* 인디케이터 점 */
+.church-carousel-dots {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.church-carousel-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.church-carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.church-carousel-dot.is-active {
+  background: #ffffff;
+  transform: scale(1.15);
+}
+
+.church-carousel-dot:focus-visible {
+  outline: 3px solid var(--color-focus, #d95d12);
+  outline-offset: 3px;
 }

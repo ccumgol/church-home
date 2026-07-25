@@ -46,7 +46,9 @@ cascade:
 ############################
 
 defaultContentLanguage: en
-hasCJKLanguage: false
+# 콘텐츠가 한국어이므로 켭니다. 이 값이 false면 한글 문단이 '한 단어'로 세어져
+# .Summary 와 읽는 시간 계산이 사실상 동작하지 않습니다.
+hasCJKLanguage: true
 defaultContentLanguageInSubdir: false
 removePathAccents: true
 

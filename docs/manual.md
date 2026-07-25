@@ -8,6 +8,7 @@
 1. [프로젝트 개요 및 기술 스택](#프로젝트-개요-및-기술-스택)
 2. [디자인 시스템 및 테마 구성](#디자인-시스템-및-테마-구성)
 3. [콘텐츠 수정 및 파일 구조](#콘텐츠-수정-및-파일-구조)
+3-1. [첫 화면 배너 선택 (티커형 / 캐러셀형)](#3-1-첫-화면-배너-선택-티커형--캐러셀형)
 4. [주일설교 4단 동적 태그 레이아웃 & 필터링 연동 가이드](#주일설교-4단-동적-태그-레이아웃--필터링-연동-가이드)
 5. [유튜브 최신 설교/찬양 플레이리스트 연동 가이드](#유튜브-최신-설교찬양-플레이리스트-연동-가이드)
 6. [이미지 자산 최적화 (WebP 가이드)](#이미지-자산-최적화-webp-가이드)
@@ -24,6 +25,103 @@
 - **Base Background:** Creamy Warm Paper (`#faf8f5` / Dark: `#0f172a`)
 - **Hosting/CI:** GitHub Pages & GitHub Actions (`.github/workflows/deploy.yaml`)
 - **Live URL:** `https://ccumgol.github.io/church-home/`
+
+---
+
+## 3-1. 첫 화면 배너 선택 (티커형 / 캐러셀형)
+
+홈 화면 맨 위 배너는 **두 가지 중 하나를 골라 쓰는 구조**입니다. 교회 상황에 맞게 설정 한 줄만 바꾸면 됩니다.
+
+| 값 | 배너 모습 | 어울리는 경우 |
+|----|-----------|--------------|
+| `ticker` | 배경 사진 한 장 + 최근소식이 한 줄씩 올라오는 티커 | 소식 전달이 중요하고, 화면이 차분하기를 바랄 때 |
+| `carousel` | 여러 장이 6초마다 자동으로 넘어가는 슬라이드 | 행사 포스터나 여러 안내를 번갈아 보여 주고 싶을 때 |
+
+### 바꾸는 방법 — Admin 페이지에서 (권장)
+
+코드를 건드리지 않고 바꿀 수 있습니다.
+
+1. `https://church-home.pages.dev/admin/` 접속 후 GitHub 로 로그인
+2. 왼쪽 메뉴에서 **⚙️ 사이트 설정** → **첫 화면 배너**
+3. **배너 종류** 를 고르고 **저장(Publish)**
+
+| 항목 | 설명 |
+|------|------|
+| 배너 종류 | 티커형 / 캐러셀형 중 선택 |
+| 캐러셀 전환 간격 (초) | 캐러셀형일 때 몇 초마다 넘어갈지. `0` 이면 자동 전환 안 함 |
+
+저장하면 GitHub 에 커밋되고 Cloudflare Pages 가 사이트를 다시 만듭니다. **반영까지 1~2분** 걸립니다.
+
+### 바꾸는 방법 — 파일로 직접
+
+Admin 을 거치지 않으려면 `data/settings.yaml` 을 고쳐도 됩니다. Admin 이 저장하는 파일이 바로 이 파일입니다.
+
+```yaml
+hero_style: ticker            # 또는 carousel
+carousel_interval_seconds: 6
+```
+
+> ⚠️ 이 파일은 Admin 에서 저장할 때 **파일 전체가 다시 쓰이므로 주석을 달아도 지워집니다.** 설명은 이 문서에 두세요.
+
+어느 쪽으로 바꾸든, 선택하지 않은 배너는 **HTML 자체가 만들어지지 않고** 그쪽 전용 자바스크립트도 내려받지 않습니다. 두 배너가 같이 보이거나 쓰지 않는 스크립트가 도는 일이 없습니다.
+
+잘못된 값(`hero_style: 뭔가이상한값`)을 넣으면 빌드가 깨지는 대신 경고를 남기고 티커형으로 처리합니다. `data/settings.yaml` 이 아예 없어도 티커형으로 동작합니다.
+
+### 캐러셀 슬라이드 구성
+
+캐러셀은 두 종류의 슬라이드를 이어 붙여 만듭니다.
+
+1. **고정 슬라이드** — `content/_index.md` 의 `block: slider` → `content.slides` 에 적은 교회 소개용 슬라이드
+2. **행사 슬라이드** — `content/event/` 의 글 중 `publish_to_home: true` 인 것이 최신순으로 자동 추가
+
+고정 슬라이드 한 장은 이렇게 생겼습니다.
+
+```yaml
+- title: "예배 안내"
+  content: "하나님을 향한 온전한 예배가 회복되는 곳"
+  background:
+    media: "vintage-floral-bg.png"   # assets/media/ 안의 파일명
+  link:
+    text: "예배 시간표 확인"
+    url: "/about/#services"
+    icon: "clock"                     # HugoBlox 기본 아이콘(heroicons) 이름
+```
+
+> `background.media` 를 비우면 따뜻한 테라코타 계열 기본 배경이 깔립니다.
+> 아이콘은 heroicons 이름을 씁니다. 이 사이트에는 FontAwesome 이 없으므로 `fa-` 계열 이름은 표시되지 않습니다.
+
+### 행사를 배너에 올리기
+
+Admin(`/admin/`) → **📅 행사안내** 에서 글을 쓸 때
+
+- **홈 화면 배너에 표시** 를 켜면 캐러셀에 추가됩니다.
+- **행사 포스터** 를 올리면 배너에서 **오른쪽 단**에 포스터가, 왼쪽 단에 제목·설명·버튼이 놓입니다. 포스터가 없으면 글만 가운데 정렬됩니다.
+- **간단 설명** 이 배너의 본문 문구로 쓰입니다.
+
+### 높이 조절
+
+높이는 디자인 값이라 Admin 이 아니라 `content/_index.md` 의 `block: slider` → `design` 에서 조절합니다. 모든 슬라이드가 같은 높이로 통일됩니다.
+
+```yaml
+design:
+  slide_height: "72vh"          # PC 높이
+  slide_height_mobile: "60vh"   # 모바일 높이
+```
+
+전환 속도는 위에서 설명한 대로 Admin 의 **캐러셀 전환 간격(초)** 에서 정합니다.
+
+### 관련 파일
+
+| 파일 | 역할 |
+|------|------|
+| `data/settings.yaml` | Admin 이 저장하는 설정값 (배너 종류, 전환 간격) |
+| `static/admin/config.yml` | Admin 의 "⚙️ 사이트 설정" 화면 정의 |
+| `layouts/_partials/church/settings.html` | 설정값 해석 — data → params → 기본값 순으로 찾고, 잘못된 값은 걸러 냄 |
+| `layouts/_partials/hbx/sections.html` | 설정값과 맞지 않는 배너 섹션을 걸러 냄 (`active: false` 도 여기서 처리) |
+| `layouts/_partials/hbx/blocks/slider/block.html` | 캐러셀 마크업 |
+| `assets/css/custom.css` (14번 섹션) | 캐러셀 디자인 |
+| `static/js/church-carousel.js` | 캐러셀 동작 (자동 전환·스와이프·키보드) |
+| `layouts/_partials/hooks/body-end/custom.html` | 선택된 배너의 스크립트만 로드 |
 
 ---
 

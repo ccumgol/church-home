@@ -3,6 +3,12 @@ public/
 resources/_gen/
 .hugo_build.lock
 hugo_stats.json
+hugo_server.log
+
+# 디버깅용으로 루트에 떨궈 둔 렌더링 결과 덤프 (저장소에 커밋하지 않습니다)
+/index.html
+/index_live.html
+/main_dump.html
 
 # Node & dependencies
 node_modules/

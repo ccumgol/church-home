@@ -1,0 +1,154 @@
+{{/*
+  ════════════════════════════════════════════════════════════════════════════
+  캐러셀형 히어로 배너 블록  (content/_index.md 의 `- block: slider`)
+  ════════════════════════════════════════════════════════════════════════════
+  두 종류의 슬라이드를 하나로 합쳐 자동 전환합니다.
+
+    1) 고정 슬라이드 — content.slides 에 직접 적은 교회 소개용 슬라이드
+    2) 행사 슬라이드 — content/event/ 의 글 중 `publish_to_home: true` 인 것
+
+  행사 슬라이드에 포스터(poster)가 있으면 좌측 글 / 우측 포스터의 2단으로,
+  없으면 고정 슬라이드와 똑같은 가운데 정렬 1단으로 그려집니다.
+
+  마크업만 담당하고 모양은 assets/css/custom.css 의 14번 섹션이,
+  동작은 static/js/church-carousel.js 가 맡습니다.
+  (JS는 layouts/_partials/hooks/body-end/custom.html 에서 불러옵니다)
+
+  design 에서 조절할 수 있는 값
+    slide_height        슬라이드 높이 (기본 72vh)
+    slide_height_mobile 모바일 높이   (기본 60vh)
+
+  자동 전환 간격은 Admin(/admin/) → "⚙️ 사이트 설정" 에서 바꿉니다.
+  (layouts/_partials/church/settings.html 참고)
+*/}}
+
+{{- $page := .wcPage -}}
+{{- $block := .wcBlock -}}
+{{- $id := .wcIdentifier -}}
+
+{{- $design := $block.design | default dict -}}
+{{- $height := $design.slide_height | default "72vh" -}}
+{{- $height_mobile := $design.slide_height_mobile | default "60vh" -}}
+{{- $interval := (partial "church/settings").carousel_interval -}}
+
+{{/* ── 슬라이드 모으기 ─────────────────────────────────────────────────── */}}
+{{- $slides := slice -}}
+
+{{/* 1) 고정 슬라이드 */}}
+{{- range $block.content.slides -}}
+  {{- $bg := index . "background" | default dict -}}
+  {{- $media := partial "church/media_url" (index $bg "media") -}}
+  {{- $slides = $slides | append (dict
+      "title"     (.title | default "")
+      "content"   (.content | default "")
+      "link"      (.link | default dict)
+      "media"     $media
+      "poster"    ""
+      "is_event"  false
+  ) -}}
+{{- end -}}
+
+{{/* 2) 행사 슬라이드 — publish_to_home 이 켜진 행사만, 최신순 */}}
+{{- $events := where (where site.RegularPages "Section" "event") "Params.publish_to_home" true -}}
+{{- range $events.ByDate.Reverse -}}
+  {{/* poster 를 우선 쓰고, 예전 표기(image)도 함께 받아 줍니다. */}}
+  {{- $poster := partial "church/media_url" (.Params.poster | default .Params.image) -}}
+  {{- $media := partial "church/media_url" (index (.Params.background | default dict) "media") -}}
+  {{- $summary := .Params.summary | default .Params.description | default .Summary -}}
+  {{- $slides = $slides | append (dict
+      "title"     .Title
+      "content"   $summary
+      "link"      (dict "url" .RelPermalink "text" "자세히 보기" "icon" "calendar-days")
+      "media"     $media
+      "poster"    $poster
+      "is_event"  true
+  ) -}}
+{{- end -}}
+
+{{- $count := len $slides -}}
+
+{{- if eq $count 0 -}}
+  {{/* 슬라이드가 하나도 없으면 빈 배너 대신 아무것도 그리지 않습니다. */}}
+{{- else -}}
+
+<div class="church-carousel-viewport"
+     id="carousel-{{ $id }}"
+     data-carousel
+     data-interval="{{ $interval }}"
+     style="--carousel-height: {{ $height }}; --carousel-height-mobile: {{ $height_mobile }};"
+     {{ if gt $count 1 }}role="region" aria-roledescription="캐러셀" aria-label="교회 소개 배너"{{ end }}>
+
+  <div class="church-carousel-track">
+    {{- range $i, $s := $slides -}}
+      {{- $two_col := and $s.is_event (ne $s.poster "") -}}
+
+      <div class="church-carousel-slide{{ if eq $i 0 }} is-active{{ end }}"
+           data-carousel-slide
+           {{ if gt $count 1 }}role="group" aria-roledescription="슬라이드" aria-label="{{ add $i 1 }} / {{ $count }}"{{ end }}
+           {{ if ne $i 0 }}aria-hidden="true"{{ end }}>
+
+        {{/* 배경 — 지정한 이미지가 있으면 그 이미지, 없으면 기본 그라디언트 */}}
+        <div class="church-carousel-bg{{ if eq $s.media "" }} is-default{{ end }}"
+             {{ with $s.media }}style="background-image: url('{{ . }}');"{{ end }}
+             aria-hidden="true"></div>
+        <div class="church-carousel-scrim" aria-hidden="true"></div>
+
+        {{/* 본문 */}}
+        <div class="church-carousel-inner{{ if $two_col }} is-split{{ end }}">
+          <div class="church-carousel-copy">
+            {{- with $s.title -}}
+              <h2 class="church-carousel-heading">{{ . | plainify | emojify }}</h2>
+            {{- end -}}
+
+            {{- with $s.content -}}
+              <div class="church-carousel-lede">{{ . | plainify | emojify }}</div>
+            {{- end -}}
+
+            {{- with $s.link -}}
+              {{- if .url -}}
+                <div class="church-carousel-actions">
+                  <a href="{{ .url }}" class="church-carousel-button">
+                    {{- .text | default "자세히 보기" | plainify | emojify -}}
+                    {{/* 아이콘은 HugoBlox 기본 아이콘 팩(heroicons)을 씁니다.
+                         이 사이트에는 FontAwesome 이 로드되지 않으므로 fa- 클래스는 쓰지 않습니다. */}}
+                    {{- with .icon -}}
+                      {{ partial "functions/get_icon" (dict "name" . "attributes" `class="church-carousel-button-icon"` "Page" $page) }}
+                    {{- end -}}
+                  </a>
+                </div>
+              {{- end -}}
+            {{- end -}}
+          </div>
+
+          {{- if $two_col -}}
+            <div class="church-carousel-poster">
+              <img src="{{ $s.poster }}" alt="{{ $s.title }} 포스터" loading="lazy" decoding="async">
+            </div>
+          {{- end -}}
+        </div>
+      </div>
+    {{- end -}}
+  </div>
+
+  {{- if gt $count 1 -}}
+    <button class="church-carousel-nav is-prev" type="button" data-carousel-prev aria-label="이전 슬라이드">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+    </button>
+    <button class="church-carousel-nav is-next" type="button" data-carousel-next aria-label="다음 슬라이드">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+    </button>
+
+    <div class="church-carousel-dots" role="tablist" aria-label="슬라이드 선택">
+      {{- range $i, $s := $slides -}}
+        <button type="button"
+                class="church-carousel-dot{{ if eq $i 0 }} is-active{{ end }}"
+                data-carousel-dot
+                role="tab"
+                aria-label="{{ add $i 1 }}번째 슬라이드로 이동"
+                aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}"></button>
+      {{- end -}}
+    </div>
+  {{- end -}}
+</div>
+
+{{- end -}}

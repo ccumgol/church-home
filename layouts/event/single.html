@@ -11,10 +11,10 @@
 
   <article class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
     
-    {{/* Header Image (Optional) */}}
-    {{ if .Params.image }}
+    {{/* 포스터 (선택) — 구버전 문서의 image 표기도 함께 지원 */}}
+    {{ with partial "church/media_url" (.Params.poster | default .Params.image) }}
       <div class="w-full aspect-[21/9] md:aspect-[3/1] bg-slate-100 dark:bg-slate-800 relative">
-        <img src="{{ .Params.image }}" alt="{{ .Title }}" class="w-full h-full object-cover">
+        <img src="{{ . }}" alt="{{ $.Title }}" class="w-full h-full object-cover">
       </div>
     {{ end }}
 
@@ -47,8 +47,8 @@
       <div class="prose prose-slate prose-lg dark:prose-invert max-w-none">
         {{ if .Content }}
           {{ .Content }}
-        {{ else if .Params.description }}
-          <p class="text-xl text-slate-500">{{ .Params.description }}</p>
+        {{ else if .Params.summary | default .Params.description }}
+          <p class="text-xl text-slate-500">{{ .Params.summary | default .Params.description }}</p>
         {{ else }}
           <p class="text-slate-500 italic">상세 내용이 없습니다.</p>
         {{ end }}

@@ -6,9 +6,17 @@ type: landing
 # Hallmark · macrostructure: Manifesto · genre: editorial · theme: Warm Terracotta
 # Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5
 
+# ══════════════════════════════════════════════════════════════════════════════
+# 첫 화면 배너는 두 가지 중 하나만 표시됩니다.
+#   - hero_style: ticker   → 아래 `block: hero` (배경 한 장 + 최근소식 티커)
+#   - hero_style: carousel → 아래 `block: slider` (여러 장 자동 전환)
+# 어느 쪽을 쓸지는 Admin(/admin/) → "⚙️ 사이트 설정" 에서 고릅니다.
+# 여기 두 섹션은 지우지 말고 그대로 두세요. 설정값과 맞는 쪽만 렌더링됩니다.
+# ══════════════════════════════════════════════════════════════════════════════
+
 sections:
   - block: hero
-    active: false
+    hero_style: ticker
     content:
       eyebrow: 샘플교회 · SAMPLE CHURCH
       title: 하나님의 말씀과 은혜로<br>새로워지는 성도의 삶
@@ -42,41 +50,47 @@ sections:
       css_class: "dark bg-gradient-to-br from-stone-900 via-[#1e1511] to-black relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-[0.03] before:mix-blend-overlay hero-smooth-fade"
 
   - block: slider
-    active: true
+    id: hero-carousel
+    hero_style: carousel
     content:
+      # 아래 고정 슬라이드 뒤로, '커뮤니티 - 행사안내' 글 중
+      # `publish_to_home: true` 인 행사가 최신순으로 자동으로 붙습니다.
       slides:
-        - title: 하나님의 말씀과 은혜로<br>새로워지는 성도의 삶
+        - title: 하나님의 말씀과 은혜로 새로워지는 성도의 삶
           content: 샘플교회 · SAMPLE CHURCH
-          align: center
           background:
             media: "hero_sky_bg.webp"
           link:
             text: "예배 및 모임 안내"
             url: "/about/#services"
             icon: "rocket-launch"
-        
+
         - title: "예배 안내"
           content: "하나님을 향한 온전한 예배가 회복되는 곳"
-          align: center
           background:
             media: "vintage-floral-bg.png"
           link:
             text: "예배 시간표 확인"
             url: "/about/#services"
             icon: "clock"
-            
+
         - title: "새가족 가이드"
           content: "샘플교회에 처음 오신 분들을 진심으로 환영합니다!"
-          align: center
           background:
-            media: "vintage-floral-bg.png"
+            media: "bright_sky_bg.webp"
           link:
             text: "오시는 길 안내"
             url: "/about/#direction"
-            icon: "map-marker-alt"
+            icon: "map-pin"
     design:
-      slide_height: "80vh"
-      is_fullscreen: true
+      # 모든 슬라이드가 이 높이로 통일됩니다. (내용이 길면 그만큼만 늘어남)
+      # 자동 전환 간격은 Admin → "⚙️ 사이트 설정" 에서 정합니다.
+      slide_height: "72vh"
+      slide_height_mobile: "60vh"
+      # 배경을 화면 좌우 끝까지 채우기 위한 클래스입니다.
+      #   dark            → 다크 섹션용 흰색 글자 규칙 적용 (티커형 배너와 동일)
+      #   church-carousel → 섹션 폭 제한/좌우 여백 해제 (custom.css 12·14번 섹션)
+      css_class: "dark church-carousel"
       spacing:
         padding: [0, 0, 0, 0]
         margin: [0, 0, 0, 0]

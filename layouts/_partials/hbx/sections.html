@@ -1,0 +1,157 @@
+{{/*
+  ════════════════════════════════════════════════════════════════════════════
+  프로젝트 오버라이드 — HugoBlox `hbx/sections` 파셜
+  ════════════════════════════════════════════════════════════════════════════
+  원본: HugoBlox/kit/modules/blox 의 layouts/_partials/hbx/sections.html
+  (모듈 버전: blox@v0.0.0-20260527025321-61f41d3667f1)
+
+  원본 로직(sections_source 링크, data/blocks ref 병합)은 그대로 두고,
+  맨 끝에 "섹션 노출 필터" 한 단계만 추가했습니다. 모듈이 업데이트되면
+  원본을 다시 복사한 뒤 아래 [ADDED] 블록만 옮겨 붙이면 됩니다.
+
+  추가된 기능 2가지
+  ──────────────────────────────────────────────────────────────────────────
+  1. active: false
+     섹션을 렌더링하지 않습니다. (예전 HugoBlox v5에는 있었으나 현재
+     모듈에서는 이 키를 아예 읽지 않아, 꺼야 할 섹션이 그대로 노출됩니다.)
+
+  2. hero_style: ticker | carousel
+     섹션에 이 키가 붙어 있으면 현재 설정된 배너 스타일과 일치할 때만
+     렌더링됩니다. 첫 화면 배너를 티커형/캐러셀형 중 하나만 켜는 데 씁니다.
+     설정값은 Admin(/admin/) → "⚙️ 사이트 설정" 에서 바꿀 수 있으며,
+     실제 해석은 layouts/_partials/church/settings.html 이 담당합니다.
+*/}}
+
+{{/* Returns sections from front matter, linked data, or from data. */}}
+{{- $sections := .Params.sections -}}
+{{- $source := "front matter" -}}
+
+{{/* 1) Linked-data: sections_source */}}
+{{- with .Params.sections_source -}}
+  {{- $key := . -}}
+  {{- if hasPrefix $key "pages/" -}}{{- $key = (replace $key "pages/" "") -}}{{- end -}}
+  {{- with index hugo.Data.pages $key -}}
+    {{- $base := .sections -}}
+    {{- if $sections -}}
+      {{- $merged := slice -}}
+      {{- range $i, $b := $base -}}
+        {{- $ov := index $sections $i -}}
+        {{- if $ov -}}
+          {{- $merged = $merged | append (partial "functions/deep_merge" (dict "a" $b "b" $ov)) -}}
+        {{- else -}}
+          {{- $merged = $merged | append $b -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if gt (len $sections) (len $base) -}}
+        {{- range $i, $ov := $sections -}}
+          {{- if ge $i (len $base) -}}
+            {{- $merged = $merged | append $ov -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $sections = $merged -}}
+    {{- else -}}
+      {{- $sections = $base -}}
+    {{- end -}}
+    {{- $source = printf "data/pages/%s.yaml (sections_source)" $key -}}
+  {{- else -}}
+    {{- partial "functions/logger" (dict "page" . "level" "warn" "id" (printf "sections-source-missing-%s" $key) "message" (printf "sections_source '%s' not found under data/pages/" $key) "source" (dict "type" "partial" "name" "hbx/sections")) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* 2) Fallbacks if still no sections */}}
+{{- if not $sections -}}
+  {{/* Fallback: Legacy data-driven pages */}}
+  {{- $p := "home" -}}{{/* Default to "home" for homepage */}}
+  {{- with .File -}}
+    {{- $basename := .ContentBaseName -}}
+    {{- if $basename -}}
+      {{- $p = $basename -}}
+      {{/* Special case: homepage _index.md should use "home" data file */}}
+      {{- if eq $p "_index" -}}
+        {{- $p = "home" -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{/* Ensure homepage always uses "home" data file */}}
+  {{- if eq $.RelPermalink "/" -}}
+    {{- $p = "home" -}}
+  {{- end -}}
+  {{- with index hugo.Data.pages $p -}}
+    {{- $sections = .sections -}}
+    {{- $source = printf "data/pages/%s.yaml" $p -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* 3) Per-section ref: load from data/blocks/<slug>.yaml and deep-merge with inline (inline wins) */}}
+{{- if $sections -}}
+  {{- $resolved := slice -}}
+  {{- range $i, $s := $sections -}}
+    {{- $sec := $s -}}
+    {{- with $s.ref -}}
+      {{- $ref := . | lower -}}
+      {{- $path := cond (hasPrefix $ref "blocks/") $ref (printf "blocks/%s" $ref) -}}
+      {{- $parts := split $path "/" -}}
+      {{- $data := hugo.Data -}}
+      {{- range $j, $p := $parts -}}
+        {{- if $data -}}
+          {{- $data = index $data $p -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if $data -}}
+        {{- /* shallow merge */ -}}
+        {{- $merged := merge $data $sec -}}
+        {{- /* merge 'content' */ -}}
+        {{- $ac := index $data "content" -}}{{- $bc := index $sec "content" -}}
+        {{- if and (reflect.IsMap $ac) (reflect.IsMap $bc) -}}
+          {{- $merged = merge $merged (dict "content" (merge $ac $bc)) -}}
+        {{- end -}}
+        {{- /* merge 'design' */ -}}
+        {{- $ad := index $data "design" -}}{{- $bd := index $sec "design" -}}
+        {{- if and (reflect.IsMap $ad) (reflect.IsMap $bd) -}}
+          {{- $merged = merge $merged (dict "design" (merge $ad $bd)) -}}
+        {{- end -}}
+        {{- $sec = $merged -}}
+      {{- else -}}
+        {{- partial "functions/logger" (dict "page" $ "level" "warn" "id" (printf "section-ref-missing-%s" $ref) "message" (printf "HBX: section ref '%s' not found under data/blocks/" $ref) "source" (dict "type" "partial" "name" "hbx/sections")) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $resolved = $resolved | append $sec -}}
+  {{- end -}}
+  {{- $sections = $resolved -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     [ADDED] 4) 섹션 노출 필터 — active / hero_style
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- if $sections -}}
+  {{- $hero_style := (partial "church/settings").hero_style -}}
+  {{- $visible := slice -}}
+  {{- range $sections -}}
+    {{- $keep := true -}}
+
+    {{/* active: false 인 섹션은 건너뜁니다. (키가 없으면 nil 이므로 계속 노출) */}}
+    {{- if eq (index . "active") false -}}
+      {{- $keep = false -}}
+    {{- end -}}
+
+    {{/* hero_style 이 지정된 섹션은 설정값과 일치할 때만 노출합니다. */}}
+    {{- with index . "hero_style" -}}
+      {{- if ne (lower .) $hero_style -}}
+        {{- $keep = false -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- if $keep -}}
+      {{- $visible = $visible | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $sections = $visible -}}
+{{- end -}}
+
+{{- if $sections -}}
+  {{- partial "functions/logger" (dict "page" . "level" "info" "message" (printf "✅  Using sections from %s for page %s (found %d sections)" $source $.RelPermalink (len $sections)) "source" (dict "type" "partial" "name" "hbx/sections")) -}}
+{{- else -}}
+  {{- partial "functions/logger" (dict "page" . "level" "warn" "id" (printf "sections-none-%s" $.RelPermalink) "message" (printf "HBX: No sections found for page %s (checked %s)" $.RelPermalink $source) "source" (dict "type" "partial" "name" "hbx/sections")) -}}
+{{- end -}}
+{{- return $sections -}}

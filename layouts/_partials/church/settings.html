@@ -1,0 +1,46 @@
+{{/*
+  Admin(/admin/)에서 바꿀 수 있는 사이트 설정값을 한 곳에서 정리해 돌려줍니다.
+
+  값을 찾는 순서
+    1. data/settings.yaml       ← Admin 의 "⚙️ 사이트 설정" 에서 저장하는 파일
+    2. config/_default/params.yaml 의 params.church.*   ← 손으로 관리하는 기본값
+    3. 아래 코드의 기본값
+
+  data/settings.yaml 은 Decap CMS 가 저장할 때 파일 전체를 다시 쓰기 때문에
+  주석을 달아도 지워집니다. 설명은 이 파일과 docs/manual.md 에 둡니다.
+
+  돌려주는 값
+    hero_style        "ticker" | "carousel"
+    carousel_interval 캐러셀 자동 전환 간격(ms). 0 이면 자동 전환 안 함
+                      Admin 에서는 '초' 단위로 입력받아 여기서 ms 로 바꿉니다.
+*/}}
+
+{{/* site.Data 는 Hugo 0.156 부터 deprecated 이므로 hugo.Data 를 씁니다. */}}
+{{- $data := index hugo.Data "settings" | default dict -}}
+{{- $church := site.Params.church | default dict -}}
+
+{{/* ── 첫 화면 배너 스타일 ─────────────────────────────────────────────── */}}
+{{- $allowed := slice "ticker" "carousel" -}}
+{{- $hero_style := index $data "hero_style" | default (index $church "hero_style") | default "ticker" -}}
+{{- $hero_style = lower (printf "%v" $hero_style) -}}
+{{- if not (in $allowed $hero_style) -}}
+  {{- warnf "church: hero_style 값이 잘못되었습니다 (%q). ticker 또는 carousel 이어야 합니다. ticker 로 처리합니다." $hero_style -}}
+  {{- $hero_style = "ticker" -}}
+{{- end -}}
+
+{{/* ── 캐러셀 자동 전환 간격 (Admin 은 '초', 템플릿은 'ms' 로 씁니다) ────
+     `default` 를 쓰지 않는 이유: Go 템플릿은 0 을 빈 값으로 보기 때문에
+     "0초 = 자동 전환 끔" 을 지정할 수 없게 됩니다. 키가 있는지로 판단합니다. */}}
+{{- $seconds := 6 -}}
+{{- if isset $data "carousel_interval_seconds" -}}
+  {{- $seconds = index $data "carousel_interval_seconds" -}}
+{{- else if isset $church "carousel_interval_seconds" -}}
+  {{- $seconds = index $church "carousel_interval_seconds" -}}
+{{- end -}}
+{{- $seconds = int $seconds -}}
+{{- if lt $seconds 0 -}}
+  {{- $seconds = 0 -}}
+{{- end -}}
+{{- $interval := mul $seconds 1000 -}}
+
+{{- return (dict "hero_style" $hero_style "carousel_interval" $interval) -}}

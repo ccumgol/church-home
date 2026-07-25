@@ -1,12 +1,27 @@
-<script>
-  window.tickerData = [
-    {{ $posts := where .Site.RegularPages "Section" "in" (slice "community" "event") }}
-    {{ range first 5 $posts.ByDate.Reverse }}
-    {
-      "title": {{ .Title | jsonify | safeJS }},
-      "url": {{ .RelPermalink | jsonify | safeJS }}
-    },
-    {{ end }}
-  ];
-</script>
-<script src="/js/custom-ticker.js"></script>
+{{/*
+  첫 화면 배너에 필요한 스크립트만 골라서 넣습니다.
+
+  Admin(/admin/) → "⚙️ 사이트 설정" 에서 고른 배너에 따라
+    ticker   → 최근소식 티커 스크립트
+    carousel → 캐러셀 스크립트
+  한쪽만 로드되므로, 쓰지 않는 배너의 스크립트는 아예 내려받지 않습니다.
+
+  티커는 홈 화면에만 있으므로 홈에서만 데이터를 심습니다.
+*/}}
+{{- $settings := partial "church/settings" -}}
+
+{{- if and (eq $settings.hero_style "ticker") .IsHome -}}
+  <script>
+    window.tickerData = [
+      {{- $posts := where site.RegularPages "Section" "in" (slice "community" "event") -}}
+      {{- range first 5 $posts.ByDate.Reverse -}}
+      { "title": {{ .Title }}, "url": {{ .RelPermalink }} },
+      {{- end -}}
+    ];
+  </script>
+  <script src="{{ "js/custom-ticker.js" | relURL }}" defer></script>
+{{- end -}}
+
+{{- if eq $settings.hero_style "carousel" -}}
+  <script src="{{ "js/church-carousel.js" | relURL }}" defer></script>
+{{- end -}}

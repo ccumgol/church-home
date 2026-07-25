@@ -5,7 +5,7 @@ speaker: "담임목사"
 passage: "마태복음 5:14-16"
 book: "마태복음"
 tags: ["주일대예배"]
-youtube_url: "https://www.youtube.com/watch?v=sZ9j7YhsPwg"
+youtube_url: "https://youtu.be/IWZx-gFRJnc?si=6Qgm4zMGAw2zwiLD"
 draft: false
 ---
 

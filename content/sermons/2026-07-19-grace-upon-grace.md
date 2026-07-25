@@ -5,7 +5,7 @@ speaker: "담임목사"
 passage: "요한복음 1:14-18"
 book: "요한복음"
 tags: ["주일대예배"]
-youtube_url: "https://www.youtube.com/watch?v=SCY3qabS1XQ"
+youtube_url: "https://youtu.be/sQNTVafPDSg?si=W1R3VsbeUXsn3n6n"
 draft: false
 ---
 

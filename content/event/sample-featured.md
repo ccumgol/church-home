@@ -1,12 +1,10 @@
 ---
-title: "창립 10주년 감사예배"
+title: 창립 10주년 감사예배
 date: 2026-07-24
-location: "본당 2층"
-# publish_to_home 을 true 로 두면 홈 화면 캐러셀 배너에 이 행사가 함께 나옵니다.
+location: 본당 2층
+summary: 다음 주일, 교회 창립 10주년을 맞이하여 특별 감사예배와 축하 행사가 진행됩니다.
+poster: /media/uploads/202608.png
 publish_to_home: true
-summary: "다음 주일, 교회 창립 10주년을 맞이하여 특별 감사예배와 축하 행사가 진행됩니다."
-# 포스터가 있으면 캐러셀에서 우측 단에 표시됩니다. (없으면 글만 가운데 정렬)
-poster: "vintage-floral-bg.png"
 draft: false
 ---
 

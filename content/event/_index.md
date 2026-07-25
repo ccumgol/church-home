@@ -3,7 +3,7 @@ title: "교회 주요 행사 안내"
 date: 2026-07-22
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 샘플교회의 주요 사역 및 행사 일정 안내입니다.
 </p>
 

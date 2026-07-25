@@ -5,7 +5,7 @@ type: page
 url: "/about/history/"
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 샘플교회가 걸어온 은혜와 감사의 발자취입니다.
 </p>
 

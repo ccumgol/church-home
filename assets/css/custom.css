@@ -1,30 +1,73 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   Hallmark Design System: Sacred Warmth & Editorial Clarity
-   Hallmark · macrostructure: Manifesto · genre: editorial · theme: Warm Terracotta
+   샘플교회 디자인 시스템 — "Sacred Warmth & Editorial Clarity"
+   ══════════════════════════════════════════════════════════════════════════════
+
+   컨셉
+     따뜻한 리넨 종이 위에 명조 활자를 얹은 '편집물' 느낌.
+     장식이 아니라 여백·활자·얇은 규칙선으로 격조를 만듭니다.
+
+   색은 여기서 정하지 않습니다
+     팔레트는 data/themes/church-warm.yaml 에서 한 번에 관리하고,
+     프레임워크가 --color-primary-* / --hb-color-* 변수로 뿌려 줍니다.
+     이 파일은 그 변수를 '쓰기만' 합니다. 그래서 색을 바꿀 때
+     이 파일을 뒤질 필요가 없습니다.
+
+   목차
+     1. 토큰 (활자·간격·규칙선)
+     2. 바탕 활자
+     3. 섹션 리듬과 컨테이너
+     4. 섹션 머리말 (영문 아이브로 + 국문 제목)
+     5. 내비게이션
+     6. 히어로 — 티커형
+     7. 히어로 — 캐러셀형
+     8. 최근 설교
+     9. 카드 / 아이콘 / 벤토
+    10. FAQ 아코디언
+    11. 마무리 초대 카드 (CTA)
+    12. 푸터
+    13. 버튼과 미세 동작
    ══════════════════════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=MaruBuri:wght@400;600;700&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 
+/* ────────────────────────────────────────────────────────────────────────────
+   1. 토큰
+   ──────────────────────────────────────────────────────────────────────────── */
 :root {
-  --color-paper: #faf8f5;
-  --color-paper-2: #f4efe9;
-  --color-ink: #221e1a;
-  --color-ink-2: #695f56;
-  --color-rule: #e5ddcf;
-  --color-accent: #d95d12;
-  --color-accent-hover: #c24e09;
-  --color-accent-gold: #d97706;
-  --color-focus: #d95d12;
-
   --font-display: 'MaruBuri', 'Nanum Myeongjo', serif;
   --font-body: 'Noto Sans KR', sans-serif;
+
+  /* 활자 크기 — 화면 폭에 따라 늘어나되 위계는 유지 */
+  --step-hero: clamp(2rem, 1.2rem + 3.4vw, 3.5rem);
+  --step-section: clamp(1.7rem, 1.2rem + 2.1vw, 2.75rem);
+  --step-card: clamp(1.05rem, 0.98rem + 0.32vw, 1.2rem);
+  --step-lede: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+
+  /* 섹션 세로 리듬 — 한 곳에서 조절 */
+  --section-y: clamp(3.5rem, 2rem + 6vw, 7rem);
+  --section-y-tight: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+
+  /* 읽기 폭 */
+  --measure: 68rem;
+  --measure-narrow: 46rem;
+
+  /* 얇은 규칙선 — 편집물 느낌의 핵심 */
+  --rule: color-mix(in oklab, var(--hb-color-foreground) 14%, transparent);
+  --rule-strong: color-mix(in oklab, var(--hb-color-foreground) 26%, transparent);
+
+  /* 표면 — 배경보다 한 겹 들어간 면 */
+  --surface: color-mix(in oklab, var(--hb-color-foreground) 4%, var(--hb-color-background));
+  --surface-2: color-mix(in oklab, var(--hb-color-foreground) 7%, var(--hb-color-background));
+
+  /* 본문 보조색 */
+  --ink-muted: color-mix(in oklab, var(--hb-color-foreground) 68%, var(--hb-color-background));
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+   2. 바탕 활자
+   ──────────────────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
-  font-family: var(--font-body);
-  color: var(--color-ink);
-  background-color: var(--color-paper);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -32,710 +75,207 @@ html {
 body {
   font-family: var(--font-body);
   line-height: 1.75;
-  color: var(--color-ink);
-  background-color: var(--color-paper);
+  /* 한글은 어절 단위로 끊어야 읽힙니다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-style: normal; /* design.md: 제목에 이탤릭 금지 */
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+  text-wrap: balance;
+}
+
+/* 본문 링크 — 밑줄은 얇게, 색은 테마 강조색 */
+.prose a,
+main p a {
+  color: var(--color-primary-600);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover,
+main p a:hover {
+  color: var(--color-primary-700);
+}
+
+:where(a, button, summary):focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   1. SECTION VERTICAL SPACING REDUCTION (Reduced to ~1/3 level)
-   ──────────────────────────────────────────────────────────────────────────── */
-section.hbb-section,
-section.home-section,
-section[class*="hbb-section"],
-.hbb-section,
-.blox-_ {
-  padding-top: 1.25rem !important;  /* Reduced to 1/3 level (~20px) */
-  padding-bottom: 1.25rem !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+   3. 섹션 리듬과 컨테이너
+   ────────────────────────────────────────────────────────────────────────────
+   예전에는 섹션 패딩을 1.25rem 로 눌러 놓고 블록마다 py-16 을 덧붙여서
+   실제 여백이 들쭉날쭉했습니다. 이제 --section-y 하나로 통일합니다. */
+
+section.hbb-section {
+  padding-top: var(--section-y);
+  padding-bottom: var(--section-y);
+  margin: 0;
 }
 
-@media (min-width: 768px) {
-  section.hbb-section,
-  section.home-section,
-  section[class*="hbb-section"],
-  .hbb-section,
-  .blox-_ {
-    padding-top: 1.75rem !important;  /* Reduced to 1/3 level (~28px) */
-    padding-bottom: 1.75rem !important;
-  }
+/* 전체 폭을 써야 하는 섹션은 스스로 여백을 관리합니다. */
+section.hbb-section.section-bleed {
+  padding: 0;
 }
 
-/* Specific Override for '예배 및 모임 시간' Section (Cut Padding in Half) */
-#worship-schedule,
-section#worship-schedule,
-section[id="worship-schedule"] {
-  padding-top: 0.6rem !important;
-  padding-bottom: 0.6rem !important;
+/* 섹션 본문 폭 */
+section.hbb-section > div:not(.home-section-bg):not([class*="carousel"]):not(.absolute) {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 
-@media (min-width: 768px) {
-  #worship-schedule,
-  section#worship-schedule,
-  section[id="worship-schedule"] {
-    padding-top: 0.85rem !important;
-    padding-bottom: 0.85rem !important;
-  }
+/* 배경 톤이 번갈아 오도록 하는 의미 클래스 (content/_index.md 에서 지정) */
+.section-tint {
+  background-color: var(--surface);
 }
 
-#worship-schedule > div[class*="-block-container"],
-#worship-schedule .features-block-container {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
+.section-rule-top {
+  border-top: 1px solid var(--rule);
 }
 
-/* Keep Hero Section Padding Top/Bottom Compact (Cut by Half) */
-section[class*="hero"],
-.block-hero,
-#section-hero {
-  padding-top: 1rem !important;
-  padding-bottom: 1rem !important;
-}
-
-@media (min-width: 768px) {
-  section[class*="hero"],
-  .block-hero,
-  #section-hero {
-    padding-top: 1.75rem !important;
-    padding-bottom: 1.75rem !important;
-  }
-}
-
-.hero-block-container,
-#section-hero .hero-block-container {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
+.section-rule-bottom {
+  border-bottom: 1px solid var(--rule);
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   2. STANDARDIZED SECTION HEADINGS (English Subtitle + Korean Title + Description)
-   ──────────────────────────────────────────────────────────────────────────── */
-.hbb-section [class*="subtitle"],
-.hbb-section .section-subtitle,
-.preact-block [class*="subtitle"] {
-  font-family: var(--font-body) !important;
-  font-size: 0.875rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  text-transform: uppercase !important;
-  color: var(--color-accent) !important;
-  margin-bottom: 0.25rem !important;
-}
+   4. 섹션 머리말
+   ────────────────────────────────────────────────────────────────────────────
+   구성: 영문 아이브로 → 국문 제목(명조) → 한 줄 설명
 
-.dark .hbb-section [class*="subtitle"],
-.dark .preact-block [class*="subtitle"] {
-  color: #f97316 !important;
-}
+   아이브로는 프레임워크가 이미
+   `text-xs font-semibold uppercase tracking-widest text-primary-600` 로
+   그리므로 손대지 않습니다. 테마팩을 고친 뒤로 이 primary 가 테라코타입니다.
 
-.hbb-section [class*="title"]:not(.hero-title),
-.hbb-section .section-title,
-.preact-block h2 {
-  font-family: var(--font-display) !important;
-  font-size: 1.75rem !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.02em !important;
-  margin-top: 0.2rem !important;
-  margin-bottom: 0.5rem !important;
-}
+   제목만 바로잡습니다. 프레임워크 기본은 본문 산세리프 + 최대 3rem 인데,
+   이 사이트의 성격상 명조 계열로 조금 작고 단정하게 두는 편이 낫습니다. */
 
-@media (min-width: 768px) {
-  .hbb-section [class*="title"]:not(.hero-title),
-  .hbb-section .section-title,
-  .preact-block h2 {
-    font-size: 2rem !important;
-  }
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   3. Typography & Legibility (Light Mode Defaults)
-   ──────────────────────────────────────────────────────────────────────────── */
-h1, h2, h3, h4, h5, h6,
-.font-display,
-.hero-title,
-section h1, section h2 {
-  font-family: var(--font-display) !important;
-  font-style: normal !important; /* Hallmark rule: no italic headers */
+.preact-block h2,
+.hbb-section .section-title {
+  font-family: var(--font-display);
+  font-size: var(--step-section);
+  font-weight: 700;
   letter-spacing: -0.025em;
+  line-height: 1.3;
 }
 
-/* Light Background Content Typography */
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h1,
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h2,
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h3,
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) h4 {
-  color: #1c1917 !important;
-}
-
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) p,
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) li,
-html:not(.dark) body:not(.dark) section:not(.dark):not([class*="hero"]):not([id*="cta"]) span:not([class*="badge"]) {
-  color: #292524;
+/* 제목 아래 설명문 */
+.preact-block h2 + p {
+  font-size: var(--step-lede);
+  color: var(--ink-muted);
+  max-width: var(--measure-narrow);
+  margin-inline: auto;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   4. GLOBAL DARK MODE TEXT & COLOR INVERSION (.dark)
+   5. 내비게이션
    ──────────────────────────────────────────────────────────────────────────── */
-.dark {
-  --color-paper: #0f172a;
-  --color-paper-2: #1e293b;
-  --color-ink: #f8fafc;
-  --color-ink-2: #cbd5e1;
-  --color-rule: #334155;
-  color: #f8fafc !important;
-  background-color: #0f172a !important;
-}
-
-.dark body {
-  color: #f8fafc !important;
-  background-color: #0f172a !important;
-}
-
-/* All Headings in Dark Mode */
-.dark h1,
-.dark h2,
-.dark h3,
-.dark h4,
-.dark h5,
-.dark h6,
-.dark .hero-title,
-.dark .font-display,
-.dark section h1,
-.dark section h2,
-.dark section h3,
-.dark section h4,
-.dark [class*="title"] {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-/* All Paragraphs, Spans, Lists, Labels in Dark Mode */
-.dark p,
-.dark span:not([class*="badge"]),
-.dark li,
-.dark label,
-.dark td,
-.dark th,
-.dark strong,
-.dark b,
-.dark article,
-.dark div:not([class*="badge"]):not([class*="card"]):not([class*="hero"]) {
-  color: #e2e8f0 !important;
-}
-
-.dark strong, .dark b {
-  color: #ffffff !important;
-}
-
-.dark summary {
-  color: #ffffff !important;
-}
-
-.dark a:not(.btn):not([class*="button"]):not(.navbar-brand) {
-  color: #fbbf24 !important;
-}
-
-.dark a:not(.btn):not([class*="button"]):not(.navbar-brand):hover {
-  color: #f97316 !important;
-}
-
-/* Cards & Accordions in Dark Mode */
-.dark .card,
-.dark .bento-card,
-.dark details,
-.dark [class*="block-"] article,
-.dark div[class*="rounded"] {
-  background-color: #1e293b !important;
-  border-color: #334155 !important;
-  color: #f8fafc !important;
-}
-
-.dark details[open] {
-  background-color: #334155 !important;
-  border-color: var(--color-accent) !important;
-}
-
-/* Navigation & Footer in Dark Mode */
-.dark header,
-.dark #site-header,
-.dark .header,
-.dark nav.navbar,
-.dark header nav,
-.dark header .container,
-.dark header > div,
-.dark nav.navbar > div {
-  background-color: #0f172a !important;
-  background: #0f172a !important;
-  border-bottom: 1px solid #1e293b !important;
-}
-
-.dark .navbar-brand,
-.dark nav a.font-bold {
-  color: #f97316 !important;
-}
-
-.dark nav a.nav-link,
-.dark nav a:not(.navbar-brand) {
-  color: #e2e8f0 !important;
-}
-
-.dark nav a.nav-link:hover {
-  color: #f97316 !important;
-}
-
-.dark footer,
-.dark .page-footer {
-  background-color: #070a12 !important;
-  color: #cbd5e1 !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   5. Bottom CTA Card (Content Width Constraint max-w-5xl & High Contrast)
-   ──────────────────────────────────────────────────────────────────────────── */
-/* Outer Section: Bounded strictly inside max-w-5xl (1024px) */
-section[id*="cta"],
-section.blox-cta-card,
-#cta-invitation,
-#section-cta-invitation,
-#section-cta-card {
-  background-color: transparent !important;
-  background: none !important;
-  max-width: 64rem !important; /* max-w-5xl = 1024px */
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-top: 0.75rem !important;
-  padding-bottom: 1rem !important;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-@media (min-width: 768px) {
-  section[id*="cta"],
-  section.blox-cta-card,
-  #cta-invitation {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-
-section[id*="cta"] .home-section-bg,
-#cta-invitation .home-section-bg,
-#section-cta-card .home-section-bg {
-  display: none !important;
-}
-
-/* Outer Preact Block Container: Transparent Wrapper */
-.cta-card-block-container,
-#cta-invitation .cta-card-block-container,
-[data-block-type="cta-card"] {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Single Inner Card Container Frame */
-.cta-card-block-container > div,
-#cta-invitation .cta-card-block-container > div,
-[data-block-type="cta-card"] > div {
-  width: 100% !important;
-  max-width: 100% !important;
-  border-radius: 1.5rem !important;
-  background: linear-gradient(135deg, #1c1917 0%, #292524 100%) !important;
-  border: 1px solid #44403c !important;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
-  padding: 2rem 1.5rem !important;
-  text-align: center !important;
-}
-
-@media (min-width: 768px) {
-  .cta-card-block-container > div,
-  #cta-invitation .cta-card-block-container > div,
-  [data-block-type="cta-card"] > div {
-    padding: 2.75rem 2.5rem !important;
-  }
-}
-
-/* Title Text: Absolute Crisp Pure White */
-section[id*="cta"] h1,
-section[id*="cta"] h2,
-section[id*="cta"] h3,
-section[id*="cta"] h4,
-[data-block-type="cta-card"] h1,
-[data-block-type="cta-card"] h2,
-[data-block-type="cta-card"] h3,
-.cta-card-block-container h2,
-.cta-card-block-container h3,
-.cta-card-block-container h4 {
-  font-family: var(--font-display) !important;
-  font-weight: 700 !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  margin-bottom: 0.5rem !important;
-}
-
-/* Description Text: Crisp Bright Slate/Off-white */
-section[id*="cta"] p,
-section[id*="cta"] span,
-section[id*="cta"] div,
-[data-block-type="cta-card"] p,
-[data-block-type="cta-card"] span,
-.cta-card-block-container p,
-.cta-card-block-container span {
-  color: #f1f5f9 !important;
-  -webkit-text-fill-color: #f1f5f9 !important;
-  opacity: 0.95 !important;
-  visibility: visible !important;
-  font-size: 1.05rem !important;
-}
-
-/* Action Button: Crisp Terracotta Action Button with White Text */
-section[id*="cta"] a,
-section[id*="cta"] button,
-[data-block-type="cta-card"] a,
-[data-block-type="cta-card"] button,
-.cta-card-block-container a {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background-color: var(--color-accent) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  font-weight: 700 !important;
-  border-radius: 0.75rem !important;
-  padding: 0.75rem 1.75rem !important;
-  border: 1px solid transparent !important;
-  box-shadow: 0 4px 12px rgba(217, 93, 18, 0.4) !important;
-  margin-top: 0.75rem !important;
-  transition: all 0.2s ease !important;
-}
-
-section[id*="cta"] a:hover,
-section[id*="cta"] button:hover,
-[data-block-type="cta-card"] a:hover,
-.cta-card-block-container a:hover {
-  background-color: var(--color-accent-hover) !important;
-  color: #ffffff !important;
-  transform: translateY(-2px) !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   6. Hero Section Refinement
-   ──────────────────────────────────────────────────────────────────────────── */
-.block-hero,
-section[class*="hero"],
-#section-hero {
-  position: relative;
-  color: #ffffff !important;
-  overflow: hidden;
-}
-
-.block-hero .home-section-bg,
-section[class*="hero"] .home-section-bg,
-#section-hero .home-section-bg {
-  background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.30) 0%, rgba(15, 23, 42, 0.48) 100%), url('/media/bright_sky_bg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: transparent !important;
-  opacity: 1 !important;
-}
-
-.dark .block-hero .home-section-bg,
-.dark section[class*="hero"] .home-section-bg,
-.dark #section-hero .home-section-bg {
-  background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.50) 0%, rgba(15, 23, 42, 0.70) 100%), url('/media/bright_sky_bg.webp') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-color: transparent !important;
-}
-
-.hero-title,
-section[class*="hero"] h1,
-section[class*="hero"] h2 {
-  font-weight: 700 !important;
-  line-height: 1.3 !important;
-  color: #ffffff !important;
-}
-
-section[class*="hero"] p,
-section[class*="hero"] span,
-section[class*="hero"] div,
-section[class*="hero"] strong {
-  color: #f1f5f9 !important;
-}
-
-/* Hide Star Rating Icons in Hero Section */
-.hero-block-container svg[class*="yellow"],
-.hero-block-container svg[class*="star"],
-.hero-block-container div.flex.items-center.gap-x-1,
-section[class*="hero"] svg[class*="yellow"],
-section[class*="hero"] svg[class*="star"] {
-  display: none !important;
-}
-
-/* Ambient Glow for Hero */
-.block-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(217, 93, 18, 0.25) 0%, rgba(217, 119, 6, 0.1) 45%, transparent 75%);
-  pointer-events: none;
-}
-
-/* Remove animated floating orbs slop */
-div[class*="orb"], div[class*="gradient_mesh"] {
-  display: none !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   7. Sticky Navigation Header & Dropdown Backgrounds
-   ──────────────────────────────────────────────────────────────────────────── */
-.page-header,
 header,
 #site-header,
-.header {
-  background-color: var(--color-paper) !important;
-  background: var(--color-paper) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-bottom: 1px solid var(--color-rule) !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+.page-header {
+  background-color: color-mix(in oklab, var(--hb-color-header-bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
+  box-shadow: none;
 }
 
-.dark .page-header,
-.dark header,
-.dark #site-header,
-.dark .header {
-  background-color: #0f172a !important;
-  background: #0f172a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
-}
-
-/* Dropdown Submenu Background & Styling (Preserving Default Hover Visibility) */
-nav.navbar ul.nav-dropdown,
-.navbar-dropdown,
-header nav .nav-dropdown {
-  background-color: var(--color-paper) !important;
-  border: 1px solid var(--color-rule) !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-  border-radius: 0.75rem !important;
-}
-
-.dark nav.navbar ul.nav-dropdown,
-.dark .navbar-dropdown,
-.dark header nav .nav-dropdown {
-  background-color: #0f172a !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Remove borders, outlines, and backgrounds from top navigation menu items */
-nav.navbar .nav-link,
-nav.navbar .nav-item,
-nav.navbar .nav-item > a,
-.navbar-nav .nav-link,
-.navbar-nav .nav-item > a,
-header nav a,
-header nav button {
-  border: none !important;
-  border-width: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  outline: none !important;
-}
-
-.dark nav.navbar .nav-link,
-.dark nav.navbar .nav-item,
-.dark nav.navbar .nav-item > a,
-.dark .navbar-nav .nav-link,
-.dark .navbar-nav .nav-item > a,
-.dark header nav a,
-.dark header nav button {
-  border: none !important;
-  border-width: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  outline: none !important;
-}
-
-/* Navbar Brand - Solid Warm Accent */
-.navbar-brand, nav a.font-bold {
-  font-family: var(--font-display) !important;
-  font-weight: 700 !important;
+.navbar-brand,
+nav a.font-bold {
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-accent) !important;
-  background: none !important;
-  background-clip: unset !important;
-  -webkit-background-clip: unset !important;
-  -webkit-text-fill-color: initial !important;
-  transition: opacity 0.2s ease;
+  color: var(--color-primary-600);
 }
 
 .navbar-brand:hover {
-  opacity: 0.9;
+  opacity: 0.85;
+}
+
+/* 메뉴 항목 — 테두리 없이 밑줄 강조만 */
+nav.navbar .nav-link,
+nav.navbar .nav-item > a,
+header nav a,
+header nav button {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+/* 드롭다운 */
+nav.navbar ul.nav-dropdown,
+.navbar-dropdown,
+header nav .nav-dropdown {
+  background-color: var(--hb-color-background);
+  border: 1px solid var(--rule);
+  border-radius: 0.75rem;
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
+  overflow: hidden;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   8. Buttons & Micro-interactions
+   6. 히어로 — 티커형 (params.church.hero_style: ticker)
    ──────────────────────────────────────────────────────────────────────────── */
-a.btn, button, .button, a[class*="primary_action"], a[class*="secondary_action"] {
-  font-family: var(--font-body);
-  font-weight: 600;
-  transition: all 0.2s ease !important;
-  border-radius: 8px !important;
+#section-hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(4rem, 2rem + 8vw, 8rem);
+  color: #ffffff;
 }
 
-/* Primary Action Button */
-a[class*="primary_action"], .btn-primary {
-  background-color: var(--color-accent) !important;
-  color: #ffffff !important;
-  border: 1px solid transparent !important;
-  box-shadow: 0 2px 4px rgba(217, 93, 18, 0.2) !important;
+#section-hero .home-section-bg {
+  background-image:
+    linear-gradient(180deg, rgb(23 19 15 / 0.55) 0%, rgb(23 19 15 / 0.68) 100%),
+    url('/media/hero_sky_bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-a[class*="primary_action"]:hover, .btn-primary:hover {
-  background-color: var(--color-accent-hover) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(217, 93, 18, 0.3) !important;
+#section-hero h1,
+#section-hero .hero-title {
+  font-size: var(--step-hero);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 4px 18px rgb(0 0 0 / 0.45);
 }
 
-/* Secondary Action Button */
-a[class*="secondary_action"], .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.12) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+#section-hero p,
+#section-hero span,
+#section-hero div {
+  color: #f2ece4;
 }
 
-a[class*="secondary_action"]:hover, .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.22) !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  transform: translateY(-1px) !important;
+/* 히어로 안의 배지·별점 등 템플릿 잔재 숨김 */
+#section-hero svg[class*="yellow"],
+#section-hero svg[class*="star"] {
+  display: none;
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   9. Cards & Bento Grid
-   ──────────────────────────────────────────────────────────────────────────── */
-.bento-card, .card, [class*="block-"] article {
-  border: 1px solid var(--color-rule);
-  border-radius: 12px;
-  background-color: #ffffff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.bento-card:hover {
-  border-color: var(--color-accent-gold);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
-
-/* Staff Cards (Explicit Border 0) */
-.staff-card, div.staff-card {
-  border: none !important;
-  border-width: 0 !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   10. Editorial FAQ Details & Accordion
-   ──────────────────────────────────────────────────────────────────────────── */
-details {
-  border: 1px solid var(--color-rule);
-  border-radius: 10px;
-  background-color: #ffffff;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-details[open] {
-  border-color: var(--color-accent);
-  background-color: var(--color-paper-2);
-}
-
-summary {
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-weight: 600;
-  padding: 1.1rem 1.25rem;
-  color: var(--color-ink) !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   11. Footer Spacing Reduction
-   ──────────────────────────────────────────────────────────────────────────── */
-footer,
-.page-footer,
-footer[aria-labelledby="footer-heading"],
-.footer-container {
-  background-color: #151210 !important; /* Warm Dark Charcoal */
-  color: #e2e8f0 !important;
-  border: 0 !important;
-  border-width: 0 !important;
-  box-shadow: none !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-}
-
-.page-footer footer {
-  margin-top: 0 !important;
-  padding-top: 0.5rem !important;
-}
-
-/* Hide Hugo Blox attribution link line */
-.powered-by,
-p.powered-by,
-[data-hbx*="poweredby"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   12. YouTube Playlist Video Player Container
-   ──────────────────────────────────────────────────────────────────────────── */
-#latest-sermon .max-w-prose,
-#latest-sermon .prose {
-  max-width: 100% !important;
-  width: 100% !important;
-}
-
-#latest-sermon iframe {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2) !important;
-}
-
+/* 아래 섹션으로 부드럽게 이어지는 페이드 */
 .hero-smooth-fade::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px; /* Overlap slightly to prevent sub-pixel gaps */
-  height: 40%;
-  min-height: 250px;
-  background: linear-gradient(to bottom, transparent, var(--hero-fade-color, #f5f5f4));
+  inset-inline: 0;
+  bottom: -1px;
+  height: 32%;
+  min-height: 160px;
+  background: linear-gradient(to bottom, transparent, var(--hb-color-background));
   pointer-events: none;
   z-index: 5;
 }
 
-:root {
-  --hero-fade-color: #f5f5f4; /* stone-100 */
-}
-html.dark {
-  --hero-fade-color: #292524; /* stone-800 */
-}
-
-
-/* Announcement Ticker Container */
+/* 최근소식 티커 */
 .announcement-ticker {
   display: inline-grid;
   overflow: hidden;
@@ -743,158 +283,380 @@ html.dark {
   vertical-align: middle;
   align-items: center;
 }
+
 .announcement-ticker > span {
   grid-area: 1 / 1;
   opacity: 0;
   display: inline-block;
   line-height: 1;
-  margin-top: -4px;
 }
+
 .announcement-ticker:hover > span {
-  animation-play-state: paused !important;
-}
-
-footer a, .page-footer a {
-  color: #a8a29e !important;
-  transition: color 0.2s ease !important;
-}
-
-footer a:hover, .page-footer a:hover {
-  color: var(--color-accent) !important;
-}
-
-footer h2, footer h3, footer h4, footer .footer-title {
-  font-family: var(--font-display) !important;
-  color: #ffffff !important;
-}
-
-footer p, footer div, footer li {
-  color: #d6d3d1 !important;
+  animation-play-state: paused !important; /* JS 인라인 애니메이션을 멈춰야 함 */
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   12. Section Container Alignment & Max Width (1024px)
+   8. 최근 설교
    ──────────────────────────────────────────────────────────────────────────── */
-/* 캐러셀 섹션(.church-carousel)은 화면 전체 너비를 써야 하므로 이 폭 제한에서 제외합니다. */
-.hbb-section:not(.church-carousel) > div[class*="-block-container"],
-.hbb-section:not(.church-carousel) .preact-block,
-.home-section .container,
-section.hbb-section:not(.church-carousel) > div:not(.home-section-bg):not(.absolute) {
-  max-width: 64rem !important; /* max-w-5xl = 1024px */
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
+/* 이 섹션은 markdown 블록이라 본문 읽기 폭(max-w-prose ≈ 65ch)으로 감싸입니다.
+   영상 + 설명 2단을 제대로 펴려면 그 제한을 풀어야 합니다. */
+#latest-sermon .prose {
+  max-width: 100%;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-  .hbb-section:not(.church-carousel) > div[class*="-block-container"],
-  .hbb-section:not(.church-carousel) .preact-block,
-  .home-section .container,
-  section.hbb-section:not(.church-carousel) > div:not(.home-section-bg):not(.absolute) {
-    padding-left: 2rem !important;
-    padding-right: 2rem !important;
+.latest-sermon-grid {
+  display: grid;
+  gap: clamp(1.75rem, 1rem + 3vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .latest-sermon-grid {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-paper-2);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d6d3d1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-}
-
-/* ────────────────────────────────────────────────────────────────────────────
-   13. Premium Aesthetics & Micro-Animations (Hallmark Redesign)
-   ──────────────────────────────────────────────────────────────────────────── */
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
-}
-
-@keyframes subtlePulse {
-  0% { opacity: 0.8; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.02); }
-  100% { opacity: 0.8; transform: scale(1); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-subtle-pulse {
-  animation: subtlePulse 4s ease-in-out infinite;
-}
-
-/* Enhancing YouTube iframe with a premium glow */
-#latest-sermon iframe {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 40px -10px rgba(217, 93, 18, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-}
-
-.dark #latest-sermon iframe {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 60px -15px rgba(217, 93, 18, 0.25) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Glassmorphism utility enhancements */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Bento Grid extra refinement */
-.bento-item {
+.latest-sermon-player {
   position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  background: #17130f;
+  border: 1px solid var(--rule);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
+}
+
+.latest-sermon-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.latest-sermon-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.latest-sermon-eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary-600);
+}
+
+.latest-sermon-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.1rem + 1.1vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.latest-sermon-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.latest-sermon-summary {
+  font-size: var(--step-lede);
+  color: var(--ink-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.bento-item::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 50%; height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
-  transform: skewX(-20deg);
-  transition: all 0.7s ease;
+/* "지난 설교 다시보기" — 예전에는 유튜브 빨강(#dc2626)이라 팔레트와 부딪혔습니다. */
+.latest-sermon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-primary-600);
+  text-decoration: none;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-primary-500) 45%, transparent);
+  transition: color 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
 }
 
-.bento-item:hover::after {
-  left: 150%;
+.latest-sermon-link:hover {
+  color: var(--color-primary-700);
+  border-bottom-color: var(--color-primary-600);
+  gap: 0.75rem;
+}
+
+.latest-sermon-link-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
-   14. Hero Carousel (params.church.hero_style: carousel)
+   9. 카드 / 아이콘 / 벤토
+   ────────────────────────────────────────────────────────────────────────────
+   features / steps / faq / cta-card 블록은 Preact 가 실행 시점에 그립니다.
+   그 마크업은 이미 `ring-gray-200` + `hover:ring-primary-300`,
+   아이콘은 `bg-primary-100 text-primary-600` 을 쓰고 있어서,
+   테마팩(data/themes/church-warm.yaml)만 제대로 잡으면 저절로 따뜻해집니다.
+   예전에 여기 있던 카드/아이콘 재정의는 전부 지웠습니다 — 프레임워크가
+   이미 하는 일을 !important 로 다시 칠하던 것이 색이 어긋난 원인이었습니다.
+
+   여기서는 design.md 의 금지 항목만 되돌립니다.
+   (hover 시 확대 금지 — 카드가 튀어오르면 값싸 보입니다) */
+
+.preact-block [class*="hover:scale"]:hover,
+.bento [class*="hover:scale"]:hover {
+  transform: none;
+}
+
+/* 장식용 애니메이션 오브 제거 (design.md 안티패턴) */
+div[class*="orb"],
+div[class*="gradient_mesh"] {
+  display: none;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   10. FAQ 아코디언
+   ────────────────────────────────────────────────────────────────────────────
+   이 블록도 Preact 가 그리며 <details> 가 아니라 <button> 을 씁니다.
+   테두리·간격은 프레임워크가 처리하므로 질문 활자만 다듬습니다. */
+
+#faq button {
+  font-family: var(--font-display);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+#faq button:hover {
+  color: var(--color-primary-600);
+}
+
+/* 답변 본문 */
+#faq [class*="prose"],
+#faq p {
+  color: var(--ink-muted);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   11. 마무리 초대 카드 (CTA)
+   ────────────────────────────────────────────────────────────────────────────
+   예전에는 _index.md 에서 주황 그라디언트를 지정했는데 CSS 가 검은 상자로
+   덮어써서 설정과 화면이 따로 놀았습니다. 이제 여기 한 곳에서만 정합니다. */
+
+/* 앞 섹션이 이미 아래 여백을 주므로 위쪽은 붙입니다.
+   (그렇지 않으면 FAQ 아래로 180px 가까운 빈 공간이 생깁니다) */
+#cta-invitation {
+  padding-top: 0;
+  padding-bottom: var(--section-y-tight);
+}
+
+#cta-invitation .home-section-bg {
+  display: none;
+}
+
+.cta-card-block-container > div,
+[data-block-type="cta-card"] > div {
+  max-width: 100%;
+  border-radius: 1.25rem;
+  padding: clamp(2.25rem, 1.5rem + 3vw, 3.5rem) clamp(1.5rem, 1rem + 3vw, 3rem);
+  text-align: center;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(135deg,
+      var(--color-primary-700) 0%,
+      var(--color-primary-600) 55%,
+      var(--color-secondary-600) 100%);
+  box-shadow: 0 30px 60px -30px color-mix(in oklab, var(--color-primary-700) 60%, transparent);
+}
+
+#cta-invitation h1,
+#cta-invitation h2,
+#cta-invitation h3,
+.cta-card-block-container h2,
+.cta-card-block-container h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+}
+
+#cta-invitation p,
+#cta-invitation span,
+.cta-card-block-container p {
+  color: color-mix(in oklab, #ffffff 88%, transparent);
+}
+
+#cta-invitation a,
+.cta-card-block-container a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0.85rem 2rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: var(--color-primary-700);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#cta-invitation a:hover,
+.cta-card-block-container a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -12px rgb(0 0 0 / 0.4);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   12. 푸터
+   ──────────────────────────────────────────────────────────────────────────── */
+/* 푸터 배경은 테마팩의 surfaces.footer 값을 씁니다.
+   (사이트의 푸터 마크업 자체에는 배경이 없어서, 예전에는 여기서 색을
+   직접 박아 넣었습니다. 이제 변수를 연결해 테마와 함께 움직입니다.) */
+.page-footer {
+  background-color: var(--hb-color-footer-bg);
+  color: var(--hb-color-footer-fg);
+}
+
+footer,
+.page-footer footer {
+  border: 0;
+  margin: 0;
+  padding-block: clamp(2rem, 1.25rem + 2.5vw, 3.25rem);
+  color: var(--hb-color-footer-fg);
+}
+
+/* 어두운 푸터 위에서는 본문용 회색이 묻히므로 밝게 되돌립니다. */
+.page-footer :is(p, li, span, div) {
+  color: color-mix(in oklab, var(--hb-color-footer-fg) 78%, transparent);
+}
+
+.page-footer :is(h2, h3, h4) {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--hb-color-footer-fg) 62%, transparent);
+}
+
+.page-footer a {
+  color: color-mix(in oklab, var(--hb-color-footer-fg) 88%, transparent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.page-footer a:hover {
+  color: var(--color-primary-400);
+}
+
+/* 교회 이름은 강조색으로 */
+.page-footer a[href="/"],
+.page-footer a[class*="font-bold"] {
+  font-family: var(--font-display);
+  color: var(--color-primary-400);
+}
+
+/* 템플릿 홍보 문구 제거 */
+.powered-by,
+p.powered-by,
+[data-hbx*="poweredby"] {
+  display: none;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   13. 버튼과 미세 동작
+   ──────────────────────────────────────────────────────────────────────────── */
+a.btn,
+.button,
+a[class*="primary_action"],
+a[class*="secondary_action"] {
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.8rem 1.75rem;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+a[class*="primary_action"],
+.btn-primary {
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+a[class*="primary_action"]:hover,
+.btn-primary:hover {
+  background-color: var(--color-primary-700);
+  transform: translateY(-2px);
+}
+
+a[class*="secondary_action"],
+.btn-secondary {
+  background-color: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  backdrop-filter: blur(6px);
+}
+
+a[class*="secondary_action"]:hover,
+.btn-secondary:hover {
+  background-color: rgb(255 255 255 / 0.22);
+  border-color: rgb(255 255 255 / 0.5);
+  transform: translateY(-2px);
+}
+
+/* 동작 줄이기 설정을 켠 사용자에게는 이동 효과를 끕니다. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rule-strong);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-500);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   7. 히어로 — 캐러셀형 (params.church.hero_style: carousel)
    ────────────────────────────────────────────────────────────────────────────
    마크업: layouts/_partials/hbx/blocks/slider/block.html
    동작:   static/js/church-carousel.js
-
-   설계 메모
-   - 배경을 섹션 전체 폭에 깔기 위해 섹션의 좌우 패딩과 1024px 폭 제한을 모두 해제합니다.
-     (폭 제한 해제는 위 12번 섹션의 :not(.church-carousel) 로 처리)
-   - 글자색은 티커형 배너와 맞추기 위해 흰색 계열로 고정합니다. 섹션에 `dark` 클래스가
-     함께 붙으므로 3번 섹션의 밝은 배경용 글자색 규칙은 이 섹션을 건드리지 않습니다.
-   - 높이는 --carousel-height 변수 하나로 통일합니다. 값은 블록의
-     design.slide_height / slide_height_mobile 에서 인라인으로 주입됩니다.
+   높이는 --carousel-height 변수 하나로 통일하며, 값은 블록의
+   design.slide_height / slide_height_mobile 에서 인라인으로 주입됩니다.
    ──────────────────────────────────────────────────────────────────────────── */
-
-/* 섹션 껍데기: 여백 제거 + 넘침 차단 */
 section.hbb-section.church-carousel {
   padding: 0 !important;
   margin: 0 !important;
@@ -1207,4 +969,254 @@ section.hbb-section.church-carousel > div.church-carousel-viewport {
 .church-carousel-dot:focus-visible {
   outline: 3px solid var(--color-focus, #d95d12);
   outline-offset: 3px;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   14. 하위 페이지 공통 (행사안내 등)
+   ────────────────────────────────────────────────────────────────────────────
+   홈 화면과 같은 편집물 언어를 하위 페이지에도 씁니다.
+   예전 행사 페이지는 파랑·남색 하드코딩이라 홈과 따로 놀았습니다. */
+
+.page-shell {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding: clamp(2.5rem, 1.5rem + 4vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem)
+           clamp(4rem, 2rem + 6vw, 6rem);
+}
+
+.page-shell-narrow {
+  max-width: 52rem;
+}
+
+/* 페이지 머리말 */
+.page-head {
+  padding-bottom: clamp(1.75rem, 1rem + 2vw, 2.5rem);
+  margin-bottom: clamp(2rem, 1.25rem + 2.5vw, 3rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-head-eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary-600);
+  margin: 0 0 0.75rem;
+}
+
+.page-head-title {
+  font-family: var(--font-display);
+  font-size: var(--step-section);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.28;
+  margin: 0;
+}
+
+.page-head-lede {
+  margin-top: 1rem;
+  color: var(--ink-muted);
+  max-width: var(--measure-narrow);
+}
+
+.page-head-count {
+  margin-top: 0.85rem;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.page-head-lede :is(p, ul, li) {
+  margin-block: 0.35rem;
+}
+
+/* 뒤로 가기 */
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.page-back:hover {
+  color: var(--color-primary-600);
+  gap: 0.7rem;
+}
+
+.page-back-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.page-pagination {
+  margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  display: flex;
+  justify-content: center;
+}
+
+/* ── 행사 카드 목록 ─────────────────────────────────────────────────────── */
+.event-grid {
+  display: grid;
+  gap: clamp(1.25rem, 0.75rem + 1.6vw, 2rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+}
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 0.875rem;
+  background-color: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+.event-card:hover {
+  border-color: var(--color-primary-400);
+  background-color: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.event-card.is-draft {
+  opacity: 0.55;
+}
+
+.event-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: var(--surface-2);
+  overflow: hidden;
+}
+
+.event-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.event-card:hover .event-card-media img {
+  transform: scale(1.03);
+}
+
+.event-card-media-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in oklab, var(--hb-color-foreground) 25%, transparent);
+}
+
+.event-card-media-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.event-card-draft {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: rgb(0 0 0 / 0.65);
+  color: #ffffff;
+}
+
+.event-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+}
+
+.event-card-date {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-primary-600);
+}
+
+.event-card-title {
+  font-family: var(--font-display);
+  font-size: var(--step-card);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.event-card-place,
+.event-article-place {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.event-card-place-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: none;
+}
+
+.event-card-summary {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin: 0.15rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── 행사 상세 ─────────────────────────────────────────────────────────── */
+.event-article-head {
+  padding-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.event-article-date {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-primary-600);
+  margin-bottom: 0.75rem;
+}
+
+.event-article-place {
+  margin-top: 0.9rem;
+}
+
+.event-article-poster {
+  margin: 0 0 2.25rem;
+}
+
+.event-article-poster img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.875rem;
+  border: 1px solid var(--rule);
+}
+
+.event-article-body {
+  font-size: var(--step-lede);
+  line-height: 1.85;
+}
+
+.event-article-empty {
+  color: var(--ink-muted);
+  font-style: normal;
 }

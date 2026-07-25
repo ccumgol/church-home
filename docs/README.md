@@ -11,7 +11,7 @@
 |------|------|-------------|
 | [setup-by-purpose.md](./setup-by-purpose.md) | **[추천]** 용도별 GitHub & Cloudflare 설정 종합 가이드 (단순 호스팅, Admin, 도메인 등) | 2026-07-25 |
 | [manual.md](./manual.md) | 홈페이지 콘텐츠 관리 방법, 첫 화면 배너 선택(티커/캐러셀), 주일설교 등록 가이드, 배포 방법 등 운영 전반 지침 | 2026-07-25 |
-| [issue-report.md](./issue-report.md) | 개발 과정에서 발생한 이슈 트래킹 및 해결 방법 기록 (이슈 1~25) | 2026-07-25 |
+| [issue-report.md](./issue-report.md) | 개발 과정에서 발생한 이슈 트래킹 및 해결 방법 기록 (이슈 1~26) | 2026-07-25 |
 
 ### Admin CMS 관련
 | 파일 | 내용 | 최종 업데이트 |
@@ -63,6 +63,14 @@
 - **배너 종류·전환 속도를 Admin(⚙️ 사이트 설정)에서 직접 변경** — 코드 수정 불필요
 - 죽은 루트 `hugo.yaml`·디버그 덤프 제거, `hasCJKLanguage` 활성화
 - Admin 업로드 이미지 자동 WebP 축소 (6.17MB → 314KB)
+
+### Phase 6 — 전체 디자인 고도화
+- **테마팩 신설** (`data/themes/church-warm.yaml`) — 차가운 indigo/남색 기본 테마를
+  따뜻한 테라코타 + stone + 리넨/에스프레소로 교체
+- `custom.css` 재작성: `!important` 243개 → 24개, 색은 테마 변수만 사용
+- 템플릿 잔재 제거 (개발자용 아이콘, "YOUR LOGO", X·GitHub·Discord 링크)
+- 홈·설교·행사 페이지 머리말 형식 통일, `slate` → `stone` 206곳 정리
+- 한글 어절 단위 줄바꿈(`word-break: keep-all`) 적용
 
 ---
 

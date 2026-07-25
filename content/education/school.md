@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 다음 세대를 하나님의 말씀으로 양육하고 신앙의 리더로 세우는 샘플교회 교회학교입니다.
 </p>
 

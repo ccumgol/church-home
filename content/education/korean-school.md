@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 어린이들에게 한글과 한국 문화, 정체성과 기독교적 가치관을 가르치는 한국학교입니다.
 </p>
 

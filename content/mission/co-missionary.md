@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 세계 열방에서 하나님 나라의 복음을 전파하는 협력선교사님들과 선교지를 소개합니다.
 </p>
 

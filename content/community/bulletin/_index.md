@@ -3,7 +3,7 @@ title: "온라인 주보 (Weekly Bulletin)"
 date: 2026-07-22
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 매주 발행되는 샘플교회 주보입니다.
 </p>
 

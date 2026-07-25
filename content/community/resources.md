@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 교회 행정 및 신앙생활에 필요한 각종 문서 양식 다운로드 페이지입니다.
 </p>
 

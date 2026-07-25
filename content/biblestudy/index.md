@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-8">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-8">
 성도의 영적 성숙과 예수 그리스도의 제자로서의 삶을 위한 다채로운 양육 과정입니다.
 </p>
 

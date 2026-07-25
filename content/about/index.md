@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-8">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-8">
 샘플교회는 하나님의 말씀 위에 바로 서서 오직 은혜, 오직 믿음, 오직 성경으로 하나님과 이웃을 섬기는 성도들의 공동체입니다.
 </p>
 
@@ -37,7 +37,7 @@ type: page
 * **문의 전화:** (201) 555-0100 / (201) 555-0101
 * **이메일:** contact@samplechurch.org
 
-<div class="w-full h-80 rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700 mt-6 mb-4">
+<div class="w-full h-80 rounded-2xl overflow-hidden shadow-lg border border-stone-200 dark:border-stone-700 mt-6 mb-4">
   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3017.550186981881!2d-73.99723042341951!3d40.8499429713732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f6d0f62bb00f%3A0xc0fb1d87e0fa0c1!2sPalisades%20Park%2C%20NJ%2007650!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
 

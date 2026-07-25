@@ -4,7 +4,7 @@ date: 2026-07-22
 type: page
 ---
 
-<p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+<p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-6">
 여름 방학 동안 어린이들이 신나고 유익하게 말씀을 배우고 다양한 활동을 진행하는 프로그램입니다.
 </p>
 

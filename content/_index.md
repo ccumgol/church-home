@@ -47,7 +47,10 @@ sections:
       spacing:
         padding: [0, 0, 0, 0]
         margin: [0, 0, 0, 0]
-      css_class: "dark bg-gradient-to-br from-stone-900 via-[#1e1511] to-black relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-[0.03] before:mix-blend-overlay hero-smooth-fade"
+      # dark             → 어두운 배경 위 흰 글자
+      # hero-smooth-fade → 아래 섹션으로 자연스럽게 이어지는 페이드
+      # 배경 사진과 글자 스타일은 custom.css 6번 섹션에서 관리합니다.
+      css_class: "dark hero-smooth-fade"
 
   - block: slider
     id: hero-carousel
@@ -102,7 +105,7 @@ sections:
         {{< latest_sermon_block >}}
     design:
       columns: '1'
-      css_class: "bg-stone-100 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700 relative z-10"
+      css_class: "section-rule-bottom"
 
   - block: features
     id: worship-schedule
@@ -112,16 +115,16 @@ sections:
       text: 참된 예배와 기도로 하나님께 영광을 올려드리는 거룩한 구별의 시간입니다.
       items:
         - name: 주일 대예배
-          icon: sparkles
+          icon: building-library
           description: "**매주 주일 오전 11:00 AM**<br />본당 2층 & YouTube Live 생중계"
         - name: 새벽기도회
-          icon: bolt
+          icon: sun
           description: "**월 ~ 금요일 오전 06:00 AM**<br />본당 1층 & 온라인 라이브"
         - name: 수요기도회
-          icon: shield-check
+          icon: hand-raised
           description: "**매주 수요일 저녁 08:00 PM**<br />본당 2층 (말씀 중심 기도회)"
     design:
-      css_class: "bg-white dark:bg-stone-950 border-b border-stone-100 dark:border-white/5 py-16 [&_.feature-card]:bg-stone-50 dark:[&_.feature-card]:bg-white/5 dark:[&_.feature-card]:backdrop-blur-md dark:[&_.feature-card]:border dark:[&_.feature-card]:border-white/10 [&_.feature-card]:hover:-translate-y-1 [&_.feature-card]:transition-all [&_.feature-card]:duration-300 [&_.feature-card]:shadow-sm hover:[&_.feature-card]:shadow-xl"
+      css_class: "section-tint section-rule-bottom"
 
   - block: steps
     id: worship-guide
@@ -132,18 +135,18 @@ sections:
       items:
         - title: 1. 하나님을 높이는 참된 예배
           text: 주일 대예배와 새벽기도회, 수요기도회를 통해 하나님의 인재하심과 말씀의 은혜를 깊이 경험합니다.
-          icon: code-bracket
+          icon: musical-note
         - title: 2. 말씀을 통한 삶의 양육
           text: 열린성경공부(TEE), 커피브레이크, 회복의 삶, 제자의 삶 코스를 통해 영적 성숙을 이룹니다.
-          icon: link
+          icon: academic-cap
         - title: 3. 다음 세대와 열방 섬김
-          text: 교회학교, 샘플한국학교/여름학교 운영 및 협력 선교지 후원으로 하나님 나라를 확장에 힘씁니다.
-          icon: rocket-launch
+          text: 교회학교, 샘플한국학교/여름학교 운영 및 협력 선교지 후원으로 하나님 나라를 확장하는 데 힘씁니다.
+          icon: globe-alt
     design:
       layout: horizontal
       marker_style: icon
       connector: none
-      css_class: "bg-stone-50 dark:bg-[#1a1816] py-16 border-b border-stone-200 dark:border-white/5"
+      css_class: "section-rule-bottom"
 
   - block: features
     id: core-values
@@ -153,26 +156,26 @@ sections:
       text: 오직 성경, 오직 은혜, 오직 믿음으로 하나님과 이웃을 온전히 섬깁니다.
       items:
         - name: 오직 성경 (Sola Scriptura)
-          icon: sparkles
+          icon: book-open
           description: 하나님의 말씀인 성경을 신앙과 삶의 최고의 표준으로 삼아 순종합니다.
         - name: 오직 은혜 (Sola Gratia)
-          icon: bolt
+          icon: heart
           description: 예수 그리스도의 십자가 은혜로 구원받았음을 고백하며 감사로 섬깁니다.
         - name: 다음 세대 양육
-          icon: rectangle-group
+          icon: academic-cap
           description: 교회학교와 샘플한국학교, 여름학교를 통해 자녀들을 기독교적 인재로 키웁니다.
         - name: 세계 선교 동역
-          icon: arrow-path
+          icon: globe-americas
           description: 협력선교사 후원과 기도로 열방에 예수 그리스도의 복음을 증거합니다.
         - name: 따뜻한 성도의 교제
-          icon: paint-brush
+          icon: user-group
           description: 순모임과 양육 코스를 통해 서로 돌아보며 사랑과 선행을 격려합니다.
         - name: 온전한 주일 성수
-          icon: shield-check
+          icon: calendar-days
           description: 거룩한 주일에 하나님께 감사함으로 예배드리며 안식과 은혜를 누립니다.
     design:
       layout: bento
-      css_class: "bg-white dark:bg-stone-900 py-16 border-b border-stone-100 dark:border-white/5 [&_.bento-item]:bg-gradient-to-br [&_.bento-item]:from-stone-50 [&_.bento-item]:to-stone-100 dark:[&_.bento-item]:from-white/10 dark:[&_.bento-item]:to-white/5 dark:[&_.bento-item]:backdrop-blur-lg dark:[&_.bento-item]:border dark:[&_.bento-item]:border-white/10 [&_.bento-item]:hover:scale-[1.02] [&_.bento-item]:transition-transform [&_.bento-item]:duration-500"
+      css_class: "section-tint section-rule-bottom"
 
   - block: faq
     id: faq
@@ -194,7 +197,7 @@ sections:
           answer: |
             [교회소개 - 온라인헌금](/about/#offering) 안내 페이지에서 계좌 송금 및 온라인 송금 상세 정보를 확인하실 수 있습니다.
     design:
-      css_class: "bg-stone-50 dark:bg-[#1c1917] py-16"
+      css_class: ""
 
   - block: cta-card
     id: cta-invitation
@@ -205,7 +208,7 @@ sections:
       button:
         text: 예배 안내 보러가기
         url: "/about/#services"
-    design:
-      card:
-        css_class: "bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white border-0 shadow-2xl relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-10 before:mix-blend-overlay hover:shadow-orange-500/20 transition-all duration-500"
+    # 카드 모양은 assets/css/custom.css 11번 섹션에서 관리합니다.
+    # (예전에는 여기 지정한 주황 그라디언트를 CSS가 검은 상자로 덮어써서
+    #  설정과 화면이 따로 놀았습니다)
 ---

@@ -48,19 +48,13 @@ hugoblox:
     tagline: "하나님의 말씀과 은혜로 새로워지는 교회"
     # Site meta description for search engines and social sharing
     description: "샘플교회 홈페이지 템플릿입니다. 예배 및 모임, 주일설교, 교육 및 양육 안내."
-    # Social accounts (used for meta tags like Twitter Cards)
+    # 푸터에 표시할 소셜 링크.
+    # 교회에서 실제로 운영하는 채널만 남기세요.
+    # (템플릿 기본값이던 X·GitHub·Discord·LinkedIn 은 교회와 무관해 제거했습니다)
     social:
-      twitter: "GoOwnable" # Twitter/X handle for Twitter Cards (without @)
-      # Site-wide social links (rendered in footer, etc.)
       links:
-        - icon: brands/x
-          url: https://x.com/GoOwnable
-        - icon: brands/github
-          url: https://github.com/HugoBlox/kit
-        - icon: brands/discord
-          url: https://discord.gg/z8wNYzb
-        - icon: brands/linkedin
-          url: https://linkedin.com/company/example
+        - icon: brands/youtube
+          url: https://youtube.com/
 
   # ────────────────────────────────────────────────────────────────────────────
   # THEME
@@ -69,17 +63,16 @@ hugoblox:
   theme:
     # Mode: 'light', 'dark', or 'system' (follows OS preference)
     mode: system
-    # Theme pack: name from data/themes/ or { light: "x", dark: "y" } for mix-and-match
-    pack: "default"
-    # Optional: Override theme pack colors
+    # 색은 data/themes/church-warm.yaml 에서 한 번에 관리합니다.
+    # 아래 colors/surfaces 는 비워 두세요. 값을 넣으면 테마팩을 덮어써서
+    # 예전처럼 색이 두 갈래로 갈라집니다.
+    pack: "church-warm"
     colors:
-      primary: "" # Tailwind palette name or hex (e.g., "indigo" or "#6366f1")
+      primary: ""
       secondary: ""
-      neutral: "" # Affects gray utilities (text-gray-*, bg-gray-*)
-    # Optional: Mode-specific color overrides
+      neutral: ""
     colors_light: {}
     colors_dark: {}
-    # Optional: Semantic surface color overrides
     surfaces:
       background: ""
       foreground: ""
@@ -87,8 +80,8 @@ hugoblox:
         background: ""
         foreground: ""
       footer:
-        background: "#0f172a"
-        foreground: "#f8fafc"
+        background: ""
+        foreground: ""
 
   # ────────────────────────────────────────────────────────────────────────────
   # TYPOGRAPHY
@@ -146,7 +139,9 @@ hugoblox:
   footer:
     # Footer style variant
     style: columns # minimal | columns | centered
-    show_logo: true
+    # 템플릿 기본 로고(assets/media/logo.svg)가 "YOUR LOGO" 플레이스홀더라 끕니다.
+    # 교회 로고 파일을 넣으면 true 로 바꾸세요.
+    show_logo: false
     show_title: true
     show_tagline: true
     # Override footer title (defaults to identity.name)

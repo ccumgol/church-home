@@ -1,0 +1,12 @@
+<script>
+  window.tickerData = [
+    {{ $posts := where .Site.RegularPages "Section" "in" (slice "community" "event") }}
+    {{ range first 5 $posts.ByDate.Reverse }}
+    {
+      "title": {{ .Title | jsonify | safeJS }},
+      "url": {{ .RelPermalink | jsonify | safeJS }}
+    },
+    {{ end }}
+  ];
+</script>
+<script src="/js/custom-ticker.js"></script>

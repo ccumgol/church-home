@@ -1,0 +1,30 @@
+Watching for changes in /Users/gihyunpark/Desktop/Workspace/church-home/archetypes, /Users/gihyunpark/Desktop/Workspace/church-home/assets/{css,js,media}, /Users/gihyunpark/Desktop/Workspace/church-home/content/{about,biblestudy,community,education,event,...}, /Users/gihyunpark/Desktop/Workspace/church-home/data/authors, /Users/gihyunpark/Desktop/Workspace/church-home/i18n, /Users/gihyunpark/Desktop/Workspace/church-home/layouts/{_default,_partials,event,page,partials,...}, /Users/gihyunpark/Desktop/Workspace/church-home/package.json, /Users/gihyunpark/Desktop/Workspace/church-home/static/{admin,js,media}, /Users/gihyunpark/Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/github.com/!hugo!blox/kit/modules/blox@v0.0.0-20260527025321-61f41d3667f1/archetypes, /Users/gihyunpark/Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/github.com/!hugo!blox/kit/modules/blox@v0.0.0-20260527025321-61f41d3667f1/assets/{css,dist,js,media}, ... and 6 more
+Watching for config changes in /Users/gihyunpark/Desktop/Workspace/church-home/hugo.toml, /Users/gihyunpark/Desktop/Workspace/church-home/config/_default, /Users/gihyunpark/Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/github.com/!hugo!blox/kit/modules/integrations/netlify@v0.0.0-20260327032542-ef8ed449c7e8/config.yaml, /Users/gihyunpark/Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/github.com/!hugo!blox/kit/modules/blox@v0.0.0-20260527025321-61f41d3667f1/hugo.yaml, /Users/gihyunpark/Desktop/Workspace/church-home/go.mod
+Start building sites … 
+hugo v0.164.0+extended+withdeploy darwin/arm64 BuildDate=2026-07-06T16:39:30Z VendorInfo=Homebrew
+
+WARN  page "/event/2026-07-23-청출어람-모임": `image` frontmatter must be an object, e.g.
+  image:
+    filename: cover.jpg
+Got: /media/uploads/202608.png
+WARN  page "/event/2026-07-23-주일학교-vbs": `image` frontmatter must be an object, e.g.
+  image:
+    filename: cover.jpg
+Got: /media/uploads/202608.png
+
+                  │ EN 
+──────────────────┼────
+ Pages            │ 73 
+ Paginator pages  │  1 
+ Non-page files   │  0 
+ Static files     │  9 
+ Processed images │  4 
+ Aliases          │  2 
+ Cleaned          │  0 
+
+Built in 444 ms
+Environment: "development"
+Serving pages from disk
+Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+Web Server is available at http://localhost:1313/ (bind address 127.0.0.1) 
+Press Ctrl+C to stop

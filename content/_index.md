@@ -8,6 +8,7 @@ type: landing
 
 sections:
   - block: hero
+    active: false
     content:
       eyebrow: 샘플교회 · SAMPLE CHURCH
       title: 하나님의 말씀과 은혜로<br>새로워지는 성도의 삶
@@ -16,27 +17,69 @@ sections:
         text: 예배 및 모임 안내
         url: "/about/#services"
         icon: rocket-launch
-        style: primary
+        style: gradient
       secondary_action:
         text: 주일 설교 보기
         url: "/sermons/"
         icon: play-circle
-        style: ghost
+        style: gradient
       announcement:
         badge:
-          text: 안내
+          text: 최근소식
           color: primary
-        text: 주일 대예배는 매주 오전 11시에 드려집니다.
-        link:
-          text: 자세히 보기
-          url: "/about/#services"
+        text: '<span id="dynamic-ticker">최신 소식을 불러오는 중입니다...</span>'
     design:
+      background:
+        image:
+          filename: "hero_sky_bg.webp"
+          size: cover
+          position: center
+          filters:
+            brightness: 0.7
       spacing:
         padding: [0, 0, 0, 0]
         margin: [0, 0, 0, 0]
-      css_class: "dark bg-gradient-to-br from-stone-900 via-[#1e1511] to-black relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-[0.03] before:mix-blend-overlay"
-      section_break:
-        fade_bottom: "#1c1917"
+      css_class: "dark bg-gradient-to-br from-stone-900 via-[#1e1511] to-black relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-[0.03] before:mix-blend-overlay hero-smooth-fade"
+
+  - block: slider
+    active: true
+    content:
+      slides:
+        - title: 하나님의 말씀과 은혜로<br>새로워지는 성도의 삶
+          content: 샘플교회 · SAMPLE CHURCH
+          align: center
+          background:
+            media: "hero_sky_bg.webp"
+          link:
+            text: "예배 및 모임 안내"
+            url: "/about/#services"
+            icon: "rocket-launch"
+        
+        - title: "예배 안내"
+          content: "하나님을 향한 온전한 예배가 회복되는 곳"
+          align: center
+          background:
+            media: "vintage-floral-bg.png"
+          link:
+            text: "예배 시간표 확인"
+            url: "/about/#services"
+            icon: "clock"
+            
+        - title: "새가족 가이드"
+          content: "샘플교회에 처음 오신 분들을 진심으로 환영합니다!"
+          align: center
+          background:
+            media: "vintage-floral-bg.png"
+          link:
+            text: "오시는 길 안내"
+            url: "/about/#direction"
+            icon: "map-marker-alt"
+    design:
+      slide_height: "80vh"
+      is_fullscreen: true
+      spacing:
+        padding: [0, 0, 0, 0]
+        margin: [0, 0, 0, 0]
 
   - block: markdown
     id: latest-sermon
@@ -45,7 +88,7 @@ sections:
         {{< latest_sermon_block >}}
     design:
       columns: '1'
-      css_class: "bg-stone-100 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700 relative z-10 pt-[100px] pb-[100px]"
+      css_class: "bg-stone-100 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700 relative z-10"
 
   - block: features
     id: worship-schedule

@@ -1,7 +1,6 @@
 ---
 title: "포토앨범 (Photo Album)"
 date: 2026-07-22
-type: page
 ---
 
 <p class="text-xl font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">

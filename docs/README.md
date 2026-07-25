@@ -6,9 +6,10 @@
 
 ## 📂 문서 목록
 
-### 운영 지침서
+### 운영 및 설정 지침서
 | 파일 | 내용 | 최종 업데이트 |
 |------|------|-------------|
+| [setup-by-purpose.md](./setup-by-purpose.md) | **[추천]** 용도별 GitHub & Cloudflare 설정 종합 가이드 (단순 호스팅, Admin, 도메인 등) | 2026-07-25 |
 | [manual.md](./manual.md) | 홈페이지 콘텐츠 관리 방법, 주일설교 등록 가이드, 배포 방법 등 운영 전반 지침 | 2026-07-23 |
 | [issue-report.md](./issue-report.md) | 개발 과정에서 발생한 이슈 트래킹 및 해결 방법 기록 (이슈 1~20) | 2026-07-23 |
 
@@ -16,12 +17,12 @@
 | 파일 | 내용 | 최종 업데이트 |
 |------|------|-------------|
 | [admin-plan.md](./admin-plan.md) | Decap CMS 기반 Admin 콘텐츠 관리 페이지 구축 계획서 (기술 방식 비교, 구현 범위) | 2026-07-23 |
-| [admin-setup-guide.md](./admin-setup-guide.md) | Admin 페이지 활성화 단계별 가이드 (GitHub OAuth App + Cloudflare Workers 설정) | 2026-07-23 |
+| [admin-setup-guide.md](./admin-setup-guide.md) | Admin 페이지 활성화 단계별 가이드 (GitHub OAuth App + Cloudflare Workers 설정) | 2026-07-25 |
 
 ### 호스팅 관련
 | 파일 | 내용 | 최종 업데이트 |
 |------|------|-------------|
-| [cloudflare-pages-migration.md](./cloudflare-pages-migration.md) | GitHub Pages → Cloudflare Pages 이전 계획 및 절차 (성능 향상 + Admin OAuth 간소화) | 2026-07-23 |
+| [cloudflare-pages-migration.md](./cloudflare-pages-migration.md) | GitHub Pages → Cloudflare Pages 이전 계획, 절차 및 프로젝트 구조 상세 | 2026-07-25 |
 
 ---
 
@@ -46,12 +47,12 @@
 - **클라이언트 사이드 태그 필터링:** 클릭 시 즉시 해당 설교만 노출
 - **3단 그리드 + 페이지네이션 (12개/페이지)** 구성
 
-### Phase 4 — 메뉴 구조 개편 및 Admin 시스템
+### Phase 4 — 메뉴 구조 개편 및 Admin 시스템 & Cloudflare 이전
 - `행사안내` → `커뮤니티` 하위 메뉴로 이동
 - **Decap CMS Admin 페이지 설치** (`/admin/`)
   - 설교 컬렉션: 제목, 예배일, 설교자, 성경본문, 성경권, 유튜브 URL, 태그, 원고
   - 행사 컬렉션: 제목, 날짜, 장소, 이미지, 상세 내용
-- Cloudflare Pages 이전 방안 검토
+- **Cloudflare Pages 호스팅 이전 및 Worker OAuth 연동 완료**
 
 ---
 
@@ -59,7 +60,7 @@
 
 | 항목 | URL |
 |------|-----|
-| 라이브 사이트 | https://ccumgol.github.io/church-home/ |
+| 라이브 사이트 | https://church-home.pages.dev/ |
 | GitHub 저장소 | https://github.com/ccumgol/church-home |
-| 주일설교 목록 | https://ccumgol.github.io/church-home/sermons/ |
-| Admin 페이지 | https://ccumgol.github.io/church-home/admin/ (OAuth 설정 후 활성화) |
+| 주일설교 목록 | https://church-home.pages.dev/sermons/ |
+| Admin 페이지 | https://church-home.pages.dev/admin/ |

@@ -34,11 +34,9 @@ sections:
       spacing:
         padding: [0, 0, 0, 0]
         margin: [0, 0, 0, 0]
-      css_class: "dark"
+      css_class: "dark bg-gradient-to-br from-stone-900 via-[#1e1511] to-black relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-[0.03] before:mix-blend-overlay"
       section_break:
-        fade_bottom: "#151210"
-      background:
-        color: "#1a1614"
+        fade_bottom: "#1c1917"
 
   - block: markdown
     id: latest-sermon
@@ -51,7 +49,7 @@ sections:
         {{< youtube_playlist list="PLPRMrPgg66ofbaR6O3TKQS8afp-bJVcdP" title="샘플교회 최신 설교 및 예배 영상" >}}
     design:
       columns: '1'
-      css_class: "bg-stone-100/50 dark:bg-stone-900/40 border-b border-stone-200 dark:border-stone-800"
+      css_class: "bg-gradient-to-b from-[#1c1917] to-stone-900 border-b border-white/5 relative z-10 py-16"
 
   - block: features
     id: worship-schedule
@@ -70,7 +68,7 @@ sections:
           icon: shield-check
           description: "**매주 수요일 저녁 08:00 PM**<br />본당 2층 (말씀 중심 기도회)"
     design:
-      css_class: "bg-amber-50/70 dark:bg-stone-900/80 border-b border-stone-200 dark:border-stone-800"
+      css_class: "bg-white dark:bg-stone-950 border-b border-stone-100 dark:border-white/5 py-16 [&_.feature-card]:bg-stone-50 dark:[&_.feature-card]:bg-white/5 dark:[&_.feature-card]:backdrop-blur-md dark:[&_.feature-card]:border dark:[&_.feature-card]:border-white/10 [&_.feature-card]:hover:-translate-y-1 [&_.feature-card]:transition-all [&_.feature-card]:duration-300 [&_.feature-card]:shadow-sm hover:[&_.feature-card]:shadow-xl"
 
   - block: steps
     id: worship-guide
@@ -92,6 +90,7 @@ sections:
       layout: horizontal
       marker_style: icon
       connector: none
+      css_class: "bg-stone-50 dark:bg-[#1a1816] py-16 border-b border-stone-200 dark:border-white/5"
 
   - block: features
     id: core-values
@@ -120,7 +119,7 @@ sections:
           description: 거룩한 주일에 하나님께 감사함으로 예배드리며 안식과 은혜를 누립니다.
     design:
       layout: bento
-      css_class: "bg-stone-100/60 dark:bg-stone-900/50"
+      css_class: "bg-white dark:bg-stone-900 py-16 border-b border-stone-100 dark:border-white/5 [&_.bento-item]:bg-gradient-to-br [&_.bento-item]:from-stone-50 [&_.bento-item]:to-stone-100 dark:[&_.bento-item]:from-white/10 dark:[&_.bento-item]:to-white/5 dark:[&_.bento-item]:backdrop-blur-lg dark:[&_.bento-item]:border dark:[&_.bento-item]:border-white/10 [&_.bento-item]:hover:scale-[1.02] [&_.bento-item]:transition-transform [&_.bento-item]:duration-500"
 
   - block: faq
     id: faq
@@ -141,6 +140,8 @@ sections:
         - question: 온라인 헌금 방법은 어떻게 되나요?
           answer: |
             [교회소개 - 온라인헌금](/about/#offering) 안내 페이지에서 계좌 송금 및 온라인 송금 상세 정보를 확인하실 수 있습니다.
+    design:
+      css_class: "bg-stone-50 dark:bg-[#1c1917] py-16"
 
   - block: cta-card
     id: cta-invitation
@@ -153,5 +154,5 @@ sections:
         url: "/about/#services"
     design:
       card:
-        css_class: "bg-stone-900 text-stone-100 border border-stone-800 shadow-xl"
+        css_class: "bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white border-0 shadow-2xl relative overflow-hidden before:absolute before:inset-0 before:bg-[url('/images/noise.png')] before:opacity-10 before:mix-blend-overlay hover:shadow-orange-500/20 transition-all duration-500"
 ---

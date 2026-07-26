@@ -1,0 +1,56 @@
+{{/*
+  게시판 목록 — 교회소식·주보·포토앨범이 함께 씁니다.
+
+  글마다 '어디로 가는가'가 달라서, 아래 순서로 목적지를 정합니다.
+    1. external_url  바깥 사이트 (포토앨범 → Google 포토). 새 창으로 열림
+    2. file          올려 둔 파일 (주보 → PDF). 새 창으로 열림
+    3. 없으면        글 자체의 상세 페이지 (교회소식)
+
+  목적지가 하나도 없으면 링크가 아닌 <div> 로 그려서, 눌러도 아무 일이
+  일어나지 않는 '죽은 링크'가 생기지 않게 합니다.
+
+  ⚠️ 껍데기 태그를 `<{{ $tag }}>` 처럼 변수로 만들면 Hugo 가 `<` 를 그대로
+  이스케이프해서 화면에 `&lt;a ...` 가 찍힙니다. 그래서 if/else 로 나눕니다.
+  (속 내용은 board_card_inner.html 에 한 번만 두고 양쪽에서 부릅니다)
+
+  받는 값
+    pages       (필수) 보여줄 글 목록
+    empty_text  (선택) 글이 없을 때 문구
+*/}}
+
+{{- $pages := .pages -}}
+{{- $empty := .empty_text | default "아직 등록된 글이 없습니다." -}}
+
+{{- if not $pages -}}
+  <p class="board-empty">{{ $empty }}</p>
+{{- else -}}
+  <div class="board-grid">
+    {{- range $pages -}}
+      {{- $thumb := partial "church/media_url" (.Params.thumbnail | default .Params.poster | default .Params.image) -}}
+      {{- $file := partial "church/media_url" .Params.file -}}
+      {{- $ext := .Params.external_url | default "" -}}
+
+      {{/* 목적지 결정 */}}
+      {{- $href := "" -}}{{- $blank := false -}}{{- $note := "" -}}
+      {{- if $ext -}}
+        {{- $href = $ext -}}{{- $blank = true -}}{{- $note = "Google 포토에서 보기" -}}
+      {{- else if $file -}}
+        {{- $href = $file -}}{{- $blank = true -}}{{- $note = "PDF 로 열기" -}}
+      {{- else if .RelPermalink -}}
+        {{- $href = .RelPermalink -}}{{- $note = "자세히 보기" -}}
+      {{- end -}}
+
+      {{- $inner := dict "page" . "thumb" $thumb "blank" $blank "note" $note -}}
+
+      {{- if $href -}}
+        <a class="board-card" href="{{ $href }}"{{ if $blank }} target="_blank" rel="noopener"{{ end }}>
+          {{- partial "church/board_card_inner" $inner -}}
+        </a>
+      {{- else -}}
+        <div class="board-card">
+          {{- partial "church/board_card_inner" $inner -}}
+        </div>
+      {{- end -}}
+    {{- end -}}
+  </div>
+{{- end -}}

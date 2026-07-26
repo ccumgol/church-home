@@ -2,12 +2,16 @@
   Admin(/admin/)에서 바꿀 수 있는 사이트 설정값을 한 곳에서 정리해 돌려줍니다.
 
   값을 찾는 순서
-    1. data/settings.yaml       ← Admin 의 "⚙️ 사이트 설정" 에서 저장하는 파일
+    1. data/ 아래의 설정 파일   ← Admin 의 "⚙️ 사이트 설정" 에서 저장
     2. config/_default/params.yaml 의 params.church.*   ← 손으로 관리하는 기본값
     3. 아래 코드의 기본값
 
-  data/settings.yaml 은 Decap CMS 가 저장할 때 파일 전체를 다시 쓰기 때문에
-  주석을 달아도 지워집니다. 설명은 이 파일과 docs/manual.md 에 둡니다.
+  Admin 화면 하나가 파일 하나를 통째로 다시 쓰므로, 설정을 화면 단위로 나눠 둡니다.
+    data/settings.yaml  첫 화면 배너 (hero_style, carousel_interval_seconds)
+    data/heading.yaml   문서 제목 모양 (page_heading_style)
+
+  ⚠️ 이 파일들은 Decap CMS 가 저장할 때 전체가 다시 쓰이므로 주석을 달아도
+  지워집니다. 설명은 이 파일과 docs/manual.md 에 둡니다.
 
   돌려주는 값
     hero_style          "ticker" | "carousel"
@@ -18,6 +22,7 @@
 
 {{/* site.Data 는 Hugo 0.156 부터 deprecated 이므로 hugo.Data 를 씁니다. */}}
 {{- $data := index hugo.Data "settings" | default dict -}}
+{{- $head := index hugo.Data "heading" | default dict -}}
 {{- $church := site.Params.church | default dict -}}
 
 {{/* ── 첫 화면 배너 스타일 ─────────────────────────────────────────────── */}}
@@ -46,7 +51,8 @@
 
 {{/* ── 하위 페이지 제목 모양 ───────────────────────────────────────────── */}}
 {{- $head_allowed := slice "banner" "sermon" "editorial" -}}
-{{- $head_style := index $data "page_heading_style" | default (index $church "page_heading_style") | default "banner" -}}
+{{/* data/heading.yaml 을 먼저 보고, 예전처럼 settings.yaml 에 들어 있어도 읽습니다. */}}
+{{- $head_style := index $head "page_heading_style" | default (index $data "page_heading_style") | default (index $church "page_heading_style") | default "banner" -}}
 {{- $head_style = lower (printf "%v" $head_style) -}}
 {{- if not (in $head_allowed $head_style) -}}
   {{- warnf "church: page_heading_style 값이 잘못되었습니다 (%q). banner / sermon / editorial 중 하나여야 합니다. banner 로 처리합니다." $head_style -}}

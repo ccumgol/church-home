@@ -1459,3 +1459,152 @@ section.hbb-section.church-carousel > div.church-carousel-viewport {
   height: 0.95rem;
   flex: none;
 }
+
+/* ── 게시판 목록 (교회소식·주보·포토앨범) ────────────────────────────────
+   마크업: layouts/_partials/church/board_list.html
+   포토앨범·주보처럼 바깥으로 나가는 항목은 본문 없이 썸네일·제목·날짜만
+   보여 주고, 오른쪽 위에 '새 창으로 열림' 표시를 답니다. */
+.board-grid {
+  display: grid;
+  gap: clamp(1rem, 0.6rem + 1.4vw, 1.75rem);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  margin-top: clamp(2rem, 1.25rem + 2.5vw, 3rem);
+}
+
+.board-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: 0.875rem;
+  background-color: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+a.board-card:hover {
+  border-color: var(--color-primary-400);
+  background-color: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.board-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--surface-2);
+}
+
+.board-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+a.board-card:hover .board-card-media img {
+  transform: scale(1.03);
+}
+
+/* 새 창으로 열린다는 표시 */
+.board-card-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 9999px;
+  background: rgb(0 0 0 / 0.55);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+.board-card-badge-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.board-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.15rem 1.25rem 1.35rem;
+}
+
+.board-card-date {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-primary-600);
+}
+
+.board-card-title {
+  font-family: var(--font-display);
+  font-size: var(--step-card);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.board-card-summary {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.board-card-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary-600);
+  transition: gap 0.2s ease;
+}
+
+a.board-card:hover .board-card-more {
+  gap: 0.6rem;
+}
+
+.board-card-more-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: none;
+}
+
+.board-empty {
+  margin-top: 2.5rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--ink-muted);
+  border: 1px dashed var(--rule-strong);
+  border-radius: 0.875rem;
+}
+
+/* 모바일에서는 2열 — 항목이 짧아 1열이면 스크롤만 길어집니다. */
+@media (max-width: 640px) {
+  .board-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .board-card-body {
+    padding: 0.85rem 0.9rem 1rem;
+    gap: 0.3rem;
+  }
+
+  .board-card-date { font-size: 0.68rem; }
+  .board-card-title { font-size: 0.92rem; }
+  .board-card-summary { font-size: 0.78rem; }
+  .board-card-more { font-size: 0.72rem; }
+}

@@ -1,0 +1,45 @@
+{{/*
+  게시판 카드의 속(썸네일·날짜·제목·안내문).
+  바깥 껍데기(<a> 또는 <div>)는 board_list.html 이 그립니다.
+
+  받는 값: page, thumb, blank(새 창 여부), note(안내 문구)
+*/}}
+{{- $p := .page -}}
+{{- $thumb := .thumb -}}
+{{- $blank := .blank -}}
+{{- $note := .note -}}
+
+{{- with $thumb -}}
+  <div class="board-card-media">
+    <img src="{{ . }}" alt="{{ $p.Title }}" loading="lazy" decoding="async">
+    {{- if $blank -}}
+      <span class="board-card-badge" aria-hidden="true">
+        {{ partial "functions/get_icon" (dict "name" "arrow-top-right-on-square" "attributes" `class="board-card-badge-icon"`) }}
+      </span>
+    {{- end -}}
+  </div>
+{{- end -}}
+
+<div class="board-card-body">
+  {{- with $p.Date -}}
+    {{- if not .IsZero -}}
+      <time class="board-card-date" datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006. 01. 02" }}</time>
+    {{- end -}}
+  {{- end -}}
+
+  <h3 class="board-card-title">{{ $p.Title }}</h3>
+
+  {{/* 포토앨범·주보는 본문을 보여주지 않습니다. (바로 바깥으로 나가는 링크이므로) */}}
+  {{- if not $blank -}}
+    {{- with $p.Summary -}}
+      <p class="board-card-summary">{{ . | plainify | truncate 110 }}</p>
+    {{- end -}}
+  {{- end -}}
+
+  {{- with $note -}}
+    <span class="board-card-more">
+      {{ . }}
+      {{ partial "functions/get_icon" (dict "name" "arrow-right" "attributes" `class="board-card-more-icon"`) }}
+    </span>
+  {{- end -}}
+</div>

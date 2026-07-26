@@ -42,9 +42,13 @@
 
     {{- with resources.Get $asset_path -}}
       {{- $img := . -}}
-      {{/* 이미지이고 지나치게 크면 줄입니다. (SVG 등은 .Width 가 없으므로 건너뜀) */}}
-      {{- if and (eq $img.ResourceType "image") (gt $img.Width $max_width) -}}
-        {{- $img = $img.Resize (printf "%dx webp q85" $max_width) -}}
+      {{/* 이미지일 때만 크기를 살핍니다.
+           PDF·SVG 등에는 .Width 가 없어서, 한 줄짜리 and 로 묶으면
+           조건 검사 도중 오류가 납니다. 그래서 if 를 겹쳐 씁니다. */}}
+      {{- if eq $img.ResourceType "image" -}}
+        {{- if gt $img.Width $max_width -}}
+          {{- $img = $img.Resize (printf "%dx webp q85" $max_width) -}}
+        {{- end -}}
       {{- end -}}
       {{- $url = $img.RelPermalink -}}
     {{- else -}}

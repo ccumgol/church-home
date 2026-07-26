@@ -1,0 +1,19 @@
+{{ define "main" }}
+<div class="page-shell">
+
+  {{/* 제목 모양은 Admin → ⚙️ 사이트 설정 → 문서 제목 모양 에서 고릅니다. */}}
+  {{ partial "church/page_head" (dict "title" .Title) }}
+
+  {{ with .Content }}
+    <div class="prose lg:prose-xl dark:prose-invert max-w-none page-content">{{ . | safeHTML }}</div>
+  {{ end }}
+
+  {{ $paginator := .Paginate .Pages 12 }}
+  {{ partial "church/board_list" (dict "pages" $paginator.Pages) }}
+
+  {{ if gt $paginator.TotalPages 1 }}
+    <div class="page-pagination">{{ partial "pagination.html" . }}</div>
+  {{ end }}
+
+</div>
+{{ end }}

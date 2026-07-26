@@ -32,9 +32,9 @@ site_url: https://church-home.pages.dev/
 # ──────────────────────────────────────────────
 collections:
 
-  # ⓪ 사이트 설정 (글이 아니라 설정 파일 하나를 편집하는 컬렉션)
-  #    저장하면 data/settings.yaml 이 통째로 다시 쓰이므로,
-  #    그 파일에는 주석을 넣지 마세요. 설명은 docs/manual.md 에 있습니다.
+  # ⓪ 사이트 설정 (글이 아니라 설정 파일을 편집하는 컬렉션)
+  #    화면 하나가 파일 하나를 통째로 다시 씁니다. 그래서 설정을 화면 단위로
+  #    나눠 두었습니다. (해당 파일에는 주석을 넣지 마세요 — 저장 시 지워집니다)
   - name: settings
     label: "⚙️ 사이트 설정"
     files:
@@ -62,15 +62,116 @@ collections:
             step: 1
             hint: "캐러셀형일 때만 쓰입니다. 몇 초마다 다음 장으로 넘어갈지 정합니다. 0 으로 두면 자동으로 넘어가지 않습니다."
 
-          - label: "페이지 제목 모양"
+      # ── 문서 제목 모양 (첫 화면 배너와 별개 화면) ──────────────────
+      - name: page_heading
+        label: "문서 제목 모양"
+        file: data/heading.yaml
+        description: "메뉴로 들어가는 모든 문서(교회소개·말씀·교회교육·양육·선교·커뮤니티·행사안내)의 제목 부분 모양입니다. 한꺼번에 적용됩니다."
+        fields:
+          - label: "제목 모양"
             name: page_heading_style
             widget: select
             default: "banner"
             options:
-              - { label: "배너형 — 진한 테라코타 상자 안에 흰 제목", value: "banner" }
-              - { label: "말씀형 — 밝은 주황·앰버 상자 안에 흰 제목", value: "sermon" }
-              - { label: "편집형 — 작은 영문 안내 + 명조 제목 + 밑줄", value: "editorial" }
-            hint: "교회소개·말씀·커뮤니티·행사안내 등 모든 하위 페이지의 제목 모양입니다. 한꺼번에 적용됩니다."
+              - { label: "배너형 — 진한 테라코타 상자 안에 흰 제목 (현재 사용 중)", value: "banner" }
+              - { label: "말씀형 — 밝은 주황·앰버 상자 안에 흰 제목 (예전 '주일설교' 스타일)", value: "sermon" }
+              - { label: "편집형 — 작은 영문 안내 + 명조 제목 + 얇은 밑줄", value: "editorial" }
+            hint: "고른 뒤 저장하면 모든 문서에 함께 반영됩니다."
+
+  # ③ 교회소식
+  - name: news
+    label: "📰 교회소식"
+    label_singular: "소식"
+    folder: content/community/news
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [date, title]
+    # `_index.md`(섹션 안내문)가 목록에 섞이지 않도록, 글에만 붙는
+    # 숨은 구분값으로 걸러 냅니다. (_index.md 에는 board 가 없습니다)
+    filter: { field: board, value: news }
+    fields:
+      - { label: "구분", name: board, widget: hidden, default: news }
+      - { label: "제목", name: title, widget: string }
+      - label: "작성일"
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: "대표 이미지"
+        name: thumbnail
+        widget: image
+        required: false
+        hint: "목록에 표시할 사진입니다. 없어도 됩니다."
+      - label: "내용"
+        name: body
+        widget: markdown
+        required: false
+      - { label: "초안", name: draft, widget: boolean, default: false }
+
+  # ④ 주보
+  - name: bulletin
+    label: "📄 주보"
+    label_singular: "주보"
+    folder: content/community/bulletin
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [date, title]
+    # `_index.md`(섹션 안내문)가 목록에 섞이지 않도록, 글에만 붙는
+    # 숨은 구분값으로 걸러 냅니다. (_index.md 에는 board 가 없습니다)
+    filter: { field: board, value: bulletin }
+    fields:
+      - { label: "구분", name: board, widget: hidden, default: bulletin }
+      - { label: "제목", name: title, widget: string, hint: "예: 2026년 7월 넷째주 주보" }
+      - label: "발행일"
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: "주보 표지"
+        name: thumbnail
+        widget: image
+        required: false
+        hint: "목록에 표시할 표지 이미지입니다."
+      - label: "주보 파일 (PDF)"
+        name: file
+        widget: file
+        required: false
+        hint: "올리면 목록에서 누를 때 이 파일이 새 창으로 열립니다."
+      - { label: "초안", name: draft, widget: boolean, default: false }
+
+  # ⑤ 포토앨범 — Google 포토 링크만 모읍니다 (사이트에 사진을 올리지 않습니다)
+  - name: album
+    label: "🖼️ 포토앨범"
+    label_singular: "앨범"
+    folder: content/community/album
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    sortable_fields: [date, title]
+    # `_index.md`(섹션 안내문)가 목록에 섞이지 않도록, 글에만 붙는
+    # 숨은 구분값으로 걸러 냅니다. (_index.md 에는 board 가 없습니다)
+    filter: { field: board, value: album }
+    fields:
+      - { label: "구분", name: board, widget: hidden, default: album }
+      - { label: "앨범 제목", name: title, widget: string, hint: "예: 2026 여름 수련회" }
+      - label: "촬영일"
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+      - label: "대표 사진 (썸네일)"
+        name: thumbnail
+        widget: image
+        required: false
+        hint: "목록에 보여 줄 사진 한 장입니다. Google 포토에서 한 장 내려받아 올려 주세요."
+      - label: "Google 포토 주소"
+        name: external_url
+        widget: string
+        pattern: ["^https?://.+", "http:// 또는 https:// 로 시작하는 주소를 넣어 주세요."]
+        hint: "Google 포토에서 '앨범 공유 → 링크 복사'로 받은 주소를 붙여 넣으세요. 목록에서 누르면 새 창으로 열립니다."
+      - { label: "초안", name: draft, widget: boolean, default: false }
 
   # ① 주일설교
   - name: sermons

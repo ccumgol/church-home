@@ -59,8 +59,20 @@
         {{ $active := eq $menuURL $pageURL }}
         {{ if .HasChildren }}
         <li class="nav-item nav-dropdown group relative">
+              {{/* 상위 메뉴는 '링크'입니다. 눌렀을 때 첫 번째 하위 항목의 문서·앵커로
+                   이동합니다. (주소는 config/_default/menus.yaml 에서 지정)
+
+                   ⚠️ role="button" 을 붙이면 안 됩니다. 프레임워크의 토글 스크립트가
+                   `.nav-dropdown > .nav-link[role='button']` 를 잡아 preventDefault 하므로
+                   모든 화면에서 이동이 막힙니다.
+                   대신 static/js/church-nav.js 가 화면 폭을 보고
+                     PC   : 그대로 이동 (하위메뉴는 hover 로 열림)
+                     모바일: 이동 대신 하위메뉴 열기
+                   로 나눠 처리합니다. */}}
               <a
                 href="{{ .URL | relLangURL }}"
+                aria-haspopup="true"
+                aria-expanded="false"
                 class="nav-link cursor-pointer select-none {{ range .Children }}
                   {{ $childURL := .URL | absLangURL }}
                   {{ $active := eq $childURL $pageURL }}

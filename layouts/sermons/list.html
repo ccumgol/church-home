@@ -23,18 +23,14 @@
 {{/* Hugo Paginator — 12 items per page */}}
 {{ $paginator := .Paginate .Pages 12 }}
 
-<div class="container mx-auto px-4 md:px-8 py-6 max-w-7xl">
+<div class="page-shell">
 
-  {{/* 페이지 머리말 — 홈·행사안내와 같은 편집물 형식
-       (예전에는 주황 그라디언트 배너였는데, 나머지 페이지의 절제된 톤과
-        어긋나서 같은 형식으로 맞췄습니다) */}}
-  <header class="page-head">
-    <p class="page-head-eyebrow">Sermons · 샘플교회 주일설교</p>
-    <h1 class="page-head-title">{{ .Title }}</h1>
-    <p class="page-head-count">
-      총 {{ len .Pages }}편의 설교 말씀 &middot; {{ $paginator.PageNumber }} / {{ $paginator.TotalPages }} 페이지
-    </p>
-  </header>
+  {{/* 제목 모양은 Admin → ⚙️ 사이트 설정 에서 고릅니다. */}}
+  {{ partial "church/page_head" (dict
+      "title" .Title
+      "eyebrow" "Sermons · 샘플교회 주일설교"
+      "meta" (printf "총 %d편의 설교 말씀 · %d / %d 페이지" (len .Pages) $paginator.PageNumber $paginator.TotalPages)
+  ) }}
 
   {{/* Main Layout: 4-Column Grid (3 Cols: Cards | 1 Col: Sidebar) */}}
   <div class="flex flex-col lg:flex-row gap-6 items-start">
@@ -62,7 +58,7 @@
       </div>
 
       {{/* 3-Column Sermon Cards Grid */}}
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5" id="sermons-grid">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="sermons-grid">
         {{ range $paginator.Pages }}
           {{- $youtubeURL := .Params.youtube_url | default "" -}}
           {{- $videoID := "" -}}

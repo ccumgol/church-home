@@ -1,0 +1,53 @@
+{{/*
+  페이지 머리말 — 세 가지 모양 중 Admin 설정에 따라 하나를 그립니다.
+
+    banner    배너형   : 깊은 테라코타 그라디언트 상자 + 흰 제목
+    sermon    말씀형   : 밝은 주황·앰버 그라디언트 상자 + 흰 제목
+                        (예전 '주일설교' 페이지에 쓰던 그 머리말)
+    editorial 편집형   : 작은 아이브로 + 명조 제목 + 얇은 선
+
+  고르는 곳: Admin(/admin/) → ⚙️ 사이트 설정 → 페이지 제목 모양
+  실제 값 : data/settings.yaml 의 page_heading_style
+
+  이 파셜을 쓰는 레이아웃
+    layouts/page/single.html      교회소개·양육·선교 등 일반 문서
+    layouts/_default/list.html    커뮤니티의 교회소식·주보·포토앨범
+    layouts/_default/single.html  그 아래 개별 글
+    layouts/sermons/list.html     말씀 - 주일설교
+    layouts/event/list.html       행사안내
+
+  받는 값
+    title    (필수) 제목
+    eyebrow  (선택) 위에 붙는 작은 글씨. 없으면 교회 이름
+    lede     (선택) 제목 아래 설명 (HTML 가능)
+    meta     (선택) 제목 아래 한 줄 (예: "총 14편 · 1 / 2 페이지")
+*/}}
+
+{{- $title := .title -}}
+{{- $eyebrow := .eyebrow | default site.Params.hugoblox.identity.name | default site.Title -}}
+{{- $lede := .lede -}}
+{{- $meta := .meta -}}
+{{- $style := (partial "church/settings").page_heading_style -}}
+
+{{- if eq $style "editorial" -}}
+
+  <header class="page-head page-head--editorial">
+    {{- with $eyebrow }}<p class="page-head-eyebrow">{{ . }}</p>{{ end }}
+    <h1 class="page-head-title">{{ $title }}</h1>
+    {{- with $meta }}<p class="page-head-count">{{ . }}</p>{{ end }}
+    {{- with $lede }}<div class="page-head-lede">{{ . | safeHTML }}</div>{{ end }}
+  </header>
+
+{{- else -}}
+
+  {{/* banner / sermon — 같은 구조에 색만 다릅니다. */}}
+  <header class="page-head page-head--banner{{ if eq $style "sermon" }} is-vivid{{ end }}">
+    <div class="page-head-banner-inner">
+      {{- with $eyebrow }}<span class="page-head-badge">{{ . }}</span>{{ end }}
+      <h1 class="page-head-banner-title">{{ $title }}</h1>
+      {{- with $meta }}<p class="page-head-banner-meta">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  {{- with $lede }}<div class="page-head-lede">{{ . | safeHTML }}</div>{{ end }}
+
+{{- end -}}

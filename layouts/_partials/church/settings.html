@@ -10,9 +10,10 @@
   주석을 달아도 지워집니다. 설명은 이 파일과 docs/manual.md 에 둡니다.
 
   돌려주는 값
-    hero_style        "ticker" | "carousel"
-    carousel_interval 캐러셀 자동 전환 간격(ms). 0 이면 자동 전환 안 함
-                      Admin 에서는 '초' 단위로 입력받아 여기서 ms 로 바꿉니다.
+    hero_style          "ticker" | "carousel"
+    carousel_interval   캐러셀 자동 전환 간격(ms). 0 이면 자동 전환 안 함
+                        Admin 에서는 '초' 단위로 입력받아 여기서 ms 로 바꿉니다.
+    page_heading_style  "banner" | "editorial" — 하위 페이지 제목 모양
 */}}
 
 {{/* site.Data 는 Hugo 0.156 부터 deprecated 이므로 hugo.Data 를 씁니다. */}}
@@ -43,4 +44,17 @@
 {{- end -}}
 {{- $interval := mul $seconds 1000 -}}
 
-{{- return (dict "hero_style" $hero_style "carousel_interval" $interval) -}}
+{{/* ── 하위 페이지 제목 모양 ───────────────────────────────────────────── */}}
+{{- $head_allowed := slice "banner" "sermon" "editorial" -}}
+{{- $head_style := index $data "page_heading_style" | default (index $church "page_heading_style") | default "banner" -}}
+{{- $head_style = lower (printf "%v" $head_style) -}}
+{{- if not (in $head_allowed $head_style) -}}
+  {{- warnf "church: page_heading_style 값이 잘못되었습니다 (%q). banner / sermon / editorial 중 하나여야 합니다. banner 로 처리합니다." $head_style -}}
+  {{- $head_style = "banner" -}}
+{{- end -}}
+
+{{- return (dict
+    "hero_style" $hero_style
+    "carousel_interval" $interval
+    "page_heading_style" $head_style
+) -}}

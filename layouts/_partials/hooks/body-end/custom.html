@@ -10,6 +10,9 @@
 */}}
 {{- $settings := partial "church/settings" -}}
 
+{{/* 상단 메뉴 동작 — 모든 페이지에 필요합니다. */}}
+<script src="{{ "js/church-nav.js" | relURL }}" defer></script>
+
 {{- if and (eq $settings.hero_style "ticker") .IsHome -}}
   <script>
     window.tickerData = [

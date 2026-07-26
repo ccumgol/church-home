@@ -77,47 +77,47 @@ main:
     weight: 43
 
   - name: "양육"
-    url: "/biblestudy/#TEE"
+    url: "/biblestudy/#tee"
     weight: 50
     identifier: "biblestudy"
 
   - name: "열린성경공부"
-    url: "/biblestudy/#TEE"
+    url: "/biblestudy/#tee"
     parent: "biblestudy"
     weight: 51
 
   - name: "커피브레이크"
-    url: "/biblestudy/#CoffeeBreak"
+    url: "/biblestudy/#coffeebreak"
     parent: "biblestudy"
     weight: 52
 
   - name: "회복의 삶"
-    url: "/biblestudy/#Prasso"
+    url: "/biblestudy/#prasso"
     parent: "biblestudy"
     weight: 53
 
   - name: "회복학교"
-    url: "/biblestudy/#RecoverySchool"
+    url: "/biblestudy/#recoveryschool"
     parent: "biblestudy"
     weight: 54
 
   - name: "제자의삶"
-    url: "/biblestudy/#Disciple"
+    url: "/biblestudy/#disciple"
     parent: "biblestudy"
     weight: 55
 
   - name: "심리상담북클럽"
-    url: "/biblestudy/#BookClub"
+    url: "/biblestudy/#bookclub"
     parent: "biblestudy"
     weight: 56
 
   - name: "실버코스 웰리빙웰다잉"
-    url: "/biblestudy/#Silver"
+    url: "/biblestudy/#silver"
     parent: "biblestudy"
     weight: 57
 
   - name: "미션퍼스펙티브스"
-    url: "/biblestudy/#PSP"
+    url: "/biblestudy/#psp"
     parent: "biblestudy"
     weight: 58
 

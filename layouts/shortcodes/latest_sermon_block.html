@@ -63,14 +63,15 @@
     </div>
 
     <div class="latest-sermon-meta">
-      <span class="latest-sermon-eyebrow">Latest Sermon · 최근 설교</span>
+      <span class="latest-sermon-eyebrow">The Word of God · 하나님의 말씀</span>
 
       <h2 class="latest-sermon-title">{{ .Title }}</h2>
 
+      {{/* 표시 순서: 성경본문 → 설교자 → 날짜 */}}
       <div class="latest-sermon-facts">
-        <span>{{ .Date.Format "2006년 1월 2일" }}</span>
         {{- with .Params.passage }}<span>{{ . }}</span>{{ end -}}
         {{- with .Params.speaker }}<span>{{ . }}</span>{{ end -}}
+        <span>{{ .Date.Format "2006년 1월 2일" }}</span>
       </div>
 
       {{- with $summary }}

@@ -3,12 +3,12 @@
 
 <div class="page-shell">
 
-  {{/* 페이지 머리말 — 홈 화면 섹션 머리말과 같은 편집물 형식 */}}
-  <header class="page-head">
-    <p class="page-head-eyebrow">Events · 샘플교회 행사안내</p>
-    <h1 class="page-head-title">{{ .Title }}</h1>
-    {{ with .Content }}<div class="page-head-lede">{{ . }}</div>{{ end }}
-  </header>
+  {{/* 제목 모양은 Admin → ⚙️ 사이트 설정 에서 고릅니다. */}}
+  {{ partial "church/page_head" (dict
+      "title" .Title
+      "eyebrow" "Events · 샘플교회 행사안내"
+      "lede" .Content
+  ) }}
 
   {{/* 행사 카드 */}}
   <div class="event-grid">

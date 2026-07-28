@@ -549,9 +549,19 @@ div[class*="gradient_mesh"] {
    (features 블록은 Preact 가 `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` 을
     붙이므로, 모바일 구간에서만 2열로 되돌립니다) */
 @media (max-width: 767px) {
+  #worship-schedule {
+    text-align: center;
+  }
+
   #worship-schedule .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
+  }
+
+  #worship-schedule .grid > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   /* 2열이 되면 폭이 좁아지므로 아이콘과 글자를 한 단계 줄입니다. */

@@ -1,6 +1,6 @@
 main:
   - name: "교회소개"
-    url: "/about/#greeting"
+    url: "/about/"
     weight: 10
     identifier: "about"
 
@@ -77,7 +77,7 @@ main:
     weight: 43
 
   - name: "양육"
-    url: "/biblestudy/#tee"
+    url: "/biblestudy/"
     weight: 50
     identifier: "biblestudy"
 

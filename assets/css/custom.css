@@ -285,13 +285,52 @@ header nav button {
   z-index: 5;
 }
 
-/* 최근소식 티커 */
+/* 최근소식 티커 ────────────────────────────────────────────────────────────
+   HugoBlox 히어로는 알림 영역을 `hidden sm:flex` 로 감싸 두어서,
+   640px 미만(모바일)에서는 통째로 display:none 이 됩니다.
+   티커 스크립트는 정상적으로 돌지만 화면에 보이지 않았습니다.
+   교회 소식은 모바일에서 더 자주 보므로 여기서 다시 켭니다. */
+#section-hero .hidden:has(#dynamic-ticker) {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
 .announcement-ticker {
   display: inline-grid;
   overflow: hidden;
   height: 1.5em;
   vertical-align: middle;
   align-items: center;
+}
+
+/* 좁은 화면에서 제목이 길면 알약이 화면 밖으로 나가므로 폭을 묶고 잘라 냅니다. */
+@media (max-width: 639px) {
+  #section-hero .hidden:has(#dynamic-ticker) > div {
+    max-width: min(100%, 21rem);
+    padding-right: 0.85rem;
+    font-size: 0.8125rem;
+  }
+
+  .announcement-ticker {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .announcement-ticker > span {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .announcement-ticker a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .announcement-ticker > span {

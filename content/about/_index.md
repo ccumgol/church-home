@@ -1,7 +1,10 @@
 ---
-title: "교회소개"
+title: "교회소개 (About Our Church)"
 date: 2026-07-22
 type: page
+# about 은 하위 문서(교회 연혁)를 두기 위해 섹션(_index.md)으로 바꿨습니다.
+# 화면은 예전 그대로 유지하려고 단일 문서 레이아웃을 지정합니다.
+layout: single
 ---
 
 <p class="text-xl font-medium text-stone-700 dark:text-stone-200 leading-relaxed mb-8">

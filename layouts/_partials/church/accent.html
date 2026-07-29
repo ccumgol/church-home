@@ -1,0 +1,117 @@
+{{/*
+  홈페이지 강조색(primary/secondary)을 결정합니다.
+
+  고르는 곳: Admin(/admin/) → ⚙️ 사이트 설정 → 강조 색상
+  저장 파일 : data/theme.yaml
+
+  왜 이렇게 하나
+    색은 원래 data/themes/church-warm.yaml 에서 관리합니다. 그런데 Decap CMS 는
+    편집 대상 파일을 통째로 다시 쓰기 때문에, 그 파일을 Admin 에 물리면
+    surfaces(배경·푸터색) 같은 나머지 설정까지 날아갑니다.
+    그래서 '강조색만' 담는 작은 파일을 따로 두고, 그 값으로 프레임워크가 만든
+    --color-primary-* 변수를 head 끝에서 덮어씁니다.
+    (layouts/_partials/hooks/head-end/custom.html)
+
+  ⚠️ Hugo 파셜에는 return 이 하나만, 그것도 맨 끝에 와야 합니다.
+     그래서 중간에 빠져나가지 않고 변수에 담아 두었다가 마지막에 한 번 돌려줍니다.
+
+  돌려주는 값
+    changed          기본값과 달라 덮어쓸 필요가 있는지 (bool)
+    primary_light    밝은 모드 강조색
+    primary_dark     어두운 모드 강조색 (밝은 모드보다 한 단계 밝게)
+    secondary_light  밝은 모드 보조색 (그라디언트가 흐를 방향)
+    secondary_dark   어두운 모드 보조색
+*/}}
+
+{{- $data := index hugo.Data "theme" | default dict -}}
+{{- $preset := lower (printf "%v" (index $data "accent_preset" | default "terracotta")) -}}
+{{- $custom := printf "%v" (index $data "accent_custom" | default "") -}}
+
+{{/* 미리 준비한 색 조합. 따뜻한 리넨 배경과 어울리도록 골랐습니다.
+     primary   = 강조색
+     secondary = 그라디언트가 흐를 방향 (조금 더 깊은 색)
+     *_dark    = 어두운 모드용. 적지 않으면 아래에서 자동으로 밝게 계산합니다.
+
+     기본값 terracotta 만 어두운 모드 색을 직접 적어 둡니다.
+     data/themes/church-warm.yaml 의 값과 똑같이 맞춰, 기본 상태에서는 화면이
+     지금과 완전히 동일하게 나오도록 하기 위해서입니다. */}}
+{{- $presets := dict
+  "terracotta" (dict "primary" "#d95d12" "secondary" "#b45309" "primary_dark" "#e8752b" "secondary_dark" "#d9a441")
+  "amber"      (dict "primary" "#c2861a" "secondary" "#8a5a0c")
+  "olive"      (dict "primary" "#5f7a3f" "secondary" "#41552a")
+  "burgundy"   (dict "primary" "#9b2c3f" "secondary" "#6d1e2c")
+  "navy"       (dict "primary" "#2f5d8c" "secondary" "#1f3f61")
+  "purple"     (dict "primary" "#6b3fa0" "secondary" "#4a2b70")
+-}}
+
+{{- $primary := "" -}}
+{{- $secondary := "" -}}
+{{- $primary_dark_set := "" -}}
+{{- $secondary_dark_set := "" -}}
+
+{{- if eq $preset "custom" -}}
+  {{/* 직접 지정: #rrggbb 형식일 때만 씁니다. 어긋나면 경고 후 기본색 유지. */}}
+  {{- if and (hasPrefix $custom "#") (eq (len $custom) 7) -}}
+    {{- $primary = lower $custom -}}
+  {{- else -}}
+    {{- warnf "church: 강조 색상(accent_custom)이 #rrggbb 형식이 아닙니다 (%q). 기본색을 그대로 씁니다." $custom -}}
+  {{- end -}}
+{{- else -}}
+  {{- with index $presets $preset -}}
+    {{- $primary = .primary -}}
+    {{- $secondary = .secondary -}}
+    {{- $primary_dark_set = .primary_dark | default "" -}}
+    {{- $secondary_dark_set = .secondary_dark | default "" -}}
+  {{- else -}}
+    {{- warnf "church: 모르는 강조 색상 이름입니다 (%q). 기본색을 그대로 씁니다." $preset -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $result := dict "changed" false -}}
+
+{{- if $primary -}}
+  {{- $r := printf "0x%s" (substr $primary 1 2) | int -}}
+  {{- $g := printf "0x%s" (substr $primary 3 2) | int -}}
+  {{- $b := printf "0x%s" (substr $primary 5 2) | int -}}
+
+  {{/* 어두운 모드에서는 같은 색이 배경에 묻히므로 흰색 쪽으로 18% 밀어 줍니다.
+       프리셋이 어두운 모드 색을 직접 적어 두었으면 그 값을 씁니다. */}}
+  {{- $lp := 18 -}}
+  {{- $primary_dark := $primary_dark_set -}}
+  {{- if not $primary_dark -}}
+    {{- $primary_dark = printf "#%02x%02x%02x"
+        (int (div (add (mul $r (sub 100 $lp)) (mul 255 $lp)) 100))
+        (int (div (add (mul $g (sub 100 $lp)) (mul 255 $lp)) 100))
+        (int (div (add (mul $b (sub 100 $lp)) (mul 255 $lp)) 100)) -}}
+  {{- end -}}
+
+  {{/* 보조색을 따로 정하지 않은 경우(직접 지정)에는 강조색을 22% 어둡게 씁니다.
+       같은 계열 안에서 그라디언트가 흘러 어떤 색을 골라도 안전합니다. */}}
+  {{- if not $secondary -}}
+    {{- $dp := 22 -}}
+    {{- $secondary = printf "#%02x%02x%02x"
+        (int (div (mul $r (sub 100 $dp)) 100))
+        (int (div (mul $g (sub 100 $dp)) 100))
+        (int (div (mul $b (sub 100 $dp)) 100)) -}}
+  {{- end -}}
+
+  {{- $secondary_dark := $secondary_dark_set -}}
+  {{- if not $secondary_dark -}}
+    {{- $sr := printf "0x%s" (substr $secondary 1 2) | int -}}
+    {{- $sg := printf "0x%s" (substr $secondary 3 2) | int -}}
+    {{- $sb := printf "0x%s" (substr $secondary 5 2) | int -}}
+    {{- $secondary_dark = printf "#%02x%02x%02x"
+        (int (div (add (mul $sr (sub 100 $lp)) (mul 255 $lp)) 100))
+        (int (div (add (mul $sg (sub 100 $lp)) (mul 255 $lp)) 100))
+        (int (div (add (mul $sb (sub 100 $lp)) (mul 255 $lp)) 100)) -}}
+  {{- end -}}
+
+  {{- $result = dict
+      "changed" true
+      "primary_light" $primary
+      "primary_dark" $primary_dark
+      "secondary_light" $secondary
+      "secondary_dark" $secondary_dark -}}
+{{- end -}}
+
+{{- return $result -}}

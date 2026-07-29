@@ -62,6 +62,36 @@ collections:
             step: 1
             hint: "캐러셀형일 때만 쓰입니다. 몇 초마다 다음 장으로 넘어갈지 정합니다. 0 으로 두면 자동으로 넘어가지 않습니다."
 
+      # ── 강조 색상 ────────────────────────────────────────────────
+      #    버튼·링크·아이콘·배너 등 사이트 전체의 강조색을 한 번에 바꿉니다.
+      #    (배경·글자색 같은 나머지 색은 data/themes/church-warm.yaml 에서 관리)
+      - name: accent_color
+        label: "강조 색상"
+        file: data/theme.yaml
+        description: "버튼·링크·아이콘·제목 배너 등 사이트 전체의 강조색입니다. 저장 후 반영까지 1~2분 걸립니다."
+        fields:
+          - label: "색상 고르기"
+            name: accent_preset
+            widget: select
+            default: "terracotta"
+            options:
+              - { label: "따뜻한 테라코타 (기본)", value: "terracotta" }
+              - { label: "앰버 골드", value: "amber" }
+              - { label: "올리브 그린", value: "olive" }
+              - { label: "딥 버건디", value: "burgundy" }
+              - { label: "미드나잇 블루", value: "navy" }
+              - { label: "로열 퍼플", value: "purple" }
+              - { label: "직접 지정 — 아래 칸의 색을 씁니다", value: "custom" }
+            hint: "미리 준비한 6가지 색은 교회 홈페이지의 따뜻한 배경과 어울리도록 맞춰 두었습니다."
+
+          - label: "직접 지정할 색"
+            name: accent_custom
+            widget: color
+            default: "#d95d12"
+            allowInput: true
+            required: false
+            hint: "위에서 '직접 지정'을 골랐을 때만 쓰입니다. 너무 밝거나 형광에 가까운 색은 글씨가 잘 안 보일 수 있습니다."
+
       # ── 문서 제목 모양 (첫 화면 배너와 별개 화면) ──────────────────
       - name: page_heading
         label: "문서 제목 모양"

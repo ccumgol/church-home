@@ -1,0 +1,31 @@
+{{/*
+  Admin 에서 고른 강조색을 적용합니다.
+
+  HugoBlox 는 site_head 앞부분에서 테마팩을 읽어
+  `:root { --color-primary-* }` / `.dark { ... }` 를 한 번 출력합니다.
+  이 훅은 그 <style> 보다 뒤(head 끝)에 놓이므로, 같은 선택자로 다시 쓰면
+  나중에 온 쪽이 이깁니다. 그래서 파일 하나만 바꿔 색을 갈아끼울 수 있습니다.
+
+  색 계산: layouts/_partials/church/accent.html
+  저장 파일: data/theme.yaml  (Admin → ⚙️ 사이트 설정 → 강조 색상)
+
+  기본색 그대로면 아무것도 출력하지 않습니다.
+*/}}
+{{- $accent := partial "church/accent" . -}}
+
+{{- if $accent.changed -}}
+<style>
+  /* stylelint-disable */
+  /* 교회 강조색 (Admin → 사이트 설정 → 강조 색상) */
+  :root {
+    {{ partial "functions/generate_color_scale" (dict "name" "primary" "color" $accent.primary_light) | safeCSS }}
+    {{ partial "functions/generate_color_scale" (dict "name" "secondary" "color" $accent.secondary_light) | safeCSS }}
+  }
+
+  .dark {
+    {{ partial "functions/generate_color_scale" (dict "name" "primary" "color" $accent.primary_dark) | safeCSS }}
+    {{ partial "functions/generate_color_scale" (dict "name" "secondary" "color" $accent.secondary_dark) | safeCSS }}
+  }
+  /* stylelint-enable */
+</style>
+{{- end -}}

@@ -1,5 +1,5 @@
 ---
-title: "선교게시판"
+title: "선교게시판 (Mission Board)"
 date: 2026-07-22
 type: page
 ---

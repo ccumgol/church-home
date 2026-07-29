@@ -1,5 +1,5 @@
 ---
-title: "주일설교 및 말씀"
+title: "주일설교 및 말씀 (Sunday Sermons)"
 date: 2026-07-22
 type: sermons
 ---

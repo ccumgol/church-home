@@ -1,5 +1,5 @@
 ---
-title: "교회 주요 행사 안내"
+title: "교회 주요 행사 안내 (Church Events)"
 date: 2026-07-22
 ---
 

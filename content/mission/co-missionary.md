@@ -1,5 +1,5 @@
 ---
-title: "협력선교사 소식 및 후원"
+title: "협력선교사 소식 및 후원 (Partner Missionaries & Support)"
 date: 2026-07-22
 type: page
 ---

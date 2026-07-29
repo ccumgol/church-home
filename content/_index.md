@@ -1,5 +1,5 @@
 ---
-title: 'Home'
+title: "홈 (Home)"
 date: 2026-07-22
 type: landing
 

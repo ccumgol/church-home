@@ -1,5 +1,5 @@
 ---
-title: "샘플교회 정관"
+title: "샘플교회 정관 (Church Bylaws)"
 date: 2026-07-22
 type: page
 ---

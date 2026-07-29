@@ -11,6 +11,10 @@
 
   기본색 그대로면 아무것도 출력하지 않습니다.
 */}}
+{{/* 구조 검사 — 화면에는 아무것도 그리지 않고 빌드 로그로만 알려 줍니다.
+     partialCached 라서 빌드당 한 번만 돕니다. (layouts/_partials/church/guard.html) */}}
+{{- partialCached "church/guard" . "church-guard" -}}
+
 {{- $accent := partial "church/accent" . -}}
 
 {{- if $accent.changed -}}

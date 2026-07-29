@@ -1,0 +1,255 @@
+{{/*
+  ══════════════════════════════════════════════════════════════════════════════
+  빌드 가드 — 구조가 조용히 망가지는 것을 막습니다
+  ══════════════════════════════════════════════════════════════════════════════
+
+  이 템플릿은 화면에 아무것도 그리지 않습니다. 빌드할 때 프로젝트를 훑어보고,
+  '빌드는 성공하는데 기능만 사라지는' 상황을 찾아 로그로 알려 줍니다.
+
+  왜 필요한가
+    이 홈페이지는 교회마다 복제해서 고쳐 쓰는 템플릿입니다. 구조를 모르고
+    파일 이름을 바꾸거나 지우면, 빌드는 멀쩡히 끝나는데 페이지·메뉴·설정이
+    조용히 사라집니다. 문서에 적어 두는 것만으로는 잘 지켜지지 않아,
+    고친 사람이 그 자리에서 알아채도록 빌드 로그에 띄웁니다.
+
+  검사 못 하는 것 (사람이 화면을 봐야 하는 영역)
+    CSS 선택자·명시도, JS 동작, 시각적 균형은 브라우저에서만 판정됩니다.
+    예: 어떤 규칙이 다른 규칙을 이겨 밑줄이 안 지워지는 문제는 여기서 못 잡습니다.
+
+  엄격 모드
+    config/_default/params.yaml 에서 church.guard_strict: true 로 두면
+    경고 대신 빌드를 실패시킵니다. 배포가 멈추므로 기본값은 false 입니다.
+    (CI 에서만 켜는 용도)
+
+  호출 위치: layouts/_partials/hooks/head-end/custom.html (partialCached 로 1회)
+*/}}
+
+{{- $strict := site.Params.church.guard_strict | default false -}}
+{{- $problems := slice -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     1. 반드시 있어야 하는 파일
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- $required := slice
+  (dict "path" "layouts/_partials/church/settings.html"
+        "why" "Admin 설정값(배너 종류·전환 간격·제목 모양)을 읽지 못합니다.")
+  (dict "path" "layouts/_partials/church/page_head.html"
+        "why" "모든 하위 페이지의 제목 영역이 그려지지 않습니다.")
+  (dict "path" "layouts/_partials/church/accent.html"
+        "why" "Admin 에서 고른 강조 색상이 적용되지 않습니다.")
+  (dict "path" "layouts/_partials/church/media_url.html"
+        "why" "이미지·PDF 경로 해석이 끊겨 썸네일과 첨부가 깨집니다.")
+  (dict "path" "layouts/_partials/church/board_list.html"
+        "why" "교회소식·주보·포토앨범 목록이 비어 보입니다.")
+  (dict "path" "layouts/_partials/hooks/head-end/custom.html"
+        "why" "강조 색상 적용과 이 빌드 가드가 함께 동작하지 않습니다.")
+  (dict "path" "layouts/_partials/hooks/body-end/custom.html"
+        "why" "티커·캐러셀·메뉴 스크립트가 페이지에 실리지 않습니다.")
+  (dict "path" "static/js/church-nav.js"
+        "why" "모바일에서 상단 메뉴의 하위메뉴를 열 수 없습니다.")
+  (dict "path" "static/js/church-carousel.js"
+        "why" "캐러셀 배너가 자동으로 넘어가지 않습니다.")
+  (dict "path" "static/js/custom-ticker.js"
+        "why" "첫 화면의 최근소식 티커가 흐르지 않습니다.")
+  (dict "path" "data/themes/church-warm.yaml"
+        "why" "팔레트가 프레임워크 기본값(차가운 남색)으로 되돌아갑니다.")
+-}}
+
+{{- range $required -}}
+  {{- if not (fileExists .path) -}}
+    {{- $problems = $problems | append (dict
+        "level" "심각"
+        "msg" (printf "필수 파일이 없습니다: %s" .path)
+        "fix" .why) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     2. about 섹션 — 리프 번들 함정
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- if fileExists "content/about/index.md" -}}
+  {{- $problems = $problems | append (dict
+      "level" "심각"
+      "msg" "content/about/index.md 가 있습니다. (_index.md 여야 합니다)"
+      "fix" "밑줄 없는 index.md 는 about/ 폴더를 '리프 번들'로 만들어, 그 안의 .md 가 페이지가 아닌 첨부 자료가 됩니다. /about/history/ 같은 하위 문서가 통째로 사라집니다. content/about/_index.md 로 되돌리세요. (docs/manual.md 3-2-2절)") -}}
+{{- end -}}
+
+{{- if not (fileExists "content/about/_index.md") -}}
+  {{- $problems = $problems | append (dict
+      "level" "심각"
+      "msg" "content/about/_index.md 가 없습니다."
+      "fix" "교회소개 페이지가 만들어지지 않고, 그 아래 하위 문서도 함께 사라집니다.") -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     3. 섹션 필터가 실제로 동작하는지 (파일 존재가 아니라 '동작'을 봅니다)
+
+     layouts/_partials/hbx/sections.html 은 프레임워크 모듈에도 같은 경로가 있어서,
+     프로젝트 쪽 파일을 지워도 fileExists 는 계속 참입니다. 그래서 파일이 아니라
+     결과를 확인합니다. 우리 버전은 hero_style 이 맞지 않는 배너를 걸러 내므로,
+     걸러진 개수가 0 이면 프로젝트 오버라이드가 사라진 것입니다.
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- with site.Home -}}
+  {{- $current := (partial "church/settings").hero_style -}}
+  {{/* 지금 설정과 맞지 않아 '걸러져야 할' 섹션 수를 셉니다. */}}
+  {{- $shouldFilter := 0 -}}
+  {{- range .Params.sections -}}
+    {{- with index . "hero_style" -}}
+      {{- if ne (lower (printf "%v" .)) $current -}}
+        {{- $shouldFilter = add $shouldFilter 1 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $declared := len (.Params.sections | default slice) -}}
+  {{- $visible := len (partial "hbx/sections" . | default slice) -}}
+  {{- if and (gt $shouldFilter 0) (eq $declared $visible) -}}
+    {{- $problems = $problems | append (dict
+        "level" "심각"
+        "msg" "배너 섹션 필터가 동작하지 않습니다. (걸러져야 할 섹션이 그대로 남음)"
+        "fix" "layouts/_partials/hbx/sections.html (프로젝트 오버라이드)이 사라졌거나 필터 부분이 지워졌습니다. 이 파일이 없으면 티커형·캐러셀형 배너가 첫 화면에 동시에 나오고 active:false 도 무시됩니다. git 에서 복구하세요.") -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     4. 홈 첫 화면 배너 — 두 종류가 모두 있어야 전환이 됩니다
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- with site.Home -}}
+  {{- $styles := slice -}}
+  {{- range .Params.sections -}}
+    {{- with index . "hero_style" -}}
+      {{- $styles = $styles | append (lower (printf "%v" .)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- range slice "ticker" "carousel" -}}
+    {{- if not (in $styles .) -}}
+      {{- $problems = $problems | append (dict
+          "level" "심각"
+          "msg" (printf "content/_index.md 에 hero_style: %s 배너 섹션이 없습니다." .)
+          "fix" "Admin(⚙️ 사이트 설정 → 첫 화면 배너)에서 그 배너를 고르면 첫 화면이 비어 버립니다. 두 섹션 모두 남겨 두세요. 설정과 맞는 쪽만 렌더링됩니다.") -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     5. 앵커는 소문자만 — Hugo 가 링크 주소를 소문자로 만듭니다
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- $badAnchors := slice -}}
+{{- range site.RegularPages -}}
+  {{- range findRE `id="[^"]*[A-Z][^"]*"` .RawContent -}}
+    {{- $badAnchors = $badAnchors | append (printf "%s → %s" $.Site.Home.RelPermalink .) -}}
+  {{- end -}}
+{{- end -}}
+{{- with $badAnchors -}}
+  {{- $problems = $problems | append (dict
+      "level" "심각"
+      "msg" (printf "대문자가 섞인 앵커가 %d개 있습니다: %s" (len .) (delimit (first 3 .) ", "))
+      "fix" "메뉴 링크는 Hugo 가 소문자로 만들기 때문에 대문자 앵커와 어긋나 이동이 안 됩니다. 문서의 id 와 menus.yaml 의 # 뒤를 모두 소문자로 맞추세요. (docs/manual.md 3-3절)") -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     6. 게시판 글 — Admin 목록에 나오려면 board 값이 필요합니다
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{/* ⚠️ 포토앨범·주보는 build.list 가 local 이라 site.RegularPages 에 잡히지 않습니다.
+     반드시 각 섹션의 .Pages 로 순회해야 빠짐없이 검사됩니다. */}}
+{{- $boards := dict
+    "news"     "/community/news"
+    "bulletin" "/community/bulletin"
+    "album"    "/community/album" -}}
+
+{{- range $board, $path := $boards -}}
+  {{- with site.GetPage $path -}}
+    {{- $missing := slice -}}
+    {{- range .Pages -}}
+      {{- if not .Params.board -}}
+        {{- $missing = $missing | append .File.Path -}}
+      {{- end -}}
+    {{- end -}}
+    {{- with $missing -}}
+      {{- $problems = $problems | append (dict
+          "level" "주의"
+          "msg" (printf "%s 글 %d개에 board 값이 없습니다: %s" $board (len .) (delimit (first 3 .) ", "))
+          "fix" (printf "사이트에는 보이지만 Admin 목록에서는 보이지 않습니다. 앞부분에 board: %s 를 넣으세요." $board)) -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $problems = $problems | append (dict
+        "level" "심각"
+        "msg" (printf "%s 게시판 섹션(%s)을 찾을 수 없습니다." $board $path)
+        "fix" "해당 폴더의 _index.md 가 지워졌거나 이름이 바뀌었습니다. 목록 페이지가 통째로 사라집니다.") -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* 포토앨범은 Google 포토 주소가 있어야 링크로 동작합니다. */}}
+{{- with site.GetPage "/community/album" -}}
+  {{- $noLink := slice -}}
+  {{- range .Pages -}}
+    {{- if not .Params.external_url -}}
+      {{- $noLink = $noLink | append .File.Path -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $noLink -}}
+    {{- $problems = $problems | append (dict
+        "level" "주의"
+        "msg" (printf "포토앨범 글 %d개에 Google 포토 주소(external_url)가 없습니다: %s" (len .) (delimit (first 3 .) ", "))
+        "fix" "앨범 카드가 눌러지지 않는 상자로 표시됩니다. Admin(🖼️ 포토앨범)에서 주소를 넣어 주세요.") -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     7. 레이아웃에 고정 색이 남아 있으면 Admin 강조색이 절반만 먹습니다
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- $fixedHues := slice "orange" "amber" "blue" "indigo" "violet" "purple" "sky" "cyan" -}}
+{{- $offenders := slice -}}
+{{- range partial "church/scan_dir" (dict "dir" "layouts" "exts" (slice ".html")) -}}
+  {{- $f := . -}}
+  {{/* 이 가드 파일 자체는 검사어를 품고 있으므로 건너뜁니다. */}}
+  {{- if not (strings.Contains $f "church/guard.html") -}}
+    {{- with try (os.ReadFile $f) -}}
+      {{- with .Value -}}
+        {{- $body := . -}}
+        {{- range $fixedHues -}}
+          {{- if findRE (printf `[a-z-]%s-[0-9]{2,3}` .) $body 1 -}}
+            {{- $offenders = $offenders | append (printf "%s(%s)" $f .) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $offenders -}}
+  {{- $problems = $problems | append (dict
+      "level" "주의"
+      "msg" (printf "레이아웃 %d곳에 고정 색 이름이 있습니다: %s" (len .) (delimit (first 3 .) ", "))
+      "fix" "Admin(⚙️ 사이트 설정 → 강조 색상)에서 색을 바꿔도 이 부분만 그대로 남습니다. primary-* / secondary-* 로 바꾸세요. 따뜻한 무채색 stone-* 은 그대로 두어도 됩니다.") -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     8. Admin 이 덮어쓰는 설정 파일에는 주석을 두면 안 됩니다
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- range slice "data/settings.yaml" "data/heading.yaml" "data/theme.yaml" -}}
+  {{- $f := . -}}
+  {{- with try (os.ReadFile $f) -}}
+    {{- with .Value -}}
+      {{- if findRE `(?m)^\s*#` . 1 -}}
+        {{- $problems = $problems | append (dict
+            "level" "주의"
+            "msg" (printf "%s 에 주석이 있습니다." $f)
+            "fix" "이 파일은 Admin 에서 저장할 때 통째로 다시 쓰이므로 주석이 지워집니다. 설명은 docs/manual.md 에 적어 주세요.") -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{/* ─────────────────────────────────────────────────────────────────────────
+     결과 출력
+     ───────────────────────────────────────────────────────────────────────── */}}
+{{- with $problems -}}
+  {{- $serious := len (where . "level" "심각") -}}
+  {{- warnf "════ 구조 검사: %d건 발견 (심각 %d) ════  자세한 규칙은 docs/manual.md 를 보세요." (len .) $serious -}}
+  {{- range . -}}
+    {{- if and $strict (eq .level "심각") -}}
+      {{- errorf "[구조 검사·%s] %s\n            → %s" .level .msg .fix -}}
+    {{- else -}}
+      {{- warnf "[구조 검사·%s] %s\n            → %s" .level .msg .fix -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

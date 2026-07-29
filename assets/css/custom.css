@@ -302,6 +302,11 @@ header nav button {
   height: 1.5em;
   vertical-align: middle;
   align-items: center;
+  /* 소식 글자를 5px 위로 올려 '최근소식' 배지와 눈높이를 맞춥니다.
+     안쪽 span 에는 JS 가 transform 으로 애니메이션을 걸기 때문에,
+     transform 대신 position/top 으로 바깥 상자만 옮깁니다. */
+  position: relative;
+  top: -5px;
 }
 
 /* 좁은 화면에서 제목이 길면 알약이 화면 밖으로 나가므로 폭을 묶고 잘라 냅니다. */
